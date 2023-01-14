@@ -52,7 +52,7 @@ public class HookTest {
     public static String b(String name, String... args) {
         StringJoiner joiner = new StringJoiner("");
         Arrays.stream(args).toList().forEach(joiner::add);
-        return " {" + name + joiner.toString() + "} ";
+        return " {" + name + joiner + "} ";
     }
 
     public static String s(String string) {

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fccb2a8f-d504-4a73-a2c8-28a31d1ad3c6" name="Changes" comment="Implemented @Subscriber Annotation for Event Handling Methods&#10;Implemented @Hook Annotation for Hook Methods&#10;Implemented Parsing and Execution of the Hook Methods">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/hooks/Hook.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/hooks/HookMethodRunner.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/hooks/hooks/one.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/eventHandlers/EventDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/eventHandlers/EventDispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/hooks/HookDispatcher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/hooks/HookHolder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/hooks/HookOptional.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/hooks/HookParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/hooks/HookParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/hooks/HookString.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/hooks/HookTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/hooks/HookTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/standard/bot/inputs/Twitch4JReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/standard/bot/inputs/Twitch4JReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/standard/repositories/TwitchUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/standard/repositories/TwitchUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/standard/repositories/TwitchUserPermissions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/standard/repositories/TwitchUserPermissions.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="vwgn2624" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2JvrJNF6YDGsB5DKO1HiScd6hFZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.33793104",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="java.subscriber" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Application">
+    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="standard.Application" />
+      <module name="JavaTwitchBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="standard.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EventDispatcher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="eventHandlers.EventDispatcher" />
+      <module name="JavaTwitchBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="eventHandlers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HookMethodRunner" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="hooks.HookMethodRunner" />
+      <module name="JavaTwitchBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="hooks.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HookParser" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="hooks.HookParser" />
+      <module name="JavaTwitchBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="hooks.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HookTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="hooks.HookTest" />
+      <module name="JavaTwitchBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="hooks.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Application" />
+        <item itemvalue="Application.HookTest" />
+        <item itemvalue="Application.HookParser" />
+        <item itemvalue="Application.HookMethodRunner" />
+        <item itemvalue="Application.EventDispatcher" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fccb2a8f-d504-4a73-a2c8-28a31d1ad3c6" name="Changes" comment="" />
+      <created>1672969325917</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1672969325917</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Initial Commit">
+      <created>1673060786374</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1673060786374</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Initial Commit">
+      <created>1673060812085</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1673060812085</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Git Ignore">
+      <created>1673707345640</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1673707345640</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial Commit" />
+    <MESSAGE value="Git Ignore" />
+    <MESSAGE value="Implemented @Subscriber Annotation for Event Handling Methods&#10;Implemented @Hook Annotation for Hook Methods&#10;Implemented Parsing and Execution of the Hook Methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented @Subscriber Annotation for Event Handling Methods&#10;Implemented @Hook Annotation for Hook Methods&#10;Implemented Parsing and Execution of the Hook Methods" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint type="java-exception">
+          <properties class="java.lang.IllegalArgumentException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

@@ -30,4 +30,24 @@ public class TwitchUser {
         this.subscriptionTier = subscriptionTier;
         this.permissions = new HashSet<>(Arrays.asList(permissions));
     }
+
+    public String id() {
+        return id;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public HashSet<TwitchUserPermissions> permissions() {
+        return permissions;
+    }
+
+    public int subscriberMonths() {
+        return subscriberMonths;
+    }
+
+    public int subscriptionTier() {
+        return subscriptionTier;
+    }
 }
