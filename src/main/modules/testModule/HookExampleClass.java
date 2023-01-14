@@ -1,13 +1,14 @@
-package hooks.hooks;
+package main.modules.testModule;
 
-import hooks.Hook;
-import standard.repositories.Message;
+import main.system.HookSystem.Hook;
+import main.standard.repositories.Message;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class one {
-    @Hook()
+@SuppressWarnings("unused")
+public class HookExampleClass {
+    @Hook
     public static String Math(String operation, String value1, String value2) {
         int int1;
         int int2;

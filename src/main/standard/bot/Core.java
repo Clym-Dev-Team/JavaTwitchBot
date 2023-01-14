@@ -1,19 +1,19 @@
-package standard.bot;
+package main.standard.bot;
 
-import jakarta.persistence.PreRemove;
-import org.springframework.stereotype.Component;
-import standard.bot.inputs.Twitch4JReader;
+import main.standard.repositories.TwitchAccountRepoController;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import jakarta.annotation.PreDestroy;
-import standard.repositories.TwitchAccount;
-import standard.repositories.TwitchAccountRepoController;
+import jakarta.persistence.PreRemove;
+import main.standard.bot.inputs.Twitch4JReader;
+import main.standard.repositories.TwitchAccount;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 @Component
+@SuppressWarnings("unused")
 public class Core {
 
     //"CONFIG"

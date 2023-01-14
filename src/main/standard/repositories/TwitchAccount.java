@@ -1,4 +1,4 @@
-package standard.repositories;
+package main.standard.repositories;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

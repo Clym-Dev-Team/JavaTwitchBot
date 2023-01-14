@@ -1,4 +1,4 @@
-package standard.repositories;
+package main.standard.repositories;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,6 +8,7 @@ import java.util.HashSet;
  * und ist nicht dazu gedacht in der Datenbank gespeichert zu werden, denn die Twitch Permissions und Badges könnten
  * sich während der Laufzeit ändern
  */
+@SuppressWarnings("unused")
 public class TwitchUser {
     private final String id;
     private final String name;

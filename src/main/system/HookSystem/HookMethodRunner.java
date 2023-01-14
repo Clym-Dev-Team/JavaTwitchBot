@@ -1,8 +1,8 @@
-package hooks;
+package main.system.HookSystem;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import standard.repositories.Message;
+import main.standard.repositories.Message;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,9 +14,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class HookMethodRunner {
-    public static void main(String[] args) {
-        scanForHooks();
-    }
 
     private static final Set<Method> hooks = scanForHooks();
 
@@ -49,7 +46,7 @@ public class HookMethodRunner {
     }
 
     private static Set<Method> scanForHooks() {
-        Reflections reflections = new Reflections("hooks.hooks", Scanners.MethodsAnnotated);
+        Reflections reflections = new Reflections("main.modules", Scanners.MethodsAnnotated);
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Hook.class);
         //Die Methoden müssen static sein und müssen als ersten Parameter die Message haben und danach eine beliebige Anzahl von Strings
         Set<Method> collect = methods.stream()

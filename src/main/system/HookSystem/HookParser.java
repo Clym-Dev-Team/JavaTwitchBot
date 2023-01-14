@@ -1,10 +1,10 @@
-package hooks;
+package main.system.HookSystem;
 
 import kotlin.text.MatchResult;
 import kotlin.text.Regex;
-import standard.repositories.Message;
-import standard.repositories.TwitchUser;
-import standard.repositories.TwitchUserPermissions;
+import main.standard.repositories.Message;
+import main.standard.repositories.TwitchUser;
+import main.standard.repositories.TwitchUserPermissions;
 
 import java.time.Instant;
 import java.util.HashMap;

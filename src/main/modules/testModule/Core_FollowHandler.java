@@ -1,9 +1,10 @@
-package eventHandlers.subscriber;
+package main.modules.testModule;
 
 import com.github.twitch4j.chat.events.channel.FollowEvent;
 import com.github.twitch4j.chat.events.channel.SubscriptionEvent;
-import eventHandlers.Subscribe;
+import main.system.eventSystem.Subscribe;
 
+@SuppressWarnings("unused")
 public class Core_FollowHandler {
 
     @Subscribe(EventClass = FollowEvent.class)

@@ -1,4 +1,4 @@
-package standard.bot.inputs;
+package main.standard.bot.inputs;
 
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
@@ -7,7 +7,7 @@ import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import com.github.twitch4j.chat.events.channel.CheerEvent;
 import com.github.twitch4j.chat.events.channel.FollowEvent;
-import standard.bot.Core;
+import main.standard.bot.Core;
 
 public class Twitch4JReader extends Thread {
 

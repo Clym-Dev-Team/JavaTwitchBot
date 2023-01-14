@@ -1,4 +1,4 @@
-package eventHandlers;
+package main.system.eventSystem;
 
 import com.github.twitch4j.chat.events.channel.FollowEvent;
 import org.reflections.Reflections;
@@ -22,7 +22,7 @@ public class EventDispatcher {
     private static final Set<Method> eventHandler = scanForSubscriber();
 
     private static Set<Method> scanForSubscriber() {
-        Reflections reflections = new Reflections("eventHandlers.subscriber", Scanners.MethodsAnnotated);
+        Reflections reflections = new Reflections("main.modules", Scanners.MethodsAnnotated);
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Subscribe.class);
         //Die Methoden müssen static sein und dürfen nur einen Parameter haben,
         // und dieser Parameter muss gleich mit der Klasse in der Annotation sein

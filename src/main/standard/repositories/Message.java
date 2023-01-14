@@ -1,4 +1,4 @@
-package standard.repositories;
+package main.standard.repositories;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -6,6 +6,7 @@ import java.util.Optional;
 /**
  * Chatmessage
  */
+@SuppressWarnings("unused")
 public class Message {
     private final String MessageRAW;
     private final Optional<TwitchUser> user;

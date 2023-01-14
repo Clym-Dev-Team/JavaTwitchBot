@@ -1,4 +1,4 @@
-package standard.repositories;
+package main.standard.repositories;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.repository.CrudRepository;

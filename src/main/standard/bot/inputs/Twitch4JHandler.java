@@ -1,4 +1,4 @@
-package standard.bot.inputs;
+package main.standard.bot.inputs;
 
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import com.github.twitch4j.chat.events.channel.CheerEvent;
