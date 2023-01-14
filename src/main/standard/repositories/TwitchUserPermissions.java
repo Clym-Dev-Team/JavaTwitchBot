@@ -12,5 +12,5 @@ public enum TwitchUserPermissions {
     VIP,
     MODERATOR,
     BROADCASTER,
-    OWNER;
+    OWNER
 }
