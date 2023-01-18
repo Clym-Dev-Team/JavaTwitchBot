@@ -32,3 +32,4 @@ gen
 target
 /target/*
 /target/
+/.idea/

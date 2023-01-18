@@ -28,7 +28,6 @@ public class TwitchAccount {
 
     @Autowired
     public void setTwitchAccountRepo(TwitchAccountRepo twitchAccountRepo) {
-        System.out.println("TwitchAccount.setTwitchAccountRepo");
         repo = twitchAccountRepo;
     }
 

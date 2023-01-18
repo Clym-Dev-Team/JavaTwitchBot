@@ -34,6 +34,13 @@ public class TwitchUser {
     private int subscriberMonths;
     private int subscriptionTier;
 
+    private static TwitchUserRepo repo;
+
+    @Autowired
+    public void setRepo(TwitchUserRepo twitchUserRepo) {
+        repo = twitchUserRepo;
+    }
+
     TwitchUser() {
     }
 
