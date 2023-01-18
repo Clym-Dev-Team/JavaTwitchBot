@@ -22,7 +22,6 @@ public class InputManager {
     }
 
     public static void startAllInputs() {
-        inputSet = scanForInputs();
         logger.info("Starting up Inputs...");
         int iSize = inputSet.size();
         checkConfigs();
@@ -42,11 +41,11 @@ public class InputManager {
         }
         if (workSet.size() != iSize) {
             String differenceString = failing.toString();
-            logger.error("Failed to start all Configured Inputs: {}", ASCIIProgressbar.asciiBar(workSet.size(), iSize, 10));
+            logger.error("Failed to start all Configured Inputs: {}", ASCIIProgressbar.consoleBar(workSet.size(), iSize));
             if (failing.size() > 0)
                 logger.error("Failing: {}", differenceString.substring(1, differenceString.length() - 1));
         } else
-            logger.info("Checked Configs and Started Inputs successfully: {}", ASCIIProgressbar.asciiBar(iSize, iSize, 10));
+            logger.info("Checked Configs and Started Inputs successfully: {}", ASCIIProgressbar.consoleBar(iSize, iSize));
         InputManager.inputSet = workSet;
         running = true;
     }
@@ -63,10 +62,10 @@ public class InputManager {
         }
         if (failing.size() > 0) {
             String differenceString = failing.toString();
-            logger.error("Error in Configs from Inputs: {}", ASCIIProgressbar.asciiBar(iSize - failing.size(), iSize, 10));
+            logger.error("Error in Configs from Inputs: {}", ASCIIProgressbar.consoleBar(iSize - failing.size(), iSize));
             logger.error("Failing: {}", differenceString.substring(1, differenceString.length() - 1));
         } else
-            logger.info("Checked Configs successfully: {}", ASCIIProgressbar.asciiBar(iSize, iSize, 10));
+            logger.info("Checked Configs successfully: {}", ASCIIProgressbar.consoleBar(iSize, iSize));
         InputManager.inputSet = workSet;
         return failing;
     }
@@ -92,10 +91,10 @@ public class InputManager {
 
         if (notProperly.size() != 0) {
             String notPString = notProperly.toString();
-            logger.error("Failed to shutdown all Inputs: {}", ASCIIProgressbar.asciiBar(iSize - notProperly.size(), iSize, 10));
+            logger.error("Failed to shutdown all Inputs: {}", ASCIIProgressbar.consoleBar(iSize - notProperly.size(), iSize));
             logger.error("Failing: {}", notPString.substring(1, notPString.length() - 1));
         } else
-            logger.info("Shutdown Inputs successfully: {}", ASCIIProgressbar.asciiBar(iSize, iSize, 10));
+            logger.info("Shutdown Inputs successfully: {}", ASCIIProgressbar.consoleBar(iSize, iSize));
         inputSet = workSet;
         running = false;
     }
@@ -125,7 +124,7 @@ public class InputManager {
                 }
             }
         }
-        logger.info("Scanned for Inputs, found: {}, invoked: {}", typesAnnotatedWith.size(), ASCIIProgressbar.asciiBar(inputSet.size(), typesAnnotatedWith.size(), 10));
+        logger.info("Scanned for Inputs, found: {}, invoked: {}", typesAnnotatedWith.size(), ASCIIProgressbar.consoleBar(inputSet.size(), typesAnnotatedWith.size()));
         return inputSet;
     }
 

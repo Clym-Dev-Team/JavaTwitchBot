@@ -24,7 +24,7 @@ public class Application {
         System.out.println();
         System.out.println("DateFormat: DayNumber-Hour:Minute:Second:Millis");
         System.out.println("DD-HH:mm:ss.SSS |LEVEL| [THREAD]        LOGGER (Source Class)               - MSG");
-        System.out.println("----------------|-----|-[-------------]-----------------------------------------------------------------------------------------------------------------");
+        System.out.println("----------------|-----|-[-------------]---------------------------------------------------------------------------------------------------------------------------------------------");
         InputManager.startAllInputs();
         time.close();
     }
