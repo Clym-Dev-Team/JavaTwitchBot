@@ -1,6 +1,6 @@
 package main.modules.testModule;
 
-import main.system.commandSystem.Message;
+import main.system.commandSystem.repositories.Message;
 import main.system.hookSystem.Hook;
 
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
 package main.system.hookSystem;
 
-import main.system.commandSystem.Message;
+import main.system.commandSystem.repositories.Message;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;

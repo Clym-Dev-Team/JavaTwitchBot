@@ -1,14 +1,15 @@
-package main.system.commandSystem;
+package main.system.commandSystem.repositories;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static main.system.commandSystem.TwitchUserPermissions.OWNER;
+import static main.system.commandSystem.repositories.TwitchUserPermissions.OWNER;
 
 /**
  * TwitchUser, lediglich dazu gedacht, um einen TwitchUser in einer Chatnachricht zu repräsentieren,

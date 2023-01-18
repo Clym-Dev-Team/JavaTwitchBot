@@ -1,6 +1,8 @@
 package main.system.commandSystem;
 
 import kotlin.text.Regex;
+import main.system.commandSystem.repositories.Command;
+import main.system.commandSystem.repositories.Message;
 
 import java.util.HashSet;
 import java.util.Set;

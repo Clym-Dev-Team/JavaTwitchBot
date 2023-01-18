@@ -1,4 +1,4 @@
-package main.system.commandSystem;
+package main.system.commandSystem.repositories;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -2,9 +2,9 @@ package main.system.hookSystem;
 
 import kotlin.text.MatchResult;
 import kotlin.text.Regex;
-import main.system.commandSystem.Message;
-import main.system.commandSystem.TwitchUser;
-import main.system.commandSystem.TwitchUserPermissions;
+import main.system.commandSystem.repositories.Message;
+import main.system.commandSystem.repositories.TwitchUser;
+import main.system.commandSystem.repositories.TwitchUserPermissions;
 
 import java.time.Instant;
 import java.util.HashMap;
