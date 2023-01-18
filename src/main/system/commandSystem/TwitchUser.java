@@ -1,20 +1,40 @@
-package main.standard.repositories;
+package main.system.commandSystem;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashSet;
+
+import static main.system.commandSystem.TwitchUserPermissions.OWNER;
 
 /**
  * TwitchUser, lediglich dazu gedacht, um einen TwitchUser in einer Chatnachricht zu repräsentieren,
  * und ist nicht dazu gedacht in der Datenbank gespeichert zu werden, denn die Twitch Permissions und Badges könnten
  * sich während der Laufzeit ändern
+ * <p>
+ * Da wenn eine Nachricht Systemintern entsteht/simuliert wird, einige Informationen fehlen, werden beim Erstellen
+ * standard werte eingefügt:
+ * name = -SYSTEM-
+ * id = -SYSTEM-
+ * permissions = OWNER
+ * subscriberMonths = Integer.MAX_VALUE
+ * subscriptionTier = Integer.MAX_VALUE
  */
-@SuppressWarnings("unused")
+@Component
+@Table(name = "Core-Twitch_ChatUser")
+@Entity
 public class TwitchUser {
-    private final String id;
-    private final String name;
-    private final HashSet<TwitchUserPermissions> permissions;
-    private final int subscriberMonths;
-    private final int subscriptionTier;
+    @Id private String id;
+    private String name;
+    private HashSet<TwitchUserPermissions> permissions;
+    private int subscriberMonths;
+    private int subscriptionTier;
+
+    TwitchUser() {
+    }
 
     public TwitchUser(String id, String name, int subscriberMonths, int subscriptionTier, HashSet<TwitchUserPermissions> permissions) {
         this.id = id;
@@ -30,6 +50,10 @@ public class TwitchUser {
         this.subscriberMonths = subscriberMonths;
         this.subscriptionTier = subscriptionTier;
         this.permissions = new HashSet<>(Arrays.asList(permissions));
+    }
+
+    public static TwitchUser getSystemUser() {
+        return new TwitchUser("-SYSTEM-", "-SYSTEM-",Integer.MAX_VALUE, Integer.MAX_VALUE, OWNER);
     }
 
     public String id() {

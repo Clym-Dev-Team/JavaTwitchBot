@@ -1,13 +1,11 @@
-package main.system.eventSystem;
+package main.system.hookSystem;
 
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
-public @interface Subscribe {
-
-    Class<?> EventClass();
+public @interface Hook {
 
 //    @AliasFor(annotation = SuppressWarnings.class, attribute = "value")
 //    String[] value() default {"unused"};

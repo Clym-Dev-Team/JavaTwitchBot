@@ -1,4 +1,4 @@
-package main.system.HookSystem;
+package main.system.hookSystem;
 
 import java.util.Arrays;
 import java.util.StringJoiner;

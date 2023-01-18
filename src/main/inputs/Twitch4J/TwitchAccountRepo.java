@@ -1,17 +1,18 @@
-package main.standard.repositories;
+package main.inputs.Twitch4J;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-
+import java.util.Optional;
 
 @Repository
 public interface TwitchAccountRepo extends CrudRepository<TwitchAccount, String> {
 
     @NotNull ArrayList<TwitchAccount> findAll();
-//    TwitchAccount findbyRole(String role);
 
-//    void updatebytwitchUserID(String twitchUserID, TwitchAccount account);
+    boolean existsByRole(String role);
+
+    Optional<TwitchAccount> getByRole(String role);
 }

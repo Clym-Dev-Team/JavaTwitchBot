@@ -1,24 +1,23 @@
-package main.system.HookSystem;
+package main.system.hookSystem;
 
 import kotlin.text.MatchResult;
 import kotlin.text.Regex;
-import main.standard.repositories.Message;
-import main.standard.repositories.TwitchUser;
-import main.standard.repositories.TwitchUserPermissions;
+import main.system.commandSystem.Message;
+import main.system.commandSystem.TwitchUser;
+import main.system.commandSystem.TwitchUserPermissions;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.Optional;
 
 public class HookParser {
     public static void main(String[] args) {
         new HookMethodRunner();
         TwitchUser user = new TwitchUser("427320589", "orciument", 48, 1, TwitchUserPermissions.OWNER);
-        Message message = new Message("!irgendwas das ist der originale mesasge text", Optional.of(user), false, false, false,false, Optional.empty(), Optional.empty(), "427320589", Instant.now());
+        Message message = new Message("","!irgendwas das ist der originale message text", user, false, false, false,false, null,null, "427320589", Instant.now());
 //        System.out.println(parseCommand(message,"Das ist ein Test Command {follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°} danke fürs zuhören!"));
 //        System.out.println(parseCommand(message,"{follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°}"));
-        System.out.println("Output: "+ parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonts} {randomInt} } danke fürs zuhören!  @{sender}: {currentTime}"));
-//        System.out.println(parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonts} {randomInt} }"));
+        System.out.println("Output: "+ parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} } danke fürs zuhören!  @{sender}: {currentTime}"));
+//        System.out.println(parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} }"));
     }
 
     public static String parseCommand(Message message, String input) {

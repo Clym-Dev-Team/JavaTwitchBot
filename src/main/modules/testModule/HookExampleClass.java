@@ -1,7 +1,7 @@
 package main.modules.testModule;
 
-import main.system.HookSystem.Hook;
-import main.standard.repositories.Message;
+import main.system.commandSystem.Message;
+import main.system.hookSystem.Hook;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,16 +41,12 @@ public class HookExampleClass {
 
     @Hook()
     public static String sender(Message message) {
-        if (message.user().isEmpty())
-            return "-SYSTEM-";
-        return message.user().get().name();
+        return message.user().name();
     }
 
     @Hook()
-    public static String senderSubMonts(Message message) {
-        if (message.user().isEmpty())
-            return String.valueOf(Integer.MAX_VALUE);
-        return String.valueOf(message.user().get().subscriberMonths());
+    public static String senderSubMonths(Message message) {
+        return String.valueOf(message.user().subscriberMonths());
     }
 
     @Hook()
