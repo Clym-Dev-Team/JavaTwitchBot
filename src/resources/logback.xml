@@ -15,7 +15,7 @@
     <logger name="main.system" level="INFO" />
     <logger name="main.system.eventSystem" level="INFO" />
     <logger name="main.standard" level="INFO" />
-    <logger name="Application.Time" level="INFO" />
+    <logger name="main.system.ASCIIProgressbar" level="DEBUG" />
     <logger name="logback" level="WARN" />
 
     <root name="STDOUT" level="WARN">
