@@ -71,7 +71,11 @@
             <artifactId>spring-jdbc</artifactId>
             <version>5.3.23</version>
         </dependency>
-<!--        <dependency>-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <!--        <dependency>-->
 <!--            <groupId>jakarta.persistence</groupId>-->
 <!--            <artifactId>jakarta.persistence-api</artifactId>-->
 <!--            <version>2.2.3</version>-->
@@ -90,6 +94,15 @@
             <resource>
                 <directory>src/resources</directory>
             </resource>
+            <resource>
+                <directory>src/main/modules/</directory>
+            </resource>
+<!--            <resource>-->
+<!--                <directory>src/main/modules/testModule/resources</directory>-->
+<!--            </resource>-->
+<!--            <resource>-->
+<!--                <directory>src/main/modules/testModule2/resources</directory>-->
+<!--            </resource>-->
         </resources>
     </build>
 

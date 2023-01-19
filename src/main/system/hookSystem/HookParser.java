@@ -23,7 +23,8 @@ public class HookParser {
     public static String parseCommand(Message message, String input) {
         if (!equalBracketNumber(input))
             return "ERROR Alle geöffneten Klammern müssen wieder geschlossen werden!";
-        System.out.println("Input: " + input);
+        //TODO LOGGER
+//        System.out.println("Input: " + input);
 
         String output = "";
         int startHookIndex = input.indexOf('{');
@@ -41,7 +42,7 @@ public class HookParser {
             input = input.substring(endHookIndex + 1);
             startHookIndex = input.indexOf('{');
         }
-        return output;
+        return output + input;
     }
 
     private static String parseHooks(Message message, String hook) {

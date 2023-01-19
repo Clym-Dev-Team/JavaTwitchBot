@@ -42,7 +42,7 @@ public class Message {
         repo = messageRepo;
     }
 
-    public Message() {
+    Message() {
     }
 
     public Message(String messageID, String message, TwitchUser user, boolean isHighlightedMessage, boolean isSkipSubsModeMessage, boolean isDesignatedFirstMessage, boolean isUserIntroduction, @Nullable String getCustomRewardId, @Nullable String replyToMessageID, String channelID, Instant sendAT) {
@@ -112,5 +112,15 @@ public class Message {
 
     public Instant sendAT() {
         return sendAT;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "user=" + user.name() +
+                "userP =" + user.permissions() +
+                ", message='" + message + '\'' +
+                ", sendAT=" + sendAT +
+                '}';
     }
 }
