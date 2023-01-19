@@ -19,6 +19,10 @@ public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
+        startup();
+    }
+
+    public static void startup() {
         StopWatch time = new StopWatch(StopWatch.TYPE.STARTUP);
         SpringApplication.run(Application.class);
         System.out.println();

@@ -19,7 +19,7 @@ import java.util.Optional;
 @Input
 public class Twitch4JInput implements TwitchBotInput {
 
-    //Muss in Globale Config
+    //TODO Muss in Globale Config
 //    @Value("panelURL") funktioniert nicht
 //    private String panel_url;
     private static final String panel_url = "https://localhost/";
@@ -63,6 +63,7 @@ public class Twitch4JInput implements TwitchBotInput {
         Optional<TwitchAccount> oldCreds = TwitchAccount.repo.getByRole("primary");
 
         if (oldCreds.isEmpty()) {
+            //TODO
 //            logger.error("Unable to start, because OAuth Credentials could not be found");
 //            throw new RuntimeException("OAuth Credentials not found!");
             oldCreds = Optional.of(injectCred());

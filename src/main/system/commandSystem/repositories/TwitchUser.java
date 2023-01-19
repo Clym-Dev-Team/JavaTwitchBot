@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static main.system.commandSystem.repositories.TwitchUserPermissions.OWNER;
+import static main.system.commandSystem.repositories.TwitchUserPermissions.*;
 
 /**
  * TwitchUser, lediglich dazu gedacht, um einen TwitchUser in einer Chatnachricht zu repräsentieren,
@@ -61,7 +61,7 @@ public class TwitchUser {
     }
 
     public static TwitchUser getSystemUser() {
-        return new TwitchUser("-SYSTEM-", "-SYSTEM-",Integer.MAX_VALUE, Integer.MAX_VALUE, OWNER);
+        return new TwitchUser("-SYSTEM-", "-SYSTEM-",Integer.MAX_VALUE, Integer.MAX_VALUE, VIP,SUBSCRIBER, FOUNDER, ARTIST, MODERATOR, BROADCASTER, OWNER);
     }
 
     public String id() {

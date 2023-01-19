@@ -18,7 +18,7 @@ public class Command {
     private boolean regexMatcher;
     private HashSet<TwitchUserPermissions> permissions;
     private String commandText;
-    private boolean activ;
+    private boolean active;
     private boolean hiddenInList;
     private int cooldown;
     private CooldownType cooldownType;
@@ -36,14 +36,14 @@ public class Command {
     public Command() {
     }
 
-    public Command(String uniqueName, String description, String matcherString, boolean regexMatcher, HashSet<TwitchUserPermissions> permissions, String commandText, boolean activ, boolean hiddenInList, int cooldown, CooldownType cooldownType, String messageColor) {
+    public Command(String uniqueName, String description, String matcherString, boolean regexMatcher, HashSet<TwitchUserPermissions> permissions, String commandText, boolean active, boolean hiddenInList, int cooldown, CooldownType cooldownType, String messageColor) {
         this.uniqueName = uniqueName;
         this.description = description;
         this.matcherString = matcherString;
         this.regexMatcher = regexMatcher;
         this.permissions = permissions;
         this.commandText = commandText;
-        this.activ = activ;
+        this.active = active;
         this.hiddenInList = hiddenInList;
         this.cooldown = cooldown;
         this.cooldownType = cooldownType;
@@ -104,12 +104,12 @@ public class Command {
         return this;
     }
 
-    public boolean activ() {
-        return activ;
+    public boolean active() {
+        return active;
     }
 
-    public Command setActiv(boolean activ) {
-        this.activ = activ;
+    public Command setActive(boolean active) {
+        this.active = active;
         return this;
     }
 

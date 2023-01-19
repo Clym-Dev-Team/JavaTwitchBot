@@ -11,4 +11,9 @@ public class testController {
     public String string() {
         return "test";
     }
+
+    @RequestMapping("/test")
+    public String test() {
+        return "Twitch4JHandler";
+    }
 }
