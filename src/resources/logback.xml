@@ -14,10 +14,10 @@
     <logger name="main.modules" level="INFO" />
     <logger name="main.system" level="INFO" />
     <logger name="main.system.eventSystem" level="INFO" />
-    <logger name="main.standard" level="INFO" />
-    <logger name="main.system.ASCIIProgressbar" level="INFO" />
     <logger name="main.system.commandSystem" level="INFO" />
-    <logger name="logback" level="WARN" />
+    <logger name="main.system.commandSystem.CommandProcessor.Chat" level="DEBUG"/>
+    <logger name="main.system.ASCIIProgressbar" level="INFO" />
+    <logger name="logback" level="INFO" />
 
     <root name="STDOUT" level="WARN">
         <appender-ref ref="STDOUT"/>

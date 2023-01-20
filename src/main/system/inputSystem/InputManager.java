@@ -24,7 +24,7 @@ public class InputManager {
     public static void startAllInputs() {
         logger.info("Starting up Inputs...");
         int iSize = inputSet.size();
-        checkConfigs();
+//        checkConfigs();
         HashSet<String> failing = new HashSet<>();
         HashSet<TwitchBotInput> workSet = inputSet;
 

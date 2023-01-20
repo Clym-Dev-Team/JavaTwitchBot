@@ -34,8 +34,9 @@ public class Twitch4JHandler {
 
     @Subscribe(EventClass = ChannelMessageEvent.class)
     public static void MessageEvent(ChannelMessageEvent messageEvent) {
-//        logger.info("{}: {}", messageEvent.getUser().getName(), messageEvent.getMessage());
-        System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | " + messageEvent.getUser().getName() + ": " + messageEvent.getMessage());
+//        System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | " + messageEvent.getUser().getName() + ": " + messageEvent.getMessage());
+
+        //Convert ChatMessage
         EventUser eUser = messageEvent.getUser();
         TwitchUser user = new TwitchUser(eUser.getId(), eUser.getName(), messageEvent.getSubscriberMonths(), messageEvent.getSubscriptionTier(), translatePerms(messageEvent.getPermissions()));
         String replyToID = null;

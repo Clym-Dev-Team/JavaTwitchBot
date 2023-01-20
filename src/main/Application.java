@@ -3,6 +3,7 @@ package main;
 import jakarta.annotation.PreDestroy;
 import jakarta.persistence.PreRemove;
 import main.system.StopWatch;
+import main.system.commandSystem.CommandProcessor;
 import main.system.inputSystem.InputManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,9 @@ public class Application {
         System.out.println("DD-HH:mm:ss.SSS |LEVEL| [THREAD]        LOGGER (Source Class)               - MSG");
         System.out.println("----------------|-----|-[-------------]---------------------------------------------------------------------------------------------------------------------------------------------");
         InputManager.startAllInputs();
+        new CommandProcessor();
         time.close();
+//        CommandProcessor.generateJunkCommands();
     }
 
     @PreDestroy

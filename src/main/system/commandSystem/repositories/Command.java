@@ -1,8 +1,6 @@
 package main.system.commandSystem.repositories;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +11,14 @@ import java.util.HashSet;
 @Entity
 public class Command {
     @Id private String uniqueName;
+    @Column(length = 1024)
     private String description;
     private String matcherString;
     private boolean regexMatcher;
+    @Convert(converter = TPermSetConverter.class)
+    @Column(length = 512)
     private HashSet<TwitchUserPermissions> permissions;
+    @Column(length = 1024)
     private String commandText;
     private boolean active;
     private boolean hiddenInList;

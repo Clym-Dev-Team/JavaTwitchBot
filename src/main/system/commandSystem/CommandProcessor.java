@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -21,6 +23,7 @@ public class CommandProcessor {
     //give the command text and message to the hook system
 
     private static final Logger logger = LoggerFactory.getLogger(CommandProcessor.class);
+    private static final Logger chat = LoggerFactory.getLogger(CommandProcessor.class.getName() + ".Chat");
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DD-HH:mm:ss.SSS");
 
     private static HashSet<CachedCommand> cachedCommands = cacheCommands();
@@ -28,27 +31,26 @@ public class CommandProcessor {
     private record CachedCommand(
             Pattern regex,
             String commandID
-    ) {
-    }
+    ) {}
 
-    CommandProcessor() {
-
-    }
+    public CommandProcessor() {}
 
     private static HashSet<CachedCommand> cacheCommands() {
-//        generateJunkCommands();
         HashSet<CachedCommand> cached = new HashSet<>();
         //For better performance, simple matcher could be matched without regex,
         //by finding the String till the first " " and comparing that with the matcher
+        int lenght = 0;
         for (Command command : Command.repo.findAll()) {
+            lenght++;
             Pattern pattern;
             if (command.regexMatcher())
                 pattern = Pattern.compile(command.matcherString());
             else
-//                pattern = Pattern.compile("/^" + command.matcherString() + "/i");
-                pattern = Pattern.compile("^" + command.matcherString(), Pattern.CASE_INSENSITIVE);
+                pattern = Pattern.compile("^" + command.matcherString() + "( |$).*", Pattern.CASE_INSENSITIVE);
             cached.add(new CachedCommand(pattern, command.uniqueName()));
         }
+        logger.debug("Number of Commands: {}", lenght);
+        logger.debug(cached.toString());
         return cached;
     }
 
@@ -57,10 +59,13 @@ public class CommandProcessor {
     }
 
     public static void processMessage(Message message) {
-        logger.debug(message.toString());
-        for (CachedCommand cached : cachedCommands) {
-            match(message, cached);
-        }
+        //TODO auch wieder, Thread Pool wäre vermutlich effizienter und schneller
+        new Thread(() -> {
+            logger.debug(message.toString());
+            for (CachedCommand cached : cachedCommands) {
+                match(message, cached);
+            }
+        }, "CommandProcessor").start();
     }
 
     private static void match(Message message, CachedCommand cached) {
@@ -93,8 +98,12 @@ public class CommandProcessor {
         }
         //Check stuff, like permissions
         String response = HookParser.parseCommand(message, command.commandText());
-//        logger.info("KMAB: {}", response);
-        System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | KMAB: " + response);
+
+        if (chat.isInfoEnabled())
+            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | " + message.getUser().name() + ": " + message.message());
+        chat.debug("Response Latency: {} Millis", message.sendAT().until(Instant.now(), ChronoUnit.MILLIS));
+        if (chat.isInfoEnabled())
+            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | KMAB: " + response);
     }
 
     protected static boolean userHasPermission(TwitchUser user, Command command) {
