@@ -13,10 +13,13 @@ import main.system.inputSystem.Input;
 import main.system.inputSystem.TwitchBotInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Input
+@Component
 public class Twitch4JInput implements TwitchBotInput {
 
     //TODO Muss in Globale Config
@@ -24,14 +27,25 @@ public class Twitch4JInput implements TwitchBotInput {
 //    private String panel_url;
     private static final String panel_url = "https://localhost/";
     private static final String channelName = "clym";
+
     //"CONFIG"
-    private static final String app_clientID = "ist0n90no55q5de5skglybbaxcpksl";
-    private static final String app_clientSecret = "afmb0o8z0fgpkc6tty9yz30nvmbg5s";
+    private static String app_clientID = "";
+
+    @Value("${twitchApp_ID}")
+    public void setApp_clientID(String app_clientID) {
+        Twitch4JInput.app_clientID = app_clientID;
+    }
+    private static String app_clientSecret = "";
+
+    @Value("${twitchApp_Secret}")
+    public void setApp_clientSecret(String app_clientSecret) {
+        Twitch4JInput.app_clientSecret = app_clientSecret;
+    }
 
 
     private static final Logger logger = LoggerFactory.getLogger(Twitch4JInput.class);
 
-    private static final TwitchIdentityProvider iProvider = new TwitchIdentityProvider(app_clientID, app_clientSecret, panel_url + "/auth");
+    private static TwitchIdentityProvider iProvider;
     private OAuth2Credential oAuth2Credential;
     private TwitchClient twitchClient;
     private boolean running = false;
@@ -60,6 +74,7 @@ public class Twitch4JInput implements TwitchBotInput {
     @Override
     public void run() {
         logger.debug("Starting... ");
+        iProvider = new TwitchIdentityProvider(app_clientID, app_clientSecret, panel_url + "/auth");
         Optional<TwitchAccount> oldCreds = TwitchAccount.repo.getByRole("primary");
 
         if (oldCreds.isEmpty()) {
@@ -124,8 +139,10 @@ public class Twitch4JInput implements TwitchBotInput {
 
     private TwitchAccount injectCred() {
         return new TwitchAccount(
-                "427320589",
-                "lfcgrnqekrxctaldtkfykhlbpgud7ga5a96an6rvuh6t26wkgg",
+                //Deine Daten zur ersten Initialising einfügen, und die Config Checks deaktivieren, oder die Returns in
+                //dieser checkConfiguration() auskommentieren
+                "",
+                "",
                 "primary");
     }
 }

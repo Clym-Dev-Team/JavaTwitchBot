@@ -20,7 +20,7 @@ public class HookMethodRunner {
 
     public static String runHook(String name, Message message, HashMap<Integer, String> parameter) {
         for (Method method : hooks) {
-            if (method.getName().equals(name))
+            if (method.getName().equalsIgnoreCase(name))
                 return invokeHookMethod(method, message, parameter);
         }
         return "{ERROR cant find Hook with Name: " + name + "}";
@@ -47,7 +47,6 @@ public class HookMethodRunner {
     }
 
     private static Set<Method> scanForHooks() {
-//        Reflections reflections = new Reflections("main.modules", Scanners.MethodsAnnotated);
         Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("main.modules").addScanners(Scanners.MethodsAnnotated));
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Hook.class);
         //Die Methoden müssen static sein und müssen als ersten Parameter die message haben und danach eine beliebige Anzahl von Strings
@@ -59,6 +58,7 @@ public class HookMethodRunner {
 
 
         //Debug Logging
+        //TODO switch to logger
         String output = "";
         for (Method method : collect) {
             output += method.getName() + "(";

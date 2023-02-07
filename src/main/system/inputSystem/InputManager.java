@@ -36,7 +36,7 @@ public class InputManager {
             } catch (RuntimeException e) {
                 failing.add(input.getClass().getName());
                 workSet.remove(input);
-                logger.error("Unable to Start Input: {} because: {}", input.getClass().getName(), e);
+                logger.error("Unable to Start Input: {} because:", input.getClass().getName(), e);
             }
         }
         if (workSet.size() != iSize) {

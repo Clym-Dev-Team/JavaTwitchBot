@@ -14,14 +14,6 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class CommandProcessor {
-    //Get all Command from DB
-    //PreCalc the Regex's
-    //refresh method that runs in its own tab
-
-    //check permissions
-    //find matching regex's
-    //give the command text and message to the hook system
-
     private static final Logger logger = LoggerFactory.getLogger(CommandProcessor.class);
     private static final Logger chat = LoggerFactory.getLogger(CommandProcessor.class.getName() + ".Chat");
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DD-HH:mm:ss.SSS");
@@ -89,7 +81,7 @@ public class CommandProcessor {
             return;
         }
 
-        //Cooldown
+        //TODO check Cooldown
 //        if (!command.)
 
         if (!userHasPermission(message.user(), command)) {
@@ -100,10 +92,10 @@ public class CommandProcessor {
         String response = HookParser.parseCommand(message, command.commandText());
 
         if (chat.isInfoEnabled())
-            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | " + message.getUser().name() + ": " + message.message());
+            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT=| " + message.getUser().name() + ": " + message.message());
         chat.debug("Response Latency: {} Millis", message.sendAT().until(Instant.now(), ChronoUnit.MILLIS));
         if (chat.isInfoEnabled())
-            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | KMAB: " + response);
+            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT=| KMAB: " + response);
     }
 
     protected static boolean userHasPermission(TwitchUser user, Command command) {

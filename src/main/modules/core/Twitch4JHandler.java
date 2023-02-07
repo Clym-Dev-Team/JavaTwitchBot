@@ -34,7 +34,8 @@ public class Twitch4JHandler {
 
     @Subscribe(EventClass = ChannelMessageEvent.class)
     public static void MessageEvent(ChannelMessageEvent messageEvent) {
-//        System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | " + messageEvent.getUser().getName() + ": " + messageEvent.getMessage());
+        if (messageEvent.getMessage().toCharArray()[0] == '!')
+            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | " + messageEvent.getUser().getName() + ": " + messageEvent.getMessage());
 
         //Convert ChatMessage
         EventUser eUser = messageEvent.getUser();
@@ -57,6 +58,8 @@ public class Twitch4JHandler {
         CommandProcessor.processMessage(message);
     }
 
+
+    //Das sind nur schnelle Beispiele um zu testen, dass es funktioniert
     @Subscribe(EventClass = CheerEvent.class)
     @Deprecated(forRemoval = true)
     public static void CheerEvent(CheerEvent cheerEvent) {
