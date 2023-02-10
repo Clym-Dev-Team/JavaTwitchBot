@@ -1,0 +1,48 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+dependencies {
+    api 'org.springframework.boot:spring-boot-starter-thymeleaf:3.0.1'
+    api 'org.springframework.boot:spring-boot-starter-web:3.0.1'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.1'
+    api 'org.springframework:spring-beans:6.0.3'
+    api 'org.reflections:reflections:0.10.2'
+    api 'com.github.twitch4j:twitch4j:1.12.0'
+    api 'ch.qos.logback:logback-classic:1.4.5'
+    api 'org.springframework:spring-jdbc:5.3.23'
+    api 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools:3.0.1'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.0.9'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.1'
+}
+
+group = 'de.orciument'
+version = '0.0.1-SNAPSHOT'
+description = 'JavaTwitchBot'
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+}
