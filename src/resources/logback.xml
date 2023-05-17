@@ -1,6 +1,6 @@
 <configuration debug="false">
     <!-- Stop output INFO at start -->
-    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -10,14 +10,15 @@
         </encoder>
     </appender>
 
-    <logger name="main.inputs" level="WARN" />
-    <logger name="main.modules" level="INFO" />
-    <logger name="main.system" level="INFO" />
-    <logger name="main.system.eventSystem" level="INFO" />
-    <logger name="main.system.commandSystem" level="INFO" />
+    <logger name="main.inputs" level="WARN"/>
+    <logger name="main.inputs.TipeeeStream" level="INFO"/>
+    <logger name="main.modules" level="INFO"/>
+    <logger name="main.system" level="INFO"/>
+    <logger name="main.system.eventSystem" level="INFO"/>
+    <logger name="main.system.commandSystem" level="INFO"/>
     <logger name="main.system.commandSystem.CommandProcessor.Chat" level="DEBUG"/>
-    <logger name="main.system.ASCIIProgressbar" level="INFO" />
-    <logger name="logback" level="INFO" />
+    <logger name="main.system.ASCIIProgressbar" level="INFO"/>
+    <logger name="logback" level="INFO"/>
 
     <root name="STDOUT" level="WARN">
         <appender-ref ref="STDOUT"/>

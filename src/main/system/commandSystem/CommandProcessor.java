@@ -1,5 +1,6 @@
 package main.system.commandSystem;
 
+import main.inputs.Twitch4J.Twitch4JInput;
 import main.system.commandSystem.repositories.*;
 import main.system.hookSystem.HookParser;
 import org.slf4j.Logger;
@@ -96,6 +97,8 @@ public class CommandProcessor {
         chat.debug("Response Latency: {} Millis", message.sendAT().until(Instant.now(), ChronoUnit.MILLIS));
         if (chat.isInfoEnabled())
             System.out.println(simpleDateFormat.format(new Date()) + " |CHAT=| KMAB: " + response);
+        //TODO NUR als Workaround!, nicht prod. ready
+        Twitch4JInput.sendMessage(response);
     }
 
     protected static boolean userHasPermission(TwitchUser user, Command command) {

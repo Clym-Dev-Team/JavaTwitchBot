@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommandRepo extends CrudRepository<Command, String> {
+    boolean existsByMatcherStringIgnoreCase(String matcherString);
 }
