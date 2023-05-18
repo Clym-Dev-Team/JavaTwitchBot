@@ -85,4 +85,9 @@ public class TipeeeInput implements TwitchBotInput {
     public boolean running() {
         return socket.connected();
     }
+
+    @Override
+    public String threadName() {
+        return "TipeeeWebsocket";
+    }
 }
