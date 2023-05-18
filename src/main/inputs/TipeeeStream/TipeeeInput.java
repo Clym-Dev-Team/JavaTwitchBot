@@ -1,4 +1,4 @@
-package main.inputs.tipeee;
+package main.inputs.TipeeeStream;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -17,22 +17,22 @@ import java.util.Arrays;
 
 @Input
 @Component
-public class TipeeInput implements TwitchBotInput {
+public class TipeeeInput implements TwitchBotInput {
 
     @Value("${tipeee_apiKey}")
     public void setApiKey(String apiKey) {
-        TipeeInput.apiKey = apiKey;
+        TipeeeInput.apiKey = apiKey;
     }
     private static String apiKey;
 
     @Value("${tipeee_channel}")
     public void setChannelName(String channelName) {
-        TipeeInput.channelName = channelName;
+        TipeeeInput.channelName = channelName;
     }
     private static String channelName;
 
     private Socket socket;
-    private static final Logger LOGGER = LoggerFactory.getLogger(TipeeInput.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TipeeeInput.class);
 
     @Override
     public boolean checkConfiguration() {
