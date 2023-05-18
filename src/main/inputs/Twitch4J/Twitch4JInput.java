@@ -142,6 +142,11 @@ public class Twitch4JInput implements TwitchBotInput {
         return true;
     }
 
+    @Override
+    public String threadName() {
+        return "TwitchReading";
+    }
+
     private TwitchAccount injectCred() {
         return new TwitchAccount(
                 //Deine Daten zur ersten Initialising einfügen, und die Config Checks deaktivieren, oder die Returns in
