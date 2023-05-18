@@ -10,6 +10,7 @@ public interface DonationRepo extends CrudRepository<DonationEvent, Long> {
     @Query(value = "SELECT * FROM donations WHERE donated_at = " +
             "(SELECT max(donated_at) FROM donations)", nativeQuery = true)
 //    @Query(value = "SELECT d FROM Donations d WHERE d.donated_at = (SELECT MAX(d.donated_at) FROM Donations d)") Does not work
+    //^^Does not work
     DonationEvent getMostRecent();
 
 }
