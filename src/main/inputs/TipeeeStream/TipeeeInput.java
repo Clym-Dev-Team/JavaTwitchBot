@@ -36,7 +36,7 @@ public class TipeeeInput implements TwitchBotInput {
 
     @Override
     public boolean checkConfiguration() {
-        return false;
+        return true;
     }
 
     @Override
@@ -83,6 +83,8 @@ public class TipeeeInput implements TwitchBotInput {
 
     @Override
     public boolean running() {
+        if (socket == null)
+            return false;
         return socket.connected();
     }
 
