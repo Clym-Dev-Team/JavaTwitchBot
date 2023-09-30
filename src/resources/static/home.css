@@ -1,0 +1,83 @@
+:root {
+    --twitchViolett: rgb(112, 34, 226);
+    --accentColor: rgb(250, 50, 95);
+    --gradient-standard: linear-gradient(
+        var(--twitchViolett) 0%,
+        var(--accentColor) 100%
+   );
+    --background: black;
+}
+
+
+nav {
+    width: 15%;
+    min-height: 100vh;
+    background: var(--gradient-standard);
+    padding-right: 25px;
+    display: inline-block;
+}
+
+div.commandSearch {
+    padding: 15px;
+}
+
+div.commandSearch > input {
+    width: 100%;
+}
+
+div.moduleList {
+    background-color: var(--background);
+    border-radius: 0rem 2rem 2rem 0rem;
+    padding-top: 5px;
+    height: fit-content;
+}
+
+div.module {
+
+    padding: 10px;
+    padding-top: 0px;
+    font-family: Bahnschrift;
+    font-size: xx-large;
+    margin-bottom: 5px;
+    display: grid;
+    border-bottom: 2px solid;
+
+    border-image: linear-gradient(
+        90deg,
+        transparent 0 10%,
+        var(--accentColor) 50%,
+        transparent 90%
+    ) 10;
+
+}
+
+div.module > a {
+    padding-top: 10px;
+    text-decoration: none;
+}
+
+a {
+    color: var(--twitchViolett);
+    transition: 300ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+a:hover {
+    color: var(--accentColor);
+}
+
+.subMenuItem {
+    padding-left: 10px;
+}
+
+iframe {
+    border: none;
+    flex-grow: 1;
+    min-height: 100vh;
+}
+
+body {
+    margin: 0px;
+    height: fit-content;
+    min-height: -webkit-fill-available;
+    display: flex;
+}

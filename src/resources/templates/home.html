@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="home.css" rel="stylesheet">
+    <link href="DesignBoard.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title th:text="${displayName} + ' - Panel'">Platzhalter</title>
+</head>
+<body>
+<nav>
+    <div class="commandSearch">
+        <input type="search" placeholder="Command Suchen">
+    </div>
+    <div class="moduleList">
+        <div class="module" th:each="module :${list}" >
+            <a class="menuItem" th:text="${module.topicName}" th:href="'/' + ${module.link}"></a>
+            <a class="subMenuItem" th:each="tab: ${module.subItems}" th:text="${tab.topicName}" th:href="'/' + ${module.link} + '?group=' + ${tab.link}"></a>
+        </div>
+    </div>
+</nav>
+<iframe th:src="'/page/' + ${pageName}" class="content"></iframe>
+</body>
+</html>

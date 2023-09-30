@@ -1,0 +1,94 @@
+:root {
+    --twitchViolett: rgb(112, 34, 226);
+    --accentColor: rgb(250, 50, 95);
+    --gradient-standard: linear-gradient(
+        var(--twitchViolett) 0%,
+        var(--accentColor) 100%
+   );
+    --background: black;
+}
+
+button {
+    font-family: Bahnschrift;
+    padding: 10px;
+    border-radius: 2rem;
+    transition: 200ms cubic-bezier(0.4, 0.46, 0.72, 0.44);
+    cursor: pointer;
+
+    color: white;
+    border: 3px solid white;
+    background: linear-gradient(
+         130deg,
+         transparent 0% 33%,
+         var(--twitchViolett) 66%,
+         var(--accentColor) 100%
+    );
+    background-size: 300% 300%;
+}
+
+.addButton {
+    background: linear-gradient(
+         130deg,
+         transparent 0% 25%,
+         #208323 50%,
+         #30C535 75%,
+         #91DA23 100%
+    );
+    background-size: 400% 400%;
+}
+
+.deleteButton {
+    background: linear-gradient(
+         130deg,
+         transparent 0% 33%,
+         #780000 50%,
+         #c1121f 78%,
+         #ff4d6d 100%
+    );
+    background-size: 300% 300%;
+}
+
+.editButton {
+    background: linear-gradient(
+         130deg,
+         transparent 0% 33%,
+         #ff7b00 66%,
+         #ffea00 100%
+    );
+    background-size: 300% 300%;
+}
+
+button:hover {
+    color: black;
+    background-position: 100% 100%;
+    border-color: black;
+    /*
+    border-width: 0px;
+    margin: 3px;
+    scale: 1.05 1.15;
+    */
+}
+
+input {
+    border-radius: 2rem;
+    border: 3px solid white;
+    background-color: black;
+    cursor: text;
+    color: white;
+    padding: 5px;
+}
+
+
+body {
+    background: black;
+    /*Farben für Panel Seiten Speichern*/
+    color: #ff0054; /*Commands*/
+    color: #4cc9f0; /* */
+    color: #affc41; /* */
+    color: #4d194d; /*Giveaways*/
+    color: #ffdc5e; /* */
+    color: white;
+    background-image: url("images/top-waves.svg");
+    background-size: cover;
+    background-attachment: fixed;
+}

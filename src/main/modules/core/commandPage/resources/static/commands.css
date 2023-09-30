@@ -1,0 +1,81 @@
+:root {
+    --twitchViolett: rgb(112, 34, 226);
+    --accentColor: rgb(250, 50, 95);
+    --gradient-standard: linear-gradient(
+        var(--twitchViolett) 0%,
+        var(--accentColor) 100%
+   );
+    --background: black;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+tr {
+    cursor: pointer;
+/*    border-bottom: 2px solid;
+    border-image: linear-gradient( 90deg, transparent 0 5%, var(--accentColor) 25%, var(--accentColor) 75%, transparent 95% ) 10; */
+    display: block;
+}
+
+td {
+    border: 1px solid grey;
+}
+
+td.uniqueName {
+    width:10vw;
+}
+
+td.active {
+    color: white;
+}
+
+td.commandText {
+    overflow: hidden;
+}
+
+td > div {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+td.active > div {
+    width: 1.5em;
+}
+
+td.boolean_indicator > div {
+    aspect-ratio: 1 / 1;
+
+    font-family: Bahnschrift;
+    background-color: #353a35;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px;
+    margin-left: 4px;
+    margin-right: 4px;
+    /* Gimmick
+    border-bottom-style: solid;
+    border-top-style: solid; */
+}
+
+div.on {
+    color: #25d725;
+}
+
+div.off {
+    color: red;
+}
+
+
+body {
+    height: 100%;
+    color: white;
+}
+
+html {
+    height: 100%;
+}

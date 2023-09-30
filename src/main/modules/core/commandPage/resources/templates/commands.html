@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../DesignBoard.css">
+    <link rel="stylesheet" href="../commands.css">
+    <title>Commands</title>
+
+    <script>
+        function rowClicked(value) {
+            location.href = "/commandEditor?id=" + value;
+        }
+    </script>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <td>UniqueName</td>
+        <td>INFO</td>
+        <td>Command Text:</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="command :${commands}"
+        th:some-field="${command.uniqueName}" onclick="rowClicked(this.getAttribute('some-field'))">
+        <td class="uniqueName">
+            <p th:text="${command.uniqueName}"></p>
+        </td>
+        <td class="active boolean_indicator">
+            <div th:classappend="${command.active} ? on : off"
+                 th:text="${command.active} ? x : o"></div>
+        </td>
+        <td class="shown boolean_indicator">
+            <div th:classappend="${command.hiddenInList} ? on : off"
+            th:text="${command.hiddenInList} ? x : o"></div>
+<!--            ⬤ : ◯-->
+        </td>
+        <td class="commandText">
+            <p th:text="${command.commandText}"></p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
