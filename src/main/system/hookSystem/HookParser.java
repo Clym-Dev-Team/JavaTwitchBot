@@ -4,15 +4,18 @@ import kotlin.text.MatchResult;
 import kotlin.text.Regex;
 import main.system.commandSystem.repositories.Message;
 import main.system.commandSystem.repositories.TwitchUser;
-import main.system.commandSystem.repositories.TwitchUserPermissions;
+import main.system.commandSystem.repositories.TwitchUserPermission;
 
 import java.time.Instant;
 import java.util.HashMap;
 
+/**
+ * Parses a Command to find and execute any hooks that are used in it.
+ */
 public class HookParser {
     public static void main(String[] args) {
         new HookMethodRunner();
-        TwitchUser user = new TwitchUser("427320589", "orciument", 48, 1, TwitchUserPermissions.OWNER);
+        TwitchUser user = new TwitchUser("427320589", "orciument", 48, 1, TwitchUserPermission.OWNER);
         Message message = new Message("","!irgendwas das ist der originale message text", user, false, false, false,false, null,null, "427320589", Instant.now());
 //        System.out.println(parseCommand(message,"Das ist ein Test Command {follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°} danke fürs zuhören!"));
 //        System.out.println(parseCommand(message,"{follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°}"));
@@ -20,6 +23,12 @@ public class HookParser {
 //        System.out.println(parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} }"));
     }
 
+    /**
+     * Parse a Command for Hooks and execute all the Hooks
+     * @param message The Message which Hooks should be executed
+     * @param input The Message that triggered the Command and Arguments come from
+     * @return The Response to the Message/the build Command Response
+     */
     public static String parseCommand(Message message, String input) {
         if (!equalBracketNumber(input))
             return "ERROR Alle geöffneten Klammern müssen wieder geschlossen werden!";
@@ -29,7 +38,7 @@ public class HookParser {
         String output = "";
         int startHookIndex = input.indexOf('{');
         while (startHookIndex > 0) {
-            //Add part bevor Hook start to output without modifying it
+            //Add part before start of Hook to output without modifying it
             output += input.substring(0, startHookIndex);
 
             int endHookIndex = findClosingBracket(input);
@@ -45,6 +54,12 @@ public class HookParser {
         return output + input;
     }
 
+    /**
+     * Parse the given Hook String, find the matching Hook function, match all the Arguments, and execute the Hook function
+     * @param message The Message that triggered the Command
+     * @param hook The Hook String from the Command
+     * @return The Output from the Hook
+     */
     private static String parseHooks(Message message, String hook) {
         //Skip first {
         hook = hook.substring(1);
@@ -113,9 +128,10 @@ public class HookParser {
     }
 
     /**
-     * Nimmt zb. so einen Input:
-     * <br> {@code  {ifequals {messageSource} °User° {atUser} } restlicher COmmand, hallo!}
-     * und returned den Index der schließenden Klammer
+     * Counts the opening and closing brackets and returns the index of the closing bracket.
+     * @apiNote Expects that the first character of the String is the first opening bracket. So be careful about leading whitespace .
+     * @param input
+     * @return The Index of the closing bracket
      */
     private static int findClosingBracket(String input) {
         int start = input.indexOf('{') + 1;
@@ -133,6 +149,10 @@ public class HookParser {
         return 0;
     }
 
+    /**
+     * @param input The String to check
+     * @return If the String contains a equal number of opening and closing brackets
+     */
     private static boolean equalBracketNumber(String input) {
         int open = 0;
         int close = 0;

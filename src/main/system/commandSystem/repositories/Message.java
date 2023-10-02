@@ -8,16 +8,18 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 /**
- * Chatmessage
+ * Chatmessageobject for DB saving and Runtime
  */
 @Component
 @Entity
 @Table(name = "Core-Twitch_Chat_Messages")
 public class Message {
+    //Annotate all Columns explicitly
     @Id private String messageID;
     private String message;
     @ManyToOne() @JoinColumn(name = "Twitch_ChatUser_ID")
     private TwitchUser user;
+    //Remove user from here, only save ID to DB and get the User Object by Caching it here, and if it is missing, get it from Twitch
     private boolean isHighlightedMessage;
     private boolean isSkipSubsModeMessage;
     private boolean isDesignatedFirstMessage;
@@ -118,7 +120,7 @@ public class Message {
     public String toString() {
         return "Message{" +
                 "user=" + user.name() +
-                "userP =" + user.permissions() +
+                "userP =" + user.permission() +
                 ", message='" + message + '\'' +
                 ", sendAT=" + sendAT +
                 '}';
