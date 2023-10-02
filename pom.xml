@@ -102,12 +102,12 @@
             <resource>
                 <directory>src/main/modules/</directory>
             </resource>
-<!--            <resource>-->
-<!--                <directory>src/main/modules/testModule/resources</directory>-->
-<!--            </resource>-->
-<!--            <resource>-->
-<!--                <directory>src/main/modules/testModule2/resources</directory>-->
-<!--            </resource>-->
+            <resource>
+                <directory>src/main/modules/core/commandPage/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/modules/DesignBoard/resources</directory>
+            </resource>
         </resources>
     </build>
 
