@@ -34,11 +34,9 @@ public class CommandProcessor {
     private record CachedCommand(
             Pattern regex,
             String commandID
-    ) {
-    }
+    ) {}
 
-    public CommandProcessor() {
-    }
+    public CommandProcessor() {}
 
     /**
      * Builds the Command Regex Cache. Currently, the entire cache is rebuild, but this could be changed in the
@@ -124,7 +122,7 @@ public class CommandProcessor {
         }
 
         // Build Response based on the Command and the Chat Message
-        String response = HookParser.parseCommand(message, command.commandText());
+        String response = HookParser.parseCommand(message, command.uniqueName(), command.commandText());
 
         if (chat.isInfoEnabled())
             System.out.println(simpleDateFormat.format(new Date()) + " |CHAT=| " + message.getUser().name() + ": " + message.message());
