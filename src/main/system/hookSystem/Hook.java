@@ -6,9 +6,6 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Documented
 public @interface Hook {
-
-//    @AliasFor(annotation = SuppressWarnings.class, attribute = "value")
-//    String[] value() default {"unused"};
     //TODO Docs for Error handling
     //TODO Docs for no overriding Hooks, first exact name Match
 }

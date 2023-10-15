@@ -1,18 +1,20 @@
 package main.system.hookSystem;
 
 import main.system.commandSystem.repositories.Message;
+import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.StringJoiner;
 
 /**
  * Hooks are Methods that can be named in a Command and are used to replace parts of the String to embed values in the
@@ -22,10 +24,14 @@ import java.util.stream.Collectors;
  */
 public class HookMethodRunner {
 
+    private static final Logger logger = LoggerFactory.getLogger(HookMethodRunner.class);
+
     /**
      * The Hook Methods found in the Modules directory
      */
-    private static final Set<Method> hooks = scanForHooks();
+    private static final Method[] hooks = scanForHooks();
+
+    public static final String HOOK_SOURCE = "main.modules";
 
     /**
      * This Method is only for the Execution of already found Hooks. <br>
@@ -43,30 +49,55 @@ public class HookMethodRunner {
             if (method.getName().equalsIgnoreCase(name))
                 return invokeHookMethod(method, message, parameter);
         }
-        return "{ERROR cant find Hook with Name: " + name + "}";
+        logger.error("Hook with name: \"{}\" could not be found!", name);
+        return "{ERROR}";
     }
 
-    private static String invokeHookMethod(Method method, Message message, HashMap<Integer, String> parameter) {
-        // dunno why this is a hashmap, it had some reason, but I forgot and I am hungry
-        // maybe something about ordering of the Arguments
-        ArrayList<Object> list = new ArrayList<>();
-        if (parameter != null) {
-            for (int i = 0; i < parameter.size(); i++) {
-                list.add(parameter.get(i));
-            }
-        }
-
+    private static @NotNull String invokeHookMethod(@NotNull Method method, @NotNull Message message, @NotNull ArrayList<String> parameter) {
+        Object[] executionParameter;
         // Conditionally add Message at beginning of Parameter list, if it is specified in the Method
-        if (method.getParameterCount() >= 1 && method.getParameterTypes()[0].equals(Message.class)) {
-            list.add(0, message);
-        }
+        if (method.getParameters().length >= 1 && method.getParameters()[0].getType() == Message.class) {
+            executionParameter = new Object[parameter.size() + 1];
+            executionParameter[0] = message;
+            System.arraycopy(parameter.toArray(), 0, executionParameter, 1, parameter.size());
+        } else
+            executionParameter = parameter.toArray();
 
         try {
-            return (String) method.invoke(null, list.toArray());
-        } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
-            e.printStackTrace();
-            return "{ERROR cant execute Hook: " + method.getName() + " " + e.getMessage() + " args: " + list.size() + " argsN: " + method.getParameterCount() + "}";
+            return (String) method.invoke(null, executionParameter);
+
+            //ERROR HANDLING
+        } catch (IllegalArgumentException e) {
+            //Skip "class " to reduce clutter in logs
+            String declaringClass = method.getDeclaringClass().toString().substring(6);
+
+            StringJoiner executionParameterTypes = new StringJoiner(", ");
+            for (Object o : executionParameter) {
+                executionParameterTypes.add(o.getClass().toString().substring(6));
+            }
+
+            // this, instead of Arrays.toString to remove the []
+            StringJoiner methodParameterTypes = new StringJoiner(", ");
+            for (Parameter p : method.getParameters()) {
+                methodParameterTypes.add(p.toString());
+            }
+
+            logger.error("Hook invoked with invalid Argument(s)! Failed to pass: [{}] --to-> {}.{}({})",
+                    executionParameterTypes,
+                    declaringClass,
+                    method.getName(),
+                    methodParameterTypes
+            );
+
+        } catch (InvocationTargetException e) {
+            String declaringClass = method.getDeclaringClass().toString().substring(6);
+            logger.error("Hook threw a Exception: Source: {}.{}, E: {}", declaringClass, method.getName(), e.getMessage());
+
+        } catch (IllegalAccessException e) {
+            String declaringClass = method.getDeclaringClass().toString().substring(6);
+            logger.error("Hook is Illegal to Access: Hook: {}.{}, E: {}", declaringClass, method.getName(), e.getMessage());
         }
+        return "{ERROR}";
     }
 
     /**
@@ -81,34 +112,15 @@ public class HookMethodRunner {
      *
      * @return The Set of valid Hook Methods
      */
-    private static Set<Method> scanForHooks() {
-        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("main.modules").addScanners(Scanners.MethodsAnnotated));
+    private static Method[] scanForHooks() {
+        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(HOOK_SOURCE).addScanners(Scanners.MethodsAnnotated));
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Hook.class);
         //Die Methoden müssen static sein und müssen als ersten Parameter die message haben und danach eine beliebige Anzahl von Strings
-        Set<Method> collect = methods.stream()
+        Method[] collect = methods.stream()
                 .filter(method -> Modifier.isStatic(method.getModifiers()))
                 .filter(method -> method.getReturnType().equals(String.class))
                 .filter(HookMethodRunner::parameterFilter)
-                .collect(Collectors.toSet());
-
-
-        //Debug Logging
-        //TODO switch to logger
-        String output = "";
-        for (Method method : collect) {
-            output += method.getName() + "(";
-
-            for (Class<?> aClass : method.getParameterTypes())
-                output += aClass.getName() + " ,";
-
-
-            if (method.getParameterCount() > 0)
-                output = output.substring(0, output.length() - 2);
-
-            output += ")";
-//            System.out.println(output);
-            output = "";
-        }
+                .toArray(Method[]::new);
         return collect;
     }
 
@@ -121,15 +133,11 @@ public class HookMethodRunner {
      */
     private static boolean parameterFilter(Method method) {
         Object[] distinctParameter = Arrays.stream(method.getParameterTypes()).distinct().toArray();
-
-        boolean returnValue;
-        switch (distinctParameter.length) {
-            case 0 -> returnValue = true;
-            case 1 -> returnValue = distinctParameter[0].equals(Message.class) || distinctParameter[0].equals(String.class);
-            case 2 -> returnValue = method.getParameterTypes()[0].equals(Message.class) && distinctParameter[1].equals(String.class);
-            default -> returnValue = false;
-        }
-        //System.out.println(method.getName() + ": " + count + " " + Arrays.toString(distinctParameter) + " -> " + returnValue);
-        return returnValue;
+        return switch (distinctParameter.length) {
+            case 0 -> true;
+            case 1 -> distinctParameter[0].equals(Message.class) || distinctParameter[0].equals(String.class);
+            case 2 -> method.getParameterTypes()[0].equals(Message.class) && distinctParameter[1].equals(String.class);
+            default -> false;
+        };
     }
 }

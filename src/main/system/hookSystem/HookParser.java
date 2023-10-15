@@ -7,7 +7,9 @@ import main.system.commandSystem.repositories.TwitchUser;
 import main.system.commandSystem.repositories.TwitchUserPermission;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Parses a Command to find and execute any hooks that are used in it.
@@ -18,9 +20,13 @@ public class HookParser {
         TwitchUser user = new TwitchUser("427320589", "orciument", 48, 1, TwitchUserPermission.OWNER);
         Message message = new Message("","!irgendwas das ist der originale message text", user, false, false, false,false, null,null, "427320589", Instant.now());
 //        System.out.println(parseCommand(message,"Das ist ein Test Command {follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°} danke fürs zuhören!"));
+        //TODO Hook needs one character bevor start to be detected!
 //        System.out.println(parseCommand(message,"{follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°}"));
-        System.out.println("Output: "+ parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} } danke fürs zuhören!  @{sender}: {currentTime}"));
+//        System.out.println(parseCommand(message," {follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°}"));
+//        System.out.println("Output: "+ parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} } danke fürs zuhören!  @{sender}: {currentTime}"));
 //        System.out.println(parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} }"));
+//        System.out.println(parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} °dasd °}"));
+        System.out.println(parseCommand(message, "Test: {Math °+° {follow} {randomInt}}"));
     }
 
     /**
@@ -29,8 +35,9 @@ public class HookParser {
      * @param input The Message that triggered the Command and Arguments come from
      * @return The Response to the Message/the build Command Response
      */
-    public static String parseCommand(Message message, String input) {
+    public static String parseCommand(Message originalMessage, String input) {
         if (!equalBracketNumber(input))
+            //TODO Improve
             return "ERROR Alle geöffneten Klammern müssen wieder geschlossen werden!";
         //TODO LOGGER
 //        System.out.println("Input: " + input);
@@ -45,7 +52,7 @@ public class HookParser {
             String substring = input.substring(startHookIndex, endHookIndex + 1);
 
             //Parse the substring Hook
-            output += parseHooks(message,substring);
+            output += parseHooks(originalMessage,substring);
 
             //Delete already parsed part from Input
             input = input.substring(endHookIndex + 1);
@@ -65,23 +72,13 @@ public class HookParser {
         hook = hook.substring(1);
 
         String name;
-        HashMap<Integer, String> parameter = new HashMap<>();
-
-        //Does not have Parameter
-        if (!hook.contains("{") && !hook.contains("°")) {
-            name = hook.substring(0, hook.indexOf("}"));
-            //Execute hook
-            return HookMethodRunner.runHook(name, message,null);
-        }
-
+        ArrayList<String> parameter = new ArrayList<>();
 
         //Has a parameter
         name = textTillControlChar(hook).trim();
         //Remove name from the hook String
         hook = hook.replace(name, "");
 
-        int index = 0;
-        //Loop
         while (hook.length() > 0) {
             switch (hook.charAt(0)) {
                 //Parameter is Hook
@@ -94,8 +91,7 @@ public class HookParser {
                     String returnString = parseHooks(message, substring);
 
                     //Add to Parameter Map
-                    parameter.put(index, returnString);
-                    index++;
+                    parameter.add(returnString);
 
                     //Remove parsed part from String
                     hook = hook.replace(substring, "");
@@ -106,8 +102,7 @@ public class HookParser {
                     String substring = hook.substring(1, endIndex);
 
                     //Add to Parameter Map
-                    parameter.put(index, substring);
-                    index++;
+                    parameter.add(substring);
 
                     //Remove parsed part from String
                     hook = hook.replace("°" + substring + "°", "");
