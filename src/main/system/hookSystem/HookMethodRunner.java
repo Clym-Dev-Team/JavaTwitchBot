@@ -29,9 +29,14 @@ public class HookMethodRunner {
     /**
      * The Hook Methods found in the Modules directory
      */
-    private static final Method[] hooks = scanForHooks();
+    private static Method[] hooks = scanForHooks("main.modules");
 
-    public static final String HOOK_SOURCE = "main.modules";
+    /**
+     * This overrides the Hook package destination <b>permanently</b> only use in setup of unit tests!
+     */
+    public static void rebuildForTests() {
+        hooks = scanForHooks("test.hooksystem");
+    }
 
     /**
      * This Method is only for the Execution of already found Hooks. <br>
@@ -112,16 +117,15 @@ public class HookMethodRunner {
      *
      * @return The Set of valid Hook Methods
      */
-    private static Method[] scanForHooks() {
-        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(HOOK_SOURCE).addScanners(Scanners.MethodsAnnotated));
+    private static Method[] scanForHooks(String hook_source) {
+        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(hook_source).addScanners(Scanners.MethodsAnnotated));
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Hook.class);
         //Die Methoden müssen static sein und müssen als ersten Parameter die message haben und danach eine beliebige Anzahl von Strings
-        Method[] collect = methods.stream()
+        return methods.stream()
                 .filter(method -> Modifier.isStatic(method.getModifiers()))
                 .filter(method -> method.getReturnType().equals(String.class))
                 .filter(HookMethodRunner::parameterFilter)
                 .toArray(Method[]::new);
-        return collect;
     }
 
     /**

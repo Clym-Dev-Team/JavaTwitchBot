@@ -5,128 +5,145 @@ import kotlin.text.Regex;
 import main.system.commandSystem.repositories.Message;
 import main.system.commandSystem.repositories.TwitchUser;
 import main.system.commandSystem.repositories.TwitchUserPermission;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Parses a Command to find and execute any hooks that are used in it.
  */
 public class HookParser {
+
+    private static final Regex MATCH_TILL_CONTROL_CHAR = new Regex("^[^{}°]*");
+    private static final Logger logger = LoggerFactory.getLogger(HookParser.class);
+
     public static void main(String[] args) {
-        new HookMethodRunner();
+//        new HookMethodRunner("main.modules");
         TwitchUser user = new TwitchUser("427320589", "orciument", 48, 1, TwitchUserPermission.OWNER);
-        Message message = new Message("","!irgendwas das ist der originale message text", user, false, false, false,false, null,null, "427320589", Instant.now());
-//        System.out.println(parseCommand(message,"Das ist ein Test Command {follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°} danke fürs zuhören!"));
+        Message message = new Message("", "!irgendwas das ist der originale message text", user, false, false, false, false, null, null, "427320589", Instant.now());
+        System.out.println(parseCommand(message, "test", "Das ist ein Test Command {follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°} danke fürs zuhören!"));
         //TODO Hook needs one character bevor start to be detected!
-//        System.out.println(parseCommand(message,"{follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°}"));
-//        System.out.println(parseCommand(message," {follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°}"));
-//        System.out.println("Output: "+ parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} } danke fürs zuhören!  @{sender}: {currentTime}"));
-//        System.out.println(parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} }"));
-//        System.out.println(parseCommand(message,"Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} °dasd °}"));
-        System.out.println(parseCommand(message, "Test: {Math °+° {follow} {randomInt}}"));
+        System.out.println(parseCommand(message, "test", "{follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°}"));
+        System.out.println(parseCommand(message, "test", " {follow {currentTime}  {somepreset} °das ist ein beispiel text der im command landet°}"));
+        System.out.println("Output: " + parseCommand(message, "test", "Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} } danke fürs zuhören!  @{sender}: {currentTime}"));
+        System.out.println(parseCommand(message, "test", "Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} }"));
+        System.out.println(parseCommand(message, "test", "Das ist ein Test Command {Math °+° {senderSubMonths} {randomInt} °dasd °}"));
+        System.out.println(parseCommand(message, "Test", "Test: {Math °+° {follow} {randomInt}}"));
     }
 
     /**
-     * Parse a Command for Hooks and execute all the Hooks
-     * @param message The Message which Hooks should be executed
-     * @param input The Message that triggered the Command and Arguments come from
-     * @return The Response to the Message/the build Command Response
+     * Takes Command and parses and evaluates all Hooks contained in the Command, and returns it ready o be printed into chat
+     *
+     * @param originalMessage Message that triggered the Hook, as context
+     * @param uniqueName      uniqueName of the Command, for error handling
+     * @param commandText     commandText of the Command, will be evaluated
+     * @return evaluated Command with hook outputs
      */
-    public static String parseCommand(Message originalMessage, String input) {
-        if (!equalBracketNumber(input))
-            //TODO Improve
-            return "ERROR Alle geöffneten Klammern müssen wieder geschlossen werden!";
-        //TODO LOGGER
-//        System.out.println("Input: " + input);
+    public static String parseCommand(Message originalMessage, String uniqueName, String commandText) {
+        if (!equalBracketNumber(commandText)) {
+            logger.error("Command: {}: Missing one or more closing brackets!", uniqueName);
+            return "{ERROR}";
+        }
 
         String output = "";
-        int startHookIndex = input.indexOf('{');
+        int startHookIndex = commandText.indexOf('{');
         while (startHookIndex > 0) {
             //Add part before start of Hook to output without modifying it
-            output += input.substring(0, startHookIndex);
+            output += commandText.substring(0, startHookIndex);
 
-            int endHookIndex = findClosingBracket(input);
-            String substring = input.substring(startHookIndex, endHookIndex + 1);
+            int endHookIndex = findClosingBracket(commandText);
+            String hookString = commandText.substring(startHookIndex, endHookIndex + 1);
 
             //Parse the substring Hook
-            output += parseHooks(originalMessage,substring);
+            output += parseHooks(originalMessage, hookString);
 
             //Delete already parsed part from Input
-            input = input.substring(endHookIndex + 1);
-            startHookIndex = input.indexOf('{');
+            commandText = commandText.substring(endHookIndex + 1);
+            startHookIndex = commandText.indexOf('{');
         }
-        return output + input;
+        return output + commandText;
     }
 
     /**
-     * Parse the given Hook String, find the matching Hook function, match all the Arguments, and execute the Hook function
-     * @param message The Message that triggered the Command
-     * @param hook The Hook String from the Command
-     * @return The Output from the Hook
+     * Parse an entire Top Level Hook String, parses it and executes the Hooks. <br/>
+     * Returns "{ERROR}" if any hook encountered any Error, the error is logged to the Console.
+     *
+     * @param originalMessage Message that triggered the Hook, as context
+     * @param remainingHook   The Hook String in the Command. e.g. "{testHook {randomInt} °hello°}"
+     * @return the Hook output
      */
-    private static String parseHooks(Message message, String hook) {
+    private static String parseHooks(Message originalMessage, String remainingHook) {
         //Skip first {
-        hook = hook.substring(1);
+        remainingHook = remainingHook.substring(1);
 
         String name;
         ArrayList<String> parameter = new ArrayList<>();
 
         //Has a parameter
-        name = textTillControlChar(hook).trim();
+        name = textTillControlChar(remainingHook).trim();
         //Remove name from the hook String
-        hook = hook.replace(name, "");
+        remainingHook = remainingHook.replace(name, "");
 
-        while (hook.length() > 0) {
-            switch (hook.charAt(0)) {
+        while (!remainingHook.isEmpty()) {
+            switch (remainingHook.charAt(0)) {
                 //Parameter is Hook
                 case '{' -> {
                     //Find Part of the String that represents the Hook that is the Parameter
-                    int endIndex = findClosingBracket(hook);
-                    String substring = hook.substring(0, endIndex + 1);
+                    int endIndex = findClosingBracket(remainingHook);
+                    String substring = remainingHook.substring(0, endIndex + 1);
 
                     //Parse the Hook recursive
-                    String returnString = parseHooks(message, substring);
+                    String returnString = parseHooks(originalMessage, substring);
+
+                    //propagate Error up the call chain
+                    if (returnString.trim().equalsIgnoreCase("{ERROR}")) return "{ERROR}";
 
                     //Add to Parameter Map
                     parameter.add(returnString);
 
                     //Remove parsed part from String
-                    hook = hook.replace(substring, "");
+                    remainingHook = remainingHook.replace(substring, "");
                 }
                 //Parameter is String
                 case '°' -> {
-                    int endIndex = hook.substring(1).indexOf("°") + 1;
-                    String substring = hook.substring(1, endIndex);
+                    int endIndex = remainingHook.substring(1).indexOf("°") + 1;
+                    String substring = remainingHook.substring(1, endIndex);
+
+                    //propagate Error up the call chain
+                    if (substring.trim().equalsIgnoreCase("{ERROR}")) return "{ERROR}";
 
                     //Add to Parameter Map
                     parameter.add(substring);
 
                     //Remove parsed part from String
-                    hook = hook.replace("°" + substring + "°", "");
+                    remainingHook = remainingHook.replace("°" + substring + "°", "");
                 }
-                case '}', ' ' -> hook = hook.substring(1);
-                //                default -> hook = hook.substring(1);
+                case '}', ' ' -> remainingHook = remainingHook.substring(1);
+                default -> remainingHook = remainingHook.substring(1);
             }
         }
         //Execute hook
-        return HookMethodRunner.runHook(name, message, parameter);
+        return HookMethodRunner.runHook(name, originalMessage, parameter);
     }
 
+    /**
+     * @param input string with (closing) control Char ('}','°')
+     * @return string until next control char, exclusive
+     */
     private static String textTillControlChar(String input) {
-        Regex regex = new Regex("^[^{}°]*");
-        MatchResult result = regex.find(input, 0);
+        MatchResult result = MATCH_TILL_CONTROL_CHAR.find(input, 0);
+        // There should always be a next control Char, because we checked for missing brackets beforehand
         assert result != null;
         return result.getValue();
     }
 
     /**
-     * Counts the opening and closing brackets and returns the index of the closing bracket.
+     * Counts the opening and closing brackets and returns the index of the closing bracket. If no closing bracket could be found, 0 is returned.
      * @apiNote Expects that the first character of the String is the first opening bracket. So be careful about leading whitespace .
      * @param input
-     * @return The Index of the closing bracket
+     * @return The Index of the closing bracket. If no closing bracket could be found, 0 is returned
      */
     private static int findClosingBracket(String input) {
         int start = input.indexOf('{') + 1;
@@ -138,8 +155,7 @@ public class HookParser {
                 case '{' -> depth++;
                 case '}' -> depth--;
             }
-            if (depth == 0)
-                return i;
+            if (depth == 0) return i;
         }
         return 0;
     }
