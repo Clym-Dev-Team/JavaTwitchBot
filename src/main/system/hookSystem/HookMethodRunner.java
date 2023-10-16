@@ -32,10 +32,11 @@ public class HookMethodRunner {
     private static Method[] hooks = scanForHooks("main.modules");
 
     /**
-     * This overrides the Hook package destination <b>permanently</b> only use in setup of unit tests!
+     * This overrides the Hook package destination <b>for the entire duration of the programm</b> this needs to be done
+     * because tests have a different folder structure. Only call in Unit Test initialisation!
      */
     public static void rebuildForTests() {
-        hooks = scanForHooks("test.hooksystem");
+        hooks = scanForHooks("hooksystem");
     }
 
     /**
@@ -49,7 +50,7 @@ public class HookMethodRunner {
      * @return The String returned by the Hook, of a String containing an Error Message
      */
     //TODO figure out Error Handling for Hooks/Add it to the Hook Docs
-    public static String runHook(String name, Message message, HashMap<Integer, String> parameter) {
+    public static String runHook(String name, Message message, ArrayList<String> parameter) {
         for (Method method : hooks) {
             if (method.getName().equalsIgnoreCase(name))
                 return invokeHookMethod(method, message, parameter);
@@ -75,13 +76,12 @@ public class HookMethodRunner {
         } catch (IllegalArgumentException e) {
             //Skip "class " to reduce clutter in logs
             String declaringClass = method.getDeclaringClass().toString().substring(6);
-
             StringJoiner executionParameterTypes = new StringJoiner(", ");
             for (Object o : executionParameter) {
                 executionParameterTypes.add(o.getClass().toString().substring(6));
             }
 
-            // this, instead of Arrays.toString to remove the []
+            // this \/, instead of Arrays.toString to remove the []
             StringJoiner methodParameterTypes = new StringJoiner(", ");
             for (Parameter p : method.getParameters()) {
                 methodParameterTypes.add(p.toString());

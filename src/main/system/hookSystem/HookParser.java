@@ -49,7 +49,7 @@ public class HookParser {
 
         String output = "";
         int startHookIndex = commandText.indexOf('{');
-        while (startHookIndex > 0) {
+        while (startHookIndex >= 0) {
             //Add part before start of Hook to output without modifying it
             output += commandText.substring(0, startHookIndex);
 
