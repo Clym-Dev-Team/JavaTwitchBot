@@ -4,23 +4,19 @@ import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-
 @Component
 @Table(name = "Core-Commands")
 @Entity
 public class Command {
-    @Id private String uniqueName;
+    @Id private String uniqueName; //
     @Column(length = 1024)
     private String description;
     private String matcherString;
     private boolean regexMatcher;
-    @Convert(converter = TPermSetConverter.class)
-    @Column(length = 512)
-    private HashSet<TwitchUserPermissions> permissions;
+    private TwitchUserPermission permissionlevel; //
     @Column(length = 1024)
-    private String commandText;
-    private boolean active;
+    private String commandText; //
+    private boolean active; //
     private boolean hiddenInList;
     private int cooldown;
     private CooldownType cooldownType;
@@ -38,12 +34,12 @@ public class Command {
     public Command() {
     }
 
-    public Command(String uniqueName, String description, String matcherString, boolean regexMatcher, HashSet<TwitchUserPermissions> permissions, String commandText, boolean active, boolean hiddenInList, int cooldown, CooldownType cooldownType, String messageColor) {
+    public Command(String uniqueName, String description, String matcherString, boolean regexMatcher, TwitchUserPermission permissionlevel, String commandText, boolean active, boolean hiddenInList, int cooldown, CooldownType cooldownType, String messageColor) {
         this.uniqueName = uniqueName;
         this.description = description;
         this.matcherString = matcherString;
         this.regexMatcher = regexMatcher;
-        this.permissions = permissions;
+        this.permissionlevel = permissionlevel;
         this.commandText = commandText;
         this.active = active;
         this.hiddenInList = hiddenInList;
@@ -88,12 +84,12 @@ public class Command {
         return this;
     }
 
-    public HashSet<TwitchUserPermissions> permissions() {
-        return permissions;
+    public TwitchUserPermission permission() {
+        return permissionlevel;
     }
 
-    public Command setPermissions(HashSet<TwitchUserPermissions> permissions) {
-        this.permissions = permissions;
+    public Command setPermissionlevel(TwitchUserPermission permissionlevel) {
+        this.permissionlevel = permissionlevel;
         return this;
     }
 

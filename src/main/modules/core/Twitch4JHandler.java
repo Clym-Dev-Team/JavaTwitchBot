@@ -9,7 +9,7 @@ import com.github.twitch4j.common.events.domain.EventUser;
 import main.system.commandSystem.CommandProcessor;
 import main.system.commandSystem.repositories.Message;
 import main.system.commandSystem.repositories.TwitchUser;
-import main.system.commandSystem.repositories.TwitchUserPermissions;
+import main.system.commandSystem.repositories.TwitchUserPermission;
 import main.system.eventSystem.EventDispatcher;
 import main.system.eventSystem.Subscribe;
 import org.slf4j.Logger;
@@ -20,12 +20,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static main.system.commandSystem.repositories.TwitchUserPermissions.*;
+import static main.system.commandSystem.repositories.TwitchUserPermission.*;
 
 /**
- * Handelt alle Events, die der Core braucht und Twitch4J sind.
- * Eine Liste dazu findet sich in den Unterklassen vom TwitchEvent
- *
+ * Handels all Events from Twitch4J that are needed for the core of the bot to function
  * @see com.github.twitch4j.chat.events.TwitchEvent
  */
 public class Twitch4JHandler {
@@ -39,7 +37,7 @@ public class Twitch4JHandler {
 
         //Convert ChatMessage
         EventUser eUser = messageEvent.getUser();
-        TwitchUser user = new TwitchUser(eUser.getId(), eUser.getName(), messageEvent.getSubscriberMonths(), messageEvent.getSubscriptionTier(), translatePerms(messageEvent.getPermissions()));
+        TwitchUser user = new TwitchUser(eUser.getId(), eUser.getName(), messageEvent.getSubscriberMonths(), messageEvent.getSubscriptionTier(), convertUserPermissions(messageEvent.getPermissions()));
         String replyToID = null;
         if (messageEvent.getReplyInfo() != null)
             replyToID = messageEvent.getReplyInfo().getMessageId();
@@ -89,9 +87,32 @@ public class Twitch4JHandler {
         logger.debug("{} joined! ", channelJoinEvent.getUser());
     }
 
-    private static HashSet<TwitchUserPermissions> translatePerms(Set<CommandPermission> permissions) {
-        HashSet<TwitchUserPermissions> newPerm = new HashSet<>();
-        for (CommandPermission cp:permissions) {
+    /**
+     * Converts a set of Twitch4J permission into our equivalent Permissions, and returns the highest one.
+     * @param userPermissions A set of Twitch4J Permissions
+     * @return The highest equivalent ranking permission in our system from the set
+     * @see CommandPermission
+     * @see TwitchUserPermission
+     */
+    private static TwitchUserPermission convertUserPermissions(Set<CommandPermission> userPermissions) {
+        HashSet<TwitchUserPermission> permissions = translatePerms(userPermissions);
+        TwitchUserPermission highest_perm = EVERYONE;
+        for (TwitchUserPermission perm : permissions) {
+            if (perm.ordinal() > highest_perm.ordinal())
+                highest_perm = perm;
+        }
+        return highest_perm;
+    }
+
+    /**
+     * Translate the Permissions of a user from Twit4J's permission System into our.
+     * @param permissions A Set if Twit4J#s permissions
+     * @return A Set of our Permissions
+     * @see CommandPermission
+     */
+    private static HashSet<TwitchUserPermission> translatePerms(Set<CommandPermission> permissions) {
+        HashSet<TwitchUserPermission> newPerm = new HashSet<>();
+        for (CommandPermission cp : permissions) {
             switch (cp) {
                 case EVERYONE -> newPerm.add(EVERYONE);
                 case SUBSCRIBER -> newPerm.add(SUBSCRIBER);
@@ -104,7 +125,8 @@ public class Twitch4JHandler {
                 case BROADCASTER -> newPerm.add(BROADCASTER);
                 case OWNER -> newPerm.add(OWNER);
                 //PRIME_TURBO, NO_VIDEO, MOMENTS, NO_AUDIO, TWITCHSTAFF, SUBGIFTER, BITS_CHEERER, PARTNER, FORMER_HYPE_TRAIN_CONDUCTOR, CURRENT_HYPE_TRAIN_CONDUCTOR -> {}
-                default -> {}
+                default -> {
+                }
             }
         }
         return newPerm;

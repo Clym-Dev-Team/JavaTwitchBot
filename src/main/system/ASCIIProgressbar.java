@@ -7,6 +7,10 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Automatically calculates a progressbar to be displayed to the user.
+ * Caller needs to print it out himself.
+ */
 public class ASCIIProgressbar {
 
     private static final Logger logger = LoggerFactory.getLogger(ASCIIProgressbar.class);
