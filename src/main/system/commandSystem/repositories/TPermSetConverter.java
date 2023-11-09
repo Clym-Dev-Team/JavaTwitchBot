@@ -4,26 +4,26 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.StringJoiner;
 
+//TODO This entire thing should be thrown out and replaced by some m:n tables (note, maybe this set based permission system will be thrown out to)
 @Converter
-public class TPermSetConverter implements AttributeConverter<HashSet<TwitchUserPermissions>, String> {
+public class TPermSetConverter implements AttributeConverter<HashSet<TwitchUserPermission>, String> {
     @Override
-    public String convertToDatabaseColumn(HashSet<TwitchUserPermissions> twitchUserPermissions) {
+    public String convertToDatabaseColumn(HashSet<TwitchUserPermission> twitchUserPermissions) {
         StringJoiner joiner = new StringJoiner("; ");
-        for (TwitchUserPermissions permissions : twitchUserPermissions) {
+        for (TwitchUserPermission permissions : twitchUserPermissions) {
             joiner.add(permissions.name());
         }
         return joiner.toString();
     }
 
     @Override
-    public HashSet<TwitchUserPermissions> convertToEntityAttribute(String s) {
+    public HashSet<TwitchUserPermission> convertToEntityAttribute(String s) {
         String[] strings = s.split(";");
-        HashSet<TwitchUserPermissions> permissions = new HashSet<>();
+        HashSet<TwitchUserPermission> permissions = new HashSet<>();
         for (String s1 : strings) {
-            permissions.add(TwitchUserPermissions.valueOf(s1.trim()));
+            permissions.add(TwitchUserPermission.valueOf(s1.trim()));
         }
         return permissions;
     }

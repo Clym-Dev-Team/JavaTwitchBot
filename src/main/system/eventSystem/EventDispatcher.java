@@ -14,8 +14,13 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
+/**
+ * This Class is responsible for dispatching an Event to all Subscribers
+ */
 public class EventDispatcher {
 
+    //Local Test, NOT MAIN ENTRY POINT
+    //Could actually be deleted now, I think
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
 //        for (Method method:eventHandler) {
 //            System.out.println(method.getName());
@@ -25,14 +30,28 @@ public class EventDispatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(EventDispatcher.class);
 
+    /**
+     * Hold all valid Subscriber that are Registered with the @Subscribe Annotation
+     */
     private static final Set<Method> eventHandler = scanForSubscriber();
 
+    /**
+     * Uses Spring and Java Reflection to collect all Methods that are Annotated with @Subscriber and are Valid in the
+     * main.modules folder and its subfolders.
+     * A Method is Valid as a Subcriber if it: <br/>
+     * - is static <br/>
+     * - only has one Parameter <br/>
+     * - the Parameter is of the same Class as specified in the Annotation <br/>
+     * @return List of Standard Java Methods
+     */
     private static Set<Method> scanForSubscriber() {
+        //TODO Add requirement for the Method to be returntype void, don't think it would cause errors on our side, because we can ignore the return type, but it would go against the idea of subscriber, so an error should be given out
+        //TODO Errors, this should ideally print out what Methods failed in which way. ideally in one single message, as to not spam the log
 //        Reflections reflections = new Reflections("main.modules", Scanners.MethodsAnnotated);
         Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("main.modules").addScanners(Scanners.MethodsAnnotated));
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Subscribe.class);
         //Die Methoden müssen static sein und dürfen nur einen Parameter haben,
-        // und dieser Parameter muss gleich mit der Klasse in der Annotation sein
+        //und dieser Parameter muss gleich mit der Klasse in der Annotation sein
         return methods.stream()
                 .filter(method -> Modifier.isStatic(method.getModifiers()))
                 .filter(method -> method.getParameterCount() == 1)
@@ -40,6 +59,17 @@ public class EventDispatcher {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * This Method is for Injection/Dispatching a new Event into the EventStream
+     * It calls all Subscriber to this Event, in a new Thread, and with their own Event Instance.
+     * There is no control about the order of execution between the Subscriber.
+     * <br/><br/>
+     * If you want to call only your specific Subscriber with an Event that other Subscriber could also consume
+     * then you should create a new Class that either hold all the same values or just inherits all of them. <br/>
+     *
+     * The Matching is done via the Class Name of the Subscriber and the Class specified in the @Subscriber Annotation
+     * @param event
+     */
     public static void dispatch(Object event) {
         //TODO Maybe Thread pool, damit die innit zeiten wegfallen, und der bot schneller antwortet
         new Thread(() -> {

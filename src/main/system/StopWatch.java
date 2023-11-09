@@ -6,6 +6,11 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Simple class only used for logging bot Startup time.
+ * Start by creating a new one and stop by calling close()
+ * The result is automatically printed with logger.info
+ */
 public class StopWatch {
 
     private static final Logger logger = LoggerFactory.getLogger(StopWatch.class);
