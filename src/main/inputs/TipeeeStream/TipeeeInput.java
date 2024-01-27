@@ -53,9 +53,7 @@ public class TipeeeInput implements TwitchBotInput {
         try {
             socket = IO.socket("https://sso-cf.tipeeestream.com:443?access_token=" + apiKey);
 
-            socket.on("new-event", data -> {
-                TipeeeEventHandler.handleDonationEvent(Arrays.toString(data));
-            });
+            socket.on("new-event", data -> TipeeeEventHandler.handleDonationEvent(Arrays.toString(data)));
 
             socket.on(Socket.EVENT_CONNECT, objects -> {
                 try {
