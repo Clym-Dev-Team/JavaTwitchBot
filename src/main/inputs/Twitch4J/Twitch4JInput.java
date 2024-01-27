@@ -118,7 +118,7 @@ public class Twitch4JInput implements TwitchBotInput {
 
     @Override
     public boolean shutdown() {
-        OauthAccount account = new OauthAccount(oAuth2Credential.getUserId(), oAuth2Credential.getRefreshToken(), chatAccountName);
+        OauthAccount account = new OauthAccount(chatAccountName, "twitch", oAuth2Credential.getRefreshToken());
         OauthAccount.repo.save(account);
         twitchClient.close();
         logger.debug("Shutdown successful!");
@@ -132,7 +132,7 @@ public class Twitch4JInput implements TwitchBotInput {
     }
 
     private Optional<OAuth2Credential> getRefreshedOauthFromDB(TwitchIdentityProvider iProvider) {
-        Optional<OauthAccount> dbCreds = OauthAccount.repo.getByAccName(chatAccountName);
+        Optional<OauthAccount> dbCreds = OauthAccount.repo.getByAccNameAndService(chatAccountName, "twitch");
         if (dbCreds.isEmpty()) {
             return Optional.empty();
         }
