@@ -14,7 +14,7 @@ public interface OauthAccountRepo extends CrudRepository<OauthAccount, String> {
 
     boolean existsByAccName(String name);
 
-    Optional<OauthAccount> getByAccName(String name);
+    Optional<OauthAccount> getByAccNameAndService(String name, String service);
 
     void deleteByAccName(String name);
 }
