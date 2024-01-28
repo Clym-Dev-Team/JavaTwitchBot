@@ -11,18 +11,17 @@ import main.inputs.shared.oauth.OAuthEndpoint;
 import main.inputs.shared.oauth.OauthAccount;
 import main.system.eventSystem.EventDispatcher;
 import main.system.inputSystem.Input;
-import main.system.inputSystem.TwitchBotInput;
+import main.system.inputSystem.BotInput;
+import main.system.inputSystem.InputStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 @Input
-@Component
-public class Twitch4JInput implements TwitchBotInput {
+public class Twitch4JInput implements BotInput {
 
     private static final String channelName = "clym";
     private static final String chatAccountName = "orciument";
@@ -50,24 +49,21 @@ public class Twitch4JInput implements TwitchBotInput {
     //GraphQL is disabled until we need it, because the module is not yet finished
     //public static TwitchGraphQL broadCasterGraphQL;
 
-    public Twitch4JInput() {
-    }
-
-    @Override
-    public boolean checkConfiguration() {
-        //TODO fehlen einige Config Tests
-        if (OauthAccount.repo == null) {
-            logger.error("TwitchAccountRepository is null!");
-            return false;
-        }
-//        if (!OauthAccount.repo.existsByAccName("primary")) {
-//            logger.error("No OAuth Credentials found!");
+//    @Override
+//    public boolean checkConfiguration() {
+//        //TODO fehlen einige Config Tests
+//        if (OauthAccount.repo == null) {
+//            logger.error("TwitchAccountRepository is null!");
 //            return false;
 //        }
-        //TODO iProvider.isCredentialValid() is valid
-        logger.info("Configuration and Credentials found and configured correctly");
-        return true;
-    }
+////        if (!OauthAccount.repo.existsByAccName("primary")) {
+////            logger.error("No OAuth Credentials found!");
+////            return false;
+////        }
+//        //TODO iProvider.isCredentialValid() is valid
+//        logger.info("Configuration and Credentials found and configured correctly");
+//        return true;
+//    }
 
     @Override
     public void run() {
@@ -111,10 +107,16 @@ public class Twitch4JInput implements TwitchBotInput {
         running = true;
     }
 
+//    @Override
+//    public boolean running() {
+//        return running;
+//    }
+
     @Override
-    public boolean running() {
-        return running;
+    public InputStatus getHealth() {
+        return null;
     }
+
 
     @Override
     public boolean shutdown() {

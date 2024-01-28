@@ -2,22 +2,22 @@ package main.inputs.TipeeeStream;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import main.system.inputSystem.HealthManager;
 import main.system.inputSystem.Input;
-import main.system.inputSystem.TwitchBotInput;
+import main.system.inputSystem.BotInput;
+import main.system.inputSystem.InputStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.Arrays;
 
 @Input
-@Component
-public class TipeeeInput implements TwitchBotInput {
+public class TipeeeInput implements BotInput {
 
     @Value("${tipeee_apiKey}")
     public void setApiKey(String apiKey) {
@@ -32,35 +32,38 @@ public class TipeeeInput implements TwitchBotInput {
     private static String channelName;
 
     private Socket socket;
+    private InputStatus health;
     private static final Logger LOGGER = LoggerFactory.getLogger(TipeeeInput.class);
-
-    @Override
-    public boolean checkConfiguration() {
-        return true;
-    }
 
     @Override
     public boolean shutdown() {
         socket.close();
         LOGGER.info("Shut down Tipeee input");
-
         return true;
     }
 
     @Override
     public void run() {
+        report(InputStatus.starting);
         LOGGER.info("Stating TipeeeInput for Channel " + channelName);
         try {
             socket = IO.socket("https://sso-cf.tipeeestream.com:443?access_token=" + apiKey);
 
             socket.on("new-event", data -> TipeeeEventHandler.handleDonationEvent(Arrays.toString(data)));
 
+            socket.on(Socket.EVENT_CONNECT_ERROR, objects -> {
+                report(InputStatus.dead);
+                throw new RuntimeException(Arrays.toString(objects));
+            });
+
             socket.on(Socket.EVENT_CONNECT, objects -> {
                 try {
                     socket.emit("join-room", new JSONObject()
                             .put("room", apiKey)
                             .put("username", channelName));
+                    report(InputStatus.healthy);
                 } catch (JSONException e) {
+                    report(InputStatus.dead);
                     throw new RuntimeException(e);
                 }
             });
@@ -75,19 +78,23 @@ public class TipeeeInput implements TwitchBotInput {
             LOGGER.info("Tipeee socket connected");
         } catch (URISyntaxException e) {
             LOGGER.error("Could not connect to Tipeee socket");
+            report(InputStatus.dead);
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public boolean running() {
-        if (socket == null)
-            return false;
-        return socket.connected();
+    public InputStatus getHealth() {
+        return health;
     }
 
     @Override
     public String threadName() {
         return "TipeeeWebsocket";
+    }
+
+    private void report(InputStatus health) {
+        HealthManager.reportStatus(this, health);
+        this.health = health;
     }
 }
