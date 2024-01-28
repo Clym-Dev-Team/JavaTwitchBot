@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class HealthManager {
@@ -20,7 +21,7 @@ public class HealthManager {
 
     private static final Logger logger = LoggerFactory.getLogger(HealthManager.class);
     private static final ArrayList<Status> statuses = new ArrayList<>();
-    private static volatile InputStatus overallStatus = InputStatus.STOPPED;
+    private static volatile InputStatus inputStatus = InputStatus.STOPPED;
     private static volatile Consumer<InputStatus> callback;
     private static volatile InputStatus filter;
 
@@ -30,11 +31,11 @@ public class HealthManager {
     }
 
     private static void checkCallback() {
-        if (filter != overallStatus) {
+        if (filter != inputStatus) {
             return;
         }
         if (callback != null) {
-            callback.accept(overallStatus);
+            callback.accept(inputStatus);
         }
         callback = null;
     }
@@ -52,9 +53,9 @@ public class HealthManager {
 
     private static void checkOverallStatusChange() {
         var worstFound = calcOverallStatus();
-        if (overallStatus != worstFound) {
-            overallStatus = worstFound;
-            logger.info("INPUTS: " + overallStatus);
+        if (inputStatus != worstFound) {
+            inputStatus = worstFound;
+            logger.info("INPUTS: " + inputStatus);
         }
     }
 
@@ -66,5 +67,14 @@ public class HealthManager {
             }
         }
         return worstYet;
+    }
+
+    public static InputStatus inputStatus() {
+        return inputStatus;
+    }
+
+    record StringStatus(String name, InputStatus status) {}
+    public static List<StringStatus> allStatuses() {
+        return statuses.stream().map(status -> new StringStatus(status.input.threadName(), status.status)).toList();
     }
 }
