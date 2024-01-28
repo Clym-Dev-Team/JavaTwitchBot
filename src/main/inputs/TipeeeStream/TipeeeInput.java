@@ -2,9 +2,9 @@ package main.inputs.TipeeeStream;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import main.system.inputSystem.BotInput;
 import main.system.inputSystem.HealthManager;
 import main.system.inputSystem.Input;
-import main.system.inputSystem.BotInput;
 import main.system.inputSystem.InputStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,15 +36,14 @@ public class TipeeeInput implements BotInput {
     private static final Logger LOGGER = LoggerFactory.getLogger(TipeeeInput.class);
 
     @Override
-    public boolean shutdown() {
+    public void shutdown() {
         socket.close();
         LOGGER.info("Shut down Tipeee input");
-        return true;
     }
 
     @Override
     public void run() {
-        report(InputStatus.starting);
+        report(InputStatus.STARTING);
         LOGGER.info("Stating TipeeeInput for Channel " + channelName);
         try {
             socket = IO.socket("https://sso-cf.tipeeestream.com:443?access_token=" + apiKey);
@@ -52,7 +51,7 @@ public class TipeeeInput implements BotInput {
             socket.on("new-event", data -> TipeeeEventHandler.handleDonationEvent(Arrays.toString(data)));
 
             socket.on(Socket.EVENT_CONNECT_ERROR, objects -> {
-                report(InputStatus.dead);
+                report(InputStatus.DEAD);
                 throw new RuntimeException(Arrays.toString(objects));
             });
 
@@ -61,9 +60,9 @@ public class TipeeeInput implements BotInput {
                     socket.emit("join-room", new JSONObject()
                             .put("room", apiKey)
                             .put("username", channelName));
-                    report(InputStatus.healthy);
+                    report(InputStatus.HEALTHY);
                 } catch (JSONException e) {
-                    report(InputStatus.dead);
+                    report(InputStatus.DEAD);
                     throw new RuntimeException(e);
                 }
             });
@@ -78,7 +77,7 @@ public class TipeeeInput implements BotInput {
             LOGGER.info("Tipeee socket connected");
         } catch (URISyntaxException e) {
             LOGGER.error("Could not connect to Tipeee socket");
-            report(InputStatus.dead);
+            report(InputStatus.DEAD);
             throw new RuntimeException(e);
         }
     }

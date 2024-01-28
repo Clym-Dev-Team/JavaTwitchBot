@@ -10,8 +10,9 @@ import com.github.twitch4j.helix.TwitchHelix;
 import main.inputs.shared.oauth.OAuthEndpoint;
 import main.inputs.shared.oauth.OauthAccount;
 import main.system.eventSystem.EventDispatcher;
-import main.system.inputSystem.Input;
 import main.system.inputSystem.BotInput;
+import main.system.inputSystem.HealthManager;
+import main.system.inputSystem.Input;
 import main.system.inputSystem.InputStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +45,8 @@ public class Twitch4JInput implements BotInput {
     private static TwitchIdentityProvider iProvider;
     private OAuth2Credential oAuth2Credential;
     private TwitchClient twitchClient;
-    private boolean running = false;
     public static TwitchHelix broadCasterHelix;
+    private InputStatus health;
     //GraphQL is disabled until we need it, because the module is not yet finished
     //public static TwitchGraphQL broadCasterGraphQL;
 
@@ -68,18 +69,22 @@ public class Twitch4JInput implements BotInput {
     @Override
     public void run() {
         logger.debug("Starting... ");
+        report(InputStatus.STARTING);
         iProvider = new TwitchIdentityProvider(app_clientID, app_clientSecret, OAuthEndpoint.getRedirectUrl("twitch"));
 
         var creds = getRefreshedOauthFromDB(iProvider);
         if (creds.isEmpty()) {
             logger.warn("Twitch credentials could not be found or refreshed, waiting for new Oauth Token to be created!");
             logger.warn("Head to " + OAuthEndpoint.getOauthSetupUrl() + " to Setup a new Oauth connection");
+            report(InputStatus.INJURED);
             creds = createNewOauth();
             if (creds.isEmpty()) {
                 logger.error("Could neither load old credentials, nor create new once, aborting startup!");
+                report(InputStatus.DEAD);
                 return;
             }
             logger.warn("Created new Oauth. Warning resolved!");
+            report(InputStatus.STARTING);
         }
         oAuth2Credential = creds.get();
 
@@ -104,7 +109,7 @@ public class Twitch4JInput implements BotInput {
         //broadCasterGraphQL = twitchClient.getGraphQL();
         broadCasterHelix = twitchClient.getHelix();
         logger.debug("Start successful!");
-        running = true;
+        report(InputStatus.HEALTHY);
     }
 
 //    @Override
@@ -114,18 +119,16 @@ public class Twitch4JInput implements BotInput {
 
     @Override
     public InputStatus getHealth() {
-        return null;
+        return health;
     }
 
 
     @Override
-    public boolean shutdown() {
+    public void shutdown() {
         OauthAccount account = new OauthAccount(chatAccountName, "twitch", oAuth2Credential.getRefreshToken());
         OauthAccount.repo.save(account);
         twitchClient.close();
         logger.debug("Shutdown successful!");
-        running = false;
-        return true;
     }
 
     @Override
@@ -160,5 +163,10 @@ public class Twitch4JInput implements BotInput {
             return Optional.empty();
         }
         return Optional.of(iProvider.getCredentialByCode(code.get()));
+    }
+
+    private void report(InputStatus health) {
+        HealthManager.reportStatus(this, health);
+        this.health = health;
     }
 }

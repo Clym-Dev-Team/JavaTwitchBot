@@ -4,7 +4,7 @@ public interface BotInput extends Runnable {
     @Override
     void run();
 
-    boolean shutdown();
+    void shutdown();
 
     InputStatus getHealth();
 

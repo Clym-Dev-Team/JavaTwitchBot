@@ -8,127 +8,60 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class InputManager {
 
     private static final Logger logger = LoggerFactory.getLogger(InputManager.class);
-    private static HashSet<BotInput> inputSet = scanForInputs();
-    private static volatile boolean running = false;
-
-    InputManager() {
-    }
+    private static final List<BotInput> inputs = new ArrayList<>();
 
     public static void startAllInputs() {
-        logger.info("Starting up Inputs...");
-        int iSize = inputSet.size();
-        checkConfigs();
-        HashSet<String> failing = new HashSet<>();
-        HashSet<BotInput> workSet = inputSet;
-
-        Iterator<BotInput> iterator = workSet.iterator();
-        while (iterator.hasNext()) {
-            BotInput input = iterator.next();
-            try {
-                new Thread(input, "INPUT-" + input.threadName()).start();
-//                onSpinWaitTimeout(input, 10000);
-//                if (!input.running())
-//                    throw new RuntimeException("Input did not start or keep running after trying to start it!");
-            } catch (RuntimeException e) {
-                failing.add(input.getClass().getName());
-                iterator.remove();
-                workSet.remove(input);
-                logger.error("Unable to Start Input: {} because:", input.getClass().getName(), e);
-            }
+        var scannedInputs = scanForInputs().stream().toList();
+        logger.info("Starting Inputs...");
+        for (BotInput input : scannedInputs) {
+            startInput(input);
         }
-        if (workSet.size() != iSize) {
-            String differenceString = failing.toString();
-            logger.error("Failed to start all Configured Inputs: {}", ASCIIProgressbar.consoleBar(workSet.size(), iSize));
-            if (failing.size() > 0)
-                logger.error("Failing: {}", differenceString.substring(1, differenceString.length() - 1));
-        } else
-            logger.info("Checked Configs and Started Inputs successfully: {}", ASCIIProgressbar.consoleBar(iSize, iSize));
-        InputManager.inputSet = workSet;
-        running = true;
     }
 
-    private static void onSpinWaitTimeout(BotInput input, int seconds) {
-        Instant end = Instant.now().plusSeconds(seconds);
-//        while (!input.running() && Instant.now().isBefore(end))
-//            Thread.onSpinWait();
-    }
-
-    private static HashSet<String> checkConfigs() {
-        int iSize = inputSet.size();
-        HashSet<BotInput> workSet = inputSet;
-        HashSet<String> failing = new HashSet<>();
-
-        Iterator<BotInput> iterator = workSet.iterator();
-        while (iterator.hasNext()) {
-            BotInput input = iterator.next();
-
-//            if (!input.checkConfiguration()) {
-//                iterator.remove();
-//                workSet.remove(input);
-//                failing.add(input.getClass().getName());
-//            }
+    public static void startInput(BotInput input) {
+        try {
+            new Thread(input, "LAUNCHER-" + input.threadName()).start();
+            inputs.add(input);
+        } catch (RuntimeException e) {
+            logger.error("Exception starting Input: {} because: {}", input.getClass().getName(), e.getMessage());
+            HealthManager.reportStatus(input, InputStatus.DEAD);
         }
-        if (failing.size() > 0) {
-            String differenceString = failing.toString();
-            logger.error("Error in Configs from Inputs: {}", ASCIIProgressbar.consoleBar(iSize - failing.size(), iSize));
-            logger.error("Failing: {}", differenceString.substring(1, differenceString.length() - 1));
-        } else
-            logger.info("Checked Configs successfully: {}", ASCIIProgressbar.consoleBar(iSize, iSize));
-        InputManager.inputSet = workSet;
-        return failing;
     }
 
-    public static void shutDownAllInputs() {
+    public static void stopAllInputs() {
+        logger.info("Stopping Inputs...");
+        for (BotInput input : inputs) {
+            stopInput(input);
+        }
+    }
+
+    public static void stopInput(BotInput input) {
         //TODO kill any Inputs if they do not shut down after a certain time
-        waitIfStillStarting();
-        logger.info("Starting to shutdown the Inputs...");
-        HashSet<BotInput> workSet = inputSet;
-        HashSet<String> notProperly = new HashSet<>();
-        int iSize = inputSet.size();
-
-        Iterator<BotInput> iterator = workSet.iterator();
-        while (iterator.hasNext()) {
-            BotInput input = iterator.next();
-            try {
-                if (!input.shutdown()) {
-                    throw new RuntimeException("Shutdown routine unsuccessful!");
-                }
-            } catch (Exception e) {
-                notProperly.add(input.getClass().getName());
-                logger.error("Unable to properly shutdown Input: {} because: {}", input.getClass().getName(), e);
-            }
-            iterator.remove();
-            workSet.remove(input);
+        try {
+            new Thread(() -> {
+                input.shutdown();
+                inputs.remove(input);
+            }, "CLOSER-" + input.threadName()).start();
+//            inputs.remove(input);
+            HealthManager.reportStatus(input, InputStatus.STOPPED);
+        } catch (Exception e) {
+            logger.error("Exception stopping Input: {} because: {}", input.getClass().getName(), e.getMessage());
+            HealthManager.reportStatus(input, InputStatus.DEAD);
         }
-
-        if (notProperly.size() != 0) {
-            String notPString = notProperly.toString();
-            logger.error("Failed to shutdown all Inputs: {}", ASCIIProgressbar.consoleBar(iSize - notProperly.size(), iSize));
-            logger.error("Failing: {}", notPString.substring(1, notPString.length() - 1));
-        } else
-            logger.info("Shutdown Inputs successfully: {}", ASCIIProgressbar.consoleBar(iSize, iSize));
-        inputSet = workSet;
-        running = false;
     }
 
-    private static void waitIfStillStarting() {
-        while (!running) {
-            Thread.onSpinWait();
-        }
+    public static boolean finishedShutdown() {
+        return !inputs.isEmpty();
     }
 
     private static HashSet<BotInput> scanForInputs() {
 //        Reflections reflections = new Reflections("main.inputs", Scanners.TypesAnnotated);
-        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("main.inputs").addScanners(Scanners.TypesAnnotated) );
+        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("main.inputs").addScanners(Scanners.TypesAnnotated));
         Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(Input.class);
         HashSet<BotInput> inputSet = new HashSet<>();
 
@@ -145,8 +78,7 @@ public class InputManager {
                 }
             }
         }
-        logger.info("Scanned for Inputs, found: {}, invoked: {}", typesAnnotatedWith.size(), ASCIIProgressbar.consoleBar(inputSet.size(), typesAnnotatedWith.size()));
+        logger.info("Scanned for Inputs, found: {}, configured correctly: {}", typesAnnotatedWith.size(), ASCIIProgressbar.consoleBar(inputSet.size(), typesAnnotatedWith.size()));
         return inputSet;
     }
-
 }
