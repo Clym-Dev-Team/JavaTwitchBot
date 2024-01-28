@@ -17,7 +17,7 @@ import java.util.Set;
 public class InputManager {
 
     private static final Logger logger = LoggerFactory.getLogger(InputManager.class);
-    private static HashSet<TwitchBotInput> inputSet = scanForInputs();
+    private static HashSet<BotInput> inputSet = scanForInputs();
     private static volatile boolean running = false;
 
     InputManager() {
@@ -28,16 +28,16 @@ public class InputManager {
         int iSize = inputSet.size();
         checkConfigs();
         HashSet<String> failing = new HashSet<>();
-        HashSet<TwitchBotInput> workSet = inputSet;
+        HashSet<BotInput> workSet = inputSet;
 
-        Iterator<TwitchBotInput> iterator = workSet.iterator();
+        Iterator<BotInput> iterator = workSet.iterator();
         while (iterator.hasNext()) {
-            TwitchBotInput input = iterator.next();
+            BotInput input = iterator.next();
             try {
                 new Thread(input, "INPUT-" + input.threadName()).start();
-                onSpinWaitTimeout(input, 10000);
-                if (!input.running())
-                    throw new RuntimeException("Input did not start or keep running after trying to start it!");
+//                onSpinWaitTimeout(input, 10000);
+//                if (!input.running())
+//                    throw new RuntimeException("Input did not start or keep running after trying to start it!");
             } catch (RuntimeException e) {
                 failing.add(input.getClass().getName());
                 iterator.remove();
@@ -56,26 +56,26 @@ public class InputManager {
         running = true;
     }
 
-    private static void onSpinWaitTimeout(TwitchBotInput input, int seconds) {
+    private static void onSpinWaitTimeout(BotInput input, int seconds) {
         Instant end = Instant.now().plusSeconds(seconds);
-        while (!input.running() && Instant.now().isBefore(end))
-            Thread.onSpinWait();
+//        while (!input.running() && Instant.now().isBefore(end))
+//            Thread.onSpinWait();
     }
 
     private static HashSet<String> checkConfigs() {
         int iSize = inputSet.size();
-        HashSet<TwitchBotInput> workSet = inputSet;
+        HashSet<BotInput> workSet = inputSet;
         HashSet<String> failing = new HashSet<>();
 
-        Iterator<TwitchBotInput> iterator = workSet.iterator();
+        Iterator<BotInput> iterator = workSet.iterator();
         while (iterator.hasNext()) {
-            TwitchBotInput input = iterator.next();
+            BotInput input = iterator.next();
 
-            if (!input.checkConfiguration()) {
-                iterator.remove();
-                workSet.remove(input);
-                failing.add(input.getClass().getName());
-            }
+//            if (!input.checkConfiguration()) {
+//                iterator.remove();
+//                workSet.remove(input);
+//                failing.add(input.getClass().getName());
+//            }
         }
         if (failing.size() > 0) {
             String differenceString = failing.toString();
@@ -91,13 +91,13 @@ public class InputManager {
         //TODO kill any Inputs if they do not shut down after a certain time
         waitIfStillStarting();
         logger.info("Starting to shutdown the Inputs...");
-        HashSet<TwitchBotInput> workSet = inputSet;
+        HashSet<BotInput> workSet = inputSet;
         HashSet<String> notProperly = new HashSet<>();
         int iSize = inputSet.size();
 
-        Iterator<TwitchBotInput> iterator = workSet.iterator();
+        Iterator<BotInput> iterator = workSet.iterator();
         while (iterator.hasNext()) {
-            TwitchBotInput input = iterator.next();
+            BotInput input = iterator.next();
             try {
                 if (!input.shutdown()) {
                     throw new RuntimeException("Shutdown routine unsuccessful!");
@@ -126,19 +126,19 @@ public class InputManager {
         }
     }
 
-    private static HashSet<TwitchBotInput> scanForInputs() {
+    private static HashSet<BotInput> scanForInputs() {
 //        Reflections reflections = new Reflections("main.inputs", Scanners.TypesAnnotated);
         Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("main.inputs").addScanners(Scanners.TypesAnnotated) );
         Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(Input.class);
-        HashSet<TwitchBotInput> inputSet = new HashSet<>();
+        HashSet<BotInput> inputSet = new HashSet<>();
 
         //get all Classes Annotated with Input.class, and if they implement the TwitchBotInput interface,
         //then a new instance will be created, and get added to the Set of Inputs
         for (Class<?> aClass : typesAnnotatedWith) {
-            if (Arrays.stream(aClass.getInterfaces()).toList().contains(TwitchBotInput.class)) {
+            if (Arrays.stream(aClass.getInterfaces()).toList().contains(BotInput.class)) {
                 //Try to create a new instance of that class
                 try {
-                    inputSet.add((TwitchBotInput) (aClass.getConstructor().newInstance()));
+                    inputSet.add((BotInput) (aClass.getConstructor().newInstance()));
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                          NoSuchMethodException e) {
                     throw new RuntimeException(e);
