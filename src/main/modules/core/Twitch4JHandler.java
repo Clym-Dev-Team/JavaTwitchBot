@@ -11,7 +11,7 @@ import main.system.commandSystem.repositories.Message;
 import main.system.commandSystem.repositories.TwitchUser;
 import main.system.commandSystem.repositories.TwitchUserPermission;
 import main.system.eventSystem.EventDispatcher;
-import main.system.eventSystem.Subscribe;
+import main.system.eventSystem.Subscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class Twitch4JHandler {
     private static final Logger logger = LoggerFactory.getLogger(Twitch4JHandler.class);
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DD-HH:mm:ss.SSS");
 
-    @Subscribe(EventClass = ChannelMessageEvent.class)
+    @Subscriber
     public static void MessageEvent(ChannelMessageEvent messageEvent) {
         if (messageEvent.getMessage().toCharArray()[0] == '!')
             System.out.println(simpleDateFormat.format(new Date()) + " |CHAT | " + messageEvent.getUser().getName() + ": " + messageEvent.getMessage());
@@ -58,7 +58,7 @@ public class Twitch4JHandler {
 
 
     //Das sind nur schnelle Beispiele um zu testen, dass es funktioniert
-    @Subscribe(EventClass = CheerEvent.class)
+    @Subscriber
     @Deprecated(forRemoval = true)
     public static void CheerEvent(CheerEvent cheerEvent) {
         //Do Database Stuff
@@ -69,7 +69,7 @@ public class Twitch4JHandler {
         EventDispatcher.dispatch(new ChannelMessageEvent(cheerEvent.getChannel(), cheerEvent.getMessageEvent(), cheerEvent.getUser(), "!testCommand", permissions));
     }
 
-    @Subscribe(EventClass = FollowEvent.class)
+    @Subscriber
     @Deprecated(forRemoval = true)
     public static void FollowEvent(FollowEvent followEvent) {
         System.out.println("Twitch4JHandler.FollowEvent");
@@ -81,7 +81,7 @@ public class Twitch4JHandler {
 //                null));
     }
 
-    @Subscribe(EventClass = ChannelJoinEvent.class)
+    @Subscriber
     @Deprecated(forRemoval = true)
     public static void ChannelJoinEvent(ChannelJoinEvent channelJoinEvent) {
         logger.debug("{} joined! ", channelJoinEvent.getUser());

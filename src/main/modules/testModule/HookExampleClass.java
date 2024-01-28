@@ -50,7 +50,7 @@ public class HookExampleClass {
     }
 
     @Hook()
-    public static String currentTime(Message message) {
+    public static String currentTime() {
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         return myDateObj.format(myFormatObj);

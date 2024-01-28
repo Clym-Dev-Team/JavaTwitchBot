@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Bot HEALTH™️</title>
+</head>
+<body>
+
+<h1>Input Health: <span th:text="${inputsSum}"></span></h1>
+<div th:each="input: ${inputsAll}">
+    <div>
+        <span th:text="${input.name}"></span>
+        <span>: </span>
+        <span th:text="${input.status}"></span>
+    </div>
+</div>
+
+</body>
+</html>

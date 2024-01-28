@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>OAuth 2.0</title>
+</head>
+<body>
+<div th:if="${mode}== 'not_needed'">
+    <h1>No Action needed at this time</h1>
+    <h2>All Credentials are configured correctly</h2>
+</div>
+<div th:if="${mode}== 'needed'">
+    <h1>Hey, du musst diese Oauths einrichten!</h1>
+    <div th:each="auth: ${authList}">
+        <span th:text="${auth.service}"></span>
+        <a th:href="${auth.url}" th:text="${auth.accName}"></a>
+    </div>
+</div>
+</body>
+</html>

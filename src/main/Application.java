@@ -4,7 +4,9 @@ import jakarta.annotation.PreDestroy;
 import jakarta.persistence.PreRemove;
 import main.system.StopWatch;
 import main.system.commandSystem.CommandProcessor;
+import main.system.inputSystem.HealthManager;
 import main.system.inputSystem.InputManager;
+import main.system.inputSystem.InputStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -32,7 +34,7 @@ public class Application {
         System.out.println("----------------|-----|-[-------------]---------------------------------------------------------------------------------------------------------------------------------------------");
         InputManager.startAllInputs();
         new CommandProcessor();
-        time.close();
+        HealthManager.subscribeNextChange(status -> time.close(), InputStatus.HEALTHY);
 //        CommandProcessor.generateJunkCommands();
     }
 
@@ -40,10 +42,16 @@ public class Application {
     @PreRemove
     public static void shutdown() {
         try {
-
             Instant start = Instant.now();
             StopWatch time = new StopWatch(StopWatch.TYPE.SHUTDOWN);
-            InputManager.shutDownAllInputs();
+            InputManager.stopAllInputs();
+            //Because we stop all inputs in separate Threads,
+            //(so that one broken shutdown does not stop the other once from shutting down)
+            //we need to wait here until all Inputs are shut down, because otherwise it will
+            //clean up all the Spring Objects, who may be needed in a shutdown routine
+            while (InputManager.finishedShutdown()) {
+                Thread.onSpinWait();
+            }
             time.close();
         } catch (Exception e) {
             e.printStackTrace();

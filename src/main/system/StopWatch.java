@@ -54,6 +54,6 @@ public class StopWatch {
         long until = start.until(Instant.now(), ChronoUnit.MICROS);
         double seconds = until * 0.000001;
 
-        logger.info(" {} in {} Seconds...", endMessage.trim(), seconds);
+        logger.info("{} in {} Seconds...", endMessage.trim(), seconds);
     }
 }
