@@ -7,17 +7,17 @@ package main.system.inputSystem;
  * - disabled should not be set by an input inself, it is to indicate that an Input was found, but will not be started <br/>
  */
 public enum InputStatus {
-    disabled,
-    healthy,
-    starting,
-    injured,
-    dead;
+    STOPPED,
+    HEALTHY,
+    STARTING,
+    INJURED,
+    DEAD;
 
     public boolean isWorseThan(InputStatus status) {
-        return (this.compareTo(status) > 0);
+        return (this.compareTo(status) < 0);
     }
 
     public boolean isBetterThan(InputStatus status) {
-        return (this.compareTo(status) < 0);
+        return (this.compareTo(status) > 0);
     }
 }

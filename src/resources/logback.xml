@@ -5,14 +5,23 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{DD-HH:mm:ss.SSS} |%-5level| [%thread] %logger{36} - %msg%n</pattern>
-            <fieldNames>
-            </fieldNames>
+        </encoder>
+    </appender>
+    <appender name="SYSTEM" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{DD-HH:mm:ss.SSS} [%class{0}] %msg%n</pattern>
         </encoder>
     </appender>
 
     <logger name="main.inputs" level="WARN" />
     <logger name="main.modules" level="INFO" />
     <logger name="main.system" level="INFO" />
+    <logger name="main.system.inputSystem.HealthManager" level="INFO" additivity="false">
+        <appender-ref ref="SYSTEM"/>
+    </logger>
+    <logger name="main.system.StopWatch" level="INFO" additivity="false">
+        <appender-ref ref="SYSTEM"/>
+    </logger>
     <logger name="main.system.eventSystem" level="INFO" />
     <logger name="main.system.commandSystem" level="INFO" />
     <logger name="main.system.commandSystem.CommandProcessor.Chat" level="DEBUG"/>
