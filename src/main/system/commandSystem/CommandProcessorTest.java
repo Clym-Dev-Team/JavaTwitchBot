@@ -1,6 +1,6 @@
 package main.system.commandSystem;
 
-import main.Application;
+import main.TwitchBot;
 import main.system.commandSystem.repositories.Command;
 import main.system.commandSystem.repositories.TwitchUser;
 import main.system.commandSystem.repositories.TwitchUserPermission;
@@ -37,7 +37,7 @@ class CommandProcessorTest {
 
     @BeforeAll
     static void setUp() {
-        Application.startup();
+        TwitchBot.startup();
     }
 
     @AfterAll

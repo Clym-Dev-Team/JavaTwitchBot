@@ -17,9 +17,10 @@ import java.time.Instant;
 
 @SpringBootApplication
 @EnableJpaRepositories
-public class Application {
+public class TwitchBot {
 
-    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+    public static boolean requestedShutdown = false;
+    private static final Logger logger = LoggerFactory.getLogger(TwitchBot.class);
 
     public static void main(String[] args) {
         startup();
@@ -27,7 +28,7 @@ public class Application {
 
     public static void startup() {
         StopWatch time = new StopWatch(StopWatch.TYPE.STARTUP);
-        SpringApplication.run(Application.class);
+        SpringApplication.run(TwitchBot.class);
         System.out.println();
         System.out.println("DateFormat: DayNumber-Hour:Minute:Second:Millis");
         System.out.println("DD-HH:mm:ss.SSS |LEVEL| [THREAD]        LOGGER (Source Class)               - MSG");
@@ -44,6 +45,7 @@ public class Application {
         try {
             Instant start = Instant.now();
             StopWatch time = new StopWatch(StopWatch.TYPE.SHUTDOWN);
+            requestedShutdown = true;
             InputManager.stopAllInputs();
             //Because we stop all inputs in separate Threads,
             //(so that one broken shutdown does not stop the other once from shutting down)

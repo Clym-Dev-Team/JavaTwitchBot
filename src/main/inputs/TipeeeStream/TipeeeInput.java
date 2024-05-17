@@ -2,6 +2,8 @@ package main.inputs.TipeeeStream;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import main.TwitchBot;
+import main.system.UnexpectedShutdownException;
 import main.system.inputSystem.BotInput;
 import main.system.inputSystem.HealthManager;
 import main.system.inputSystem.Input;
@@ -71,8 +73,12 @@ public class TipeeeInput implements BotInput {
             //Wait for the Socket to connect, because it will be opened in a new Thread and
             // so will otherwise not be done by the time we check if the starting has worked
             Instant end = Instant.now().plusSeconds(10);
-            while (!socket.connected() || end.isBefore(Instant.now()))
+            while (!socket.connected() || end.isBefore(Instant.now()) && !TwitchBot.requestedShutdown)
                 Thread.onSpinWait();
+
+            if (TwitchBot.requestedShutdown) {
+                throw new UnexpectedShutdownException();
+            }
 
             LOGGER.info("Tipeee socket connected");
         } catch (URISyntaxException e) {
