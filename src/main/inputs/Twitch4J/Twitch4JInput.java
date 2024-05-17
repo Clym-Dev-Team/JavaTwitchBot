@@ -29,12 +29,14 @@ public class Twitch4JInput implements BotInput {
 
     //"CONFIG"
     private static String app_clientID = "";
+
     @Value("${twitchApp_ID}")
     public void setApp_clientID(String app_clientID) {
         Twitch4JInput.app_clientID = app_clientID;
     }
 
     private static String app_clientSecret = "";
+
     @Value("${twitchApp_Secret}")
     public void setApp_clientSecret(String app_clientSecret) {
         Twitch4JInput.app_clientSecret = app_clientSecret;
@@ -125,9 +127,13 @@ public class Twitch4JInput implements BotInput {
 
     @Override
     public void shutdown() {
-        OauthAccount account = new OauthAccount(chatAccountName, "twitch", oAuth2Credential.getRefreshToken());
-        OauthAccount.repo.save(account);
-        twitchClient.close();
+        if (oAuth2Credential != null) {
+            OauthAccount account = new OauthAccount(chatAccountName, "twitch", oAuth2Credential.getRefreshToken());
+            OauthAccount.repo.save(account);
+        }
+        if (twitchClient != null) {
+            twitchClient.close();
+        }
         logger.debug("Shutdown successful!");
     }
 

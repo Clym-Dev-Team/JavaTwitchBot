@@ -1,6 +1,8 @@
 package main.inputs.shared.oauth;
 
 import com.github.philippheuer.credentialmanager.identityprovider.OAuth2IdentityProvider;
+import main.TwitchBot;
+import main.system.UnexpectedShutdownException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,8 +64,11 @@ public class OAuthEndpoint {
 
         // TODO add Timeout (10min)
         // wait for completion by user using web portal
-        while (request.code.isEmpty()) {
+        while (request.code.isEmpty() && !TwitchBot.requestedShutdown) {
             Thread.onSpinWait();
+        }
+        if (TwitchBot.requestedShutdown) {
+            throw new UnexpectedShutdownException();
         }
 
         //return code, remove completed request
