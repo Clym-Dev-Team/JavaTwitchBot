@@ -21,6 +21,8 @@ import java.util.Arrays;
 @Input
 public class TipeeeInput implements BotInput {
 
+    public static final String TIPEEE_API_URL = "https://sso-cf.tipeeestream.com:443?access_token=";
+
     @Value("${tipeee_apiKey}")
     public void setApiKey(String apiKey) {
         TipeeeInput.apiKey = apiKey;
@@ -46,9 +48,9 @@ public class TipeeeInput implements BotInput {
     @Override
     public void run() {
         report(InputStatus.STARTING);
-        LOGGER.info("Stating TipeeeInput for Channel " + channelName);
+        LOGGER.info("Stating TipeeeInput for Channel {}", channelName);
         try {
-            socket = IO.socket("https://sso-cf.tipeeestream.com:443?access_token=" + apiKey);
+            socket = IO.socket(TIPEEE_API_URL + apiKey);
 
             socket.on("new-event", data -> TipeeeEventHandler.handleDonationEvent(Arrays.toString(data)));
 
