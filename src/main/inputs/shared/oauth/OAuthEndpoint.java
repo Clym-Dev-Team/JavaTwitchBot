@@ -4,6 +4,7 @@ import com.github.philippheuer.credentialmanager.identityprovider.OAuth2Identity
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -42,11 +43,10 @@ public class OAuthEndpoint {
 
     //TODO Muss in Globale Config
     //    @Value("panelURL") funktioniert nicht
-    private static final String panel_url = "https://localhost";
+    private static final String panel_url = "http://localhost";
 
     public static String getRedirectUrl(String service) {
-        return panel_url + "/auth";
-//        return panel_url + "/auth/" + service;
+        return panel_url + "/auth/" + service;
     }
 
     public static String getOauthSetupUrl() {
@@ -73,9 +73,8 @@ public class OAuthEndpoint {
     }
 
     // TODO this should be /twitch, but dev.twitch.tv is broken for me
-    //    @RequestMapping("/{service}")
-    @RequestMapping
-    public String oAuthEndpoint(/*@PathVariable String service, */@RequestParam(required = false) String code, @RequestParam(required = false) String scope, @RequestParam String state, @RequestParam(required = false) String error, @RequestParam(required = false) String error_description, Model model) {
+    @RequestMapping("/{service}")
+    public String oAuthEndpoint(@PathVariable String service, @RequestParam(required = false) String code, @RequestParam(required = false) String scope, @RequestParam String state, @RequestParam(required = false) String error, @RequestParam(required = false) String error_description, Model model) {
         //If the state is not equal to the state of our request, the response is not ours
         var s = requests.stream().filter(r -> r.state.equals(state)).findFirst();
         if (s.isEmpty()) {
