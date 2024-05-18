@@ -1,8 +1,6 @@
 package main.modules.donation_goal;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +17,8 @@ public class DonationGoal {
     double targetAmount;
     double amountInGoal;
     boolean active;
+    @Column(unique = true)
+    int order;
 
     public DonationGoal(String idName, String displayName, Currency currency, double targetAmount, double amountInGoal, boolean active) {
         this.idName = idName;
