@@ -5,6 +5,7 @@ import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
+import com.github.twitch4j.chat.TwitchChat;
 import com.github.twitch4j.chat.events.TwitchEvent;
 import com.github.twitch4j.helix.TwitchHelix;
 import talium.inputs.shared.oauth.OAuthEndpoint;
@@ -26,6 +27,9 @@ public class Twitch4JInput implements BotInput {
 
     private static final String channelName = "clym";
     private static final String chatAccountName = "orciument";
+    private static final String sendTo = "orciument";
+
+    private static volatile TwitchChat chat;
 
     //"CONFIG"
     private static String app_clientID = "";
@@ -175,4 +179,11 @@ public class Twitch4JInput implements BotInput {
         HealthManager.reportStatus(this, health);
         this.health = health;
     }
+
+    public static void sendMessage(String message) {
+        while (chat == null)
+            Thread.onSpinWait();
+        chat.sendMessage(sendTo, message);
+    }
+
 }
