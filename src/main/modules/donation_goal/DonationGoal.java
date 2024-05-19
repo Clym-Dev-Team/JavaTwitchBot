@@ -11,14 +11,14 @@ import java.util.Currency;
 @Component
 public class DonationGoal {
     @Id
-    String idName;
-    String displayName;
-    Currency currency;
-    double targetAmount;
-    double amountInGoal;
-    boolean active;
+    public String idName;
+    public String displayName;
+    public Currency currency;
+    public double targetAmount;
+    public double amountInGoal;
+    public boolean active;
     @Column(unique = true)
-    int order;
+    public int order;
 
     public DonationGoal(String idName, String displayName, Currency currency, double targetAmount, double amountInGoal, boolean active) {
         this.idName = idName;
