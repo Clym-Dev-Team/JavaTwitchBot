@@ -11,12 +11,12 @@ public class Out {
 
     public static class Twitch {
 
-        void sendRawMessage(String message) {
+        public static void sendRawMessage(String message) {
             Twitch4JInput.sendMessage(message);
         }
 
-        void sendNamedTemplate(String type, String name, HashMap<String, Object> baseValues) {
-            Optional<Template> template = Template.repo.findByTypeAndName(type, name);
+        public static void sendNamedTemplate(String module, String name, String objectName, HashMap<String, Object> baseValues) {
+            Optional<Template> template = Template.repo.findByTypeAndNameAndObjectName(module, name, objectName);
             if (template.isEmpty()) {
                 //TODO error handling, throw
                 return;
@@ -25,7 +25,7 @@ public class Out {
             sendRawTemplate(template.get().template, baseValues);
         }
 
-        void sendRawTemplate(String template, HashMap<String, Object> values) {
+        public static void sendRawTemplate(String template, HashMap<String, Object> values) {
             String message = TemplateResolver.populate(template, values);
             Twitch4JInput.sendMessage(message);
         }

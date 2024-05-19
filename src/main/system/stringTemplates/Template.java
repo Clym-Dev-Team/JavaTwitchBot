@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class Template {
     public @Id String type;
     public @Id String name;
+    public @Id String objectName;
     public String template;
 
     @Autowired

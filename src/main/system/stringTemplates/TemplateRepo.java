@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface TemplateRepo extends CrudRepository<Template, TemplateID> {
 
     @NotNull
-    Optional<Template> findByTypeAndName(String type, String name);
+    Optional<Template> findByTypeAndNameAndObjectName(String module, String name, String objectName);
 }
