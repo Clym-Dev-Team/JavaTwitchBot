@@ -1,10 +1,8 @@
-package main.modules.donation_goal;
+package main.modules.donation_alerts;
 
 import main.inputs.TipeeeStream.DonationEvent;
 
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Currency;
 
 public class DonationTemplateContext {
     private static final DateTimeFormatter dateFormater = DateTimeFormatter.ofPattern("dd/MM/yyyy");

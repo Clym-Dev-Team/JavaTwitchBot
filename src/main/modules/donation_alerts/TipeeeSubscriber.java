@@ -1,6 +1,8 @@
-package main.modules.donation_goal;
+package main.modules.donation_alerts;
 
 import main.inputs.TipeeeStream.DonationEvent;
+import main.modules.donation_goal.DonationGoal;
+import main.modules.donation_goal.GoalTemplateContext;
 import main.system.Out;
 import main.system.eventSystem.Subscriber;
 
@@ -11,7 +13,8 @@ public class TipeeeSubscriber {
 
     @Subscriber
     public static void handleTipeeeEvent(DonationEvent event) {
-        for (DonationGoal goal: DonationGoalCache.activeGoals) {
+        List<DonationGoal> activeGoals = DonationGoal.repo.findByActive(true);
+        for (DonationGoal goal: activeGoals) {
             goal.amountInGoal += event.amount;
             DonationGoal.repo.save(goal);
         }
@@ -20,7 +23,7 @@ public class TipeeeSubscriber {
         DonationTemplateContext donationContext = new DonationTemplateContext(event);
         HashMap<String, Object> baseValues = new HashMap<>();
         //TODO should be done via a system to attach additional context to a template
-        GoalTemplateContext goal = new GoalTemplateContext(DonationGoalCache.activeGoals.getFirst());
+        GoalTemplateContext goal = new GoalTemplateContext(activeGoals.getFirst());
         Out.Twitch.sendNamedTemplate("alert", "tipeee", "donation", baseValues);
     }
 }
