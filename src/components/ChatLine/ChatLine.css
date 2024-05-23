@@ -1,0 +1,40 @@
+.message {
+    padding: 5px;
+    position: relative;
+    height: min-content;
+}
+
+.message:hover {
+    background-color: var(--select-grey);
+}
+
+.message-timestamp {
+    padding-right: 5px;
+    color: var(--muted-text);
+}
+
+.timestamp-hint {
+    opacity: 0;
+    position: absolute;
+    transition-property: opacity;
+    transition-duration: 250ms;
+    transition-timing-function: linear;
+    transition-delay: 50ms;
+}
+
+.message-timestamp:hover > .timestamp-hint {
+    opacity: 100%;
+    top: -100%;
+    padding: 5px;
+    border-radius: .5em;
+    border: 2px solid var(--muted-text);
+    background-color: var(--base-background);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1em;
+    /*animation: ease-in-out 2s;*/
+}
+
+.message-user {
+    font-weight: 700;
+}

@@ -1,0 +1,8 @@
+.loader {
+    display: flex;
+    justify-content: center;
+    flex-flow: row;
+    flex-direction: column;
+    align-items: center;
+    height: -webkit-fill-available;
+}
