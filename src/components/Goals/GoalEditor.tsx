@@ -1,7 +1,7 @@
 'use client';
 
 import {useEffect, useState} from "react";
-import {getGoal, saveGoal} from "../Goals/GoalClient.ts";
+import {getGoal, saveGoal} from "./GoalClient.ts";
 import Loader from "../LoadingSpinner/Loader.tsx";
 import {useForm} from "react-hook-form";
 

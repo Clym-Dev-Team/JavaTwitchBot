@@ -1,26 +1,22 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Template} from "../Template.ts";
-import {getAllTemplates} from "../TemplateClient.ts";
-import TemplateListItem from "../TemplateList/TemplateListItem.tsx";
-import Loader from "../../LoadingSpinner/Loader.tsx";
+import TemplateEditor from "../TemplateEditor/TemplateEditor.tsx";
+import TemplateList from "../TemplateList/TemplateList.tsx";
 
 export function TemplatePane() {
-  const [templates, setTemplates] = useState<Template[]>();
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    getAllTemplates()
-      .then(r => setTemplates(r))
-      .catch(reason => console.log(reason))
-      .finally(() => setLoading(false));
-  }, [])
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
-  return (
-    <div className="template-pane">
-      {loading ? <Loader/> : templates?.map(
-      (template, key) =>
-        <TemplateListItem template={template} key={key}/>
-    )}
-    </div>
-  )
+  function handleListSelect(template: Template) {
+    setSelectedTemplate(template);
+  }
+
+  function handleEditorClose() {
+    setSelectedTemplate(null);
+  }
+
+  if (selectedTemplate == null) {
+    return <TemplateList onSelect={handleListSelect}/>
+  } else {
+    return <TemplateEditor template={!!selectedTemplate && selectedTemplate} onClose={handleEditorClose}/>
+  }
 }

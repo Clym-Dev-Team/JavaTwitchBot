@@ -1,0 +1,10 @@
+.template_list-item {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.identifier {
+    display: flex;
+    flex-direction: row;
+}
