@@ -1,7 +1,7 @@
 import {useState, useRef, useEffect} from 'react';
 import {Message} from "./ChatHistory/Pane/Message.ts";
 import {loadMore} from "./ChatHistory/Pane/getMessages.ts";
-import "./ChatHistory/ChatHistoryPane/MessagePane.css"
+import "./ChatHistory/Pane/MessagePane.css"
 import ChatHistoryQuery from "../components/ChatHistory/Query/ChatHistoryQuery.tsx";
 import ChatLine from "./ChatHistory/ChatLine/ChatLine.tsx";
 
