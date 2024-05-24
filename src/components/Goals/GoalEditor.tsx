@@ -1,7 +1,7 @@
 'use client';
 
 import {useEffect, useState} from "react";
-import {getGoal} from "../Goals/GoalClient.ts";
+import {getGoal, saveGoal} from "../Goals/GoalClient.ts";
 import Loader from "../LoadingSpinner/Loader.tsx";
 import {useForm} from "react-hook-form";
 
@@ -21,6 +21,7 @@ export function GoalEditorPane() {
   function submit(goal: Goal) {
     console.log("evebt")
     console.log(goal)
+    saveGoal(goal).then(() => console.log("goal saved"));
   }
 
   return (

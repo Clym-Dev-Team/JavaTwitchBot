@@ -1,9 +1,9 @@
 import {useState, useRef, useEffect} from 'react';
-import {Message} from "./ChatHistoryPane/Message.ts";
-import {loadMore} from "./ChatHistoryPane/getMessages.ts";
-import "./ChatHistoryPane/MessagePane.css"
-import ChatHistoryQuery from "./ChatHistoryQuery/ChatHistoryQuery.tsx";
-import ChatLine from "./ChatLine/ChatLine.tsx";
+import {Message} from "./ChatHistory/Pane/Message.ts";
+import {loadMore} from "./ChatHistory/Pane/getMessages.ts";
+import "./ChatHistory/ChatHistoryPane/MessagePane.css"
+import ChatHistoryQuery from "../components/ChatHistory/Query/ChatHistoryQuery.tsx";
+import ChatLine from "./ChatHistory/ChatLine/ChatLine.tsx";
 
 
 function InfiniteScroll() {

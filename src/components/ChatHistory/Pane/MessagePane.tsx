@@ -1,11 +1,11 @@
 import {useEffect, useRef, useState} from "react";
 import {Message} from "./Message.ts";
 import {loadMore} from "./getMessages.ts";
-import Loader from "../LoadingSpinner/Loader.tsx";
+import Loader from "../../LoadingSpinner/Loader.tsx";
 import ChatLine from "../ChatLine/ChatLine.tsx";
-import ChatHistoryQuery from "../ChatHistoryQuery/ChatHistoryQuery.tsx";
+import ChatHistoryQuery from "../Query/ChatHistoryQuery.tsx";
 import "./MessagePane.css"
-import VisibilityCallback from "../VisibilityCallback/VisibilityCallback.tsx";
+import VisibilityCallback from "../../VisibilityCallback/VisibilityCallback.tsx";
 
 
 export default function MessagePane() {

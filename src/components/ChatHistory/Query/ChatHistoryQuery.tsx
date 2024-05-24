@@ -1,6 +1,6 @@
-import {Input} from "@/components/ui/input.tsx";
 import {useState} from "react";
 import "./ChatHistoryQuery.css"
+import {Input} from "@/components/ui/input.tsx";
 
 interface props {
   value: string,
