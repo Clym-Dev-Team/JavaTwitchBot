@@ -1,0 +1,10 @@
+.templateList {
+
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 10px;
+}

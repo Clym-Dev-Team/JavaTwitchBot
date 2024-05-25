@@ -1,16 +1,32 @@
 :root {
+  /*Auto generated defaults*/
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: var(--default-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+
+  /*Our Constants*/
+  --primary-border-color: #5f6368;
+  --primary-border: var(--primary-border-color) 2px solid;
+  --field-color: #252628;
+  --default-background: #18181b;
+  --twitchViolett: rgb(112, 34, 226);
+  --accentColor: rgb(183, 50, 95);
+  --gradient-diag: linear-gradient(
+          130deg,
+          transparent 0% 33%,
+          var(--twitchViolett) 66%,
+          var(--accentColor) 100%
+  );
 }
 
 body {
@@ -21,5 +37,9 @@ body {
 }
 
 #root {
+  /*Style so our nav bar works*/
   height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
 }

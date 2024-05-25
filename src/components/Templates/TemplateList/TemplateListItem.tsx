@@ -3,21 +3,21 @@ import "./TemplateListItem.css"
 
 export interface TemplateListItemProps {
   template: Template,
-  onSelect: (template: Template) => void
 }
 
-export default function TemplateListItem(props: TemplateListItemProps) {
+export default function TemplateListItem({template}: TemplateListItemProps) {
+  const href = `/templates/edit?module=${template.module}&type=${template.type}&object=${template.object}`;
   return (
-    <div className="template_list-item" onClick={() => props.onSelect(props.template)}>
+    <a className="template_list-item" href={href}>
       <div className="identifier">
-        <span className="module">{props.template.module}</span>
+        <span className="module">{template.module}</span>
         <span className="dot">.</span>
-        <span className="name">{props.template.type}</span>
+        <span className="name">{template.type}</span>
         <span className="dot">.</span>
-        <span className="object-name">{props.template.object}</span>
+        <span className="object-name">{template.object}</span>
       </div>
-      <div className="template_string">temp = {props.template.template}</div>
-    </div>
+      <div className="template_string">{template.template}</div>
+    </a>
   )
 
 }

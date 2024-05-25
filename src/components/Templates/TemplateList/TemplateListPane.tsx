@@ -3,12 +3,9 @@ import {Template} from "../Template.ts";
 import Loader from "../../LoadingSpinner/Loader.tsx";
 import TemplateListItem from "./TemplateListItem.tsx";
 import {getAllTemplates} from "../TemplateClient.ts";
+import "./TemplateList.css"
 
-export interface TemplateListProps {
-  onSelect: (template: Template) => void;
-}
-
-export default function TemplateList(props: TemplateListProps) {
+export default function TemplateListPane() {
   const [templates, setTemplates] = useState<Template[]>();
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +22,7 @@ export default function TemplateList(props: TemplateListProps) {
       <div className="items">
       {loading ? <Loader/> : templates?.map(
         (template, key) =>
-          <TemplateListItem template={template} key={key} onSelect={props.onSelect}/>
+          <TemplateListItem template={template} key={key}/>
       )}
       </div>
     </div>
