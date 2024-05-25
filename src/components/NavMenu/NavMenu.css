@@ -1,0 +1,10 @@
+.navMenu {
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+    min-width: 100px;
+    max-width: 300px;
+    padding: .5rem;
+    gap: .3rem;
+    border-right: var(--primary-border);
+}
