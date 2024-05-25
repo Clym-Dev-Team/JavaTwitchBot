@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {getGoal, saveGoal} from "./GoalClient.ts";
 import Loader from "../LoadingSpinner/Loader.tsx";
 import {useForm} from "react-hook-form";
+import "./GoalEditor.css"
 
 export function GoalEditorPane() {
   const [loading, setLoading] = useState(true);
@@ -19,29 +20,27 @@ export function GoalEditorPane() {
   }, [])
 
   function submit(goal: Goal) {
-    console.log("evebt")
-    console.log(goal)
-    saveGoal(goal).then(() => console.log("goal saved"));
+    saveGoal(goal).then(() => console.log("goal saved")); //TODO show toast os smth
   }
 
   return (
-    <div className="goal-editor">
+    <div className="goalEditor">
       <h1>Current Donation Goal:</h1>
       {loading ? <Loader/> :
         <form onSubmit={handleSubmit(submit)}>
-          <label className="goal-form">Name:
+          <label className="goalForm">Name:
             <input type="text" {...register("name", {required: true})}/>
           </label>
-          <label className="goal-form">current:
+          <label className="goalForm">current:
             <input step="0.01" type="number" {...register("current", {required: true, valueAsNumber: true, min: 0})}/>
           </label>
-          <label className="goal-form">target:
+          <label className="goalForm">target:
             <input step="0.01" type="number" {...register("target", {required: true, valueAsNumber: true, min: 0})}/>
           </label>
-          <label className="goal-form">alertText:
+          <label className="goalForm">alertText:
             <input type="text" {...register("alertText", {required: true})}/>
           </label>
-          <button className="goal-form-save" id="submit" name="submit" type="submit">Save</button>
+          <button className="goalForm-save" id="submit" name="submit" type="submit">Save</button>
         </form>
       }
     </div>
