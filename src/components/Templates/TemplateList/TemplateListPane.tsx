@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {Template} from "../Template.ts";
-import Loader from "../../LoadingSpinner/Loader.tsx";
+import Loader from "../../../common/LoadingSpinner/Loader.tsx";
 import TemplateListItem from "./TemplateListItem.tsx";
 import {getAllTemplates} from "../TemplateClient.ts";
 import "./TemplateList.css"

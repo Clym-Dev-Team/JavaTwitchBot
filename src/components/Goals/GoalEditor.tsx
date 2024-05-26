@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from "react";
 import {getGoal, saveGoal} from "./GoalClient.ts";
-import Loader from "../LoadingSpinner/Loader.tsx";
+import Loader from "../../common/LoadingSpinner/Loader.tsx";
 import {useForm} from "react-hook-form";
 import "./GoalEditor.css"
 import TitleBar from "../TitleBar/TitleBar.tsx";

@@ -2,7 +2,7 @@ import useQuery from "../../../common/useQuery.ts";
 import {getTemplateById, saveTemplate} from "../TemplateClient.ts";
 import {useEffect, useState} from "react";
 import {Template} from "../Template.ts";
-import Loader from "../../LoadingSpinner/Loader.tsx";
+import Loader from "../../../common/LoadingSpinner/Loader.tsx";
 import TemplateForm from "./TemplateForm.tsx";
 import "./TemplateEditorTile.css"
 import TitleBar from "../../TitleBar/TitleBar.tsx";
