@@ -45,7 +45,7 @@ export default function AuthProvider(props: PropsWithChildren<Record<never, neve
       .then(res => res.text()
         .then(value => {
           setAccessToken(value);
-          localStorage.setItem("accessToken", JSON.stringify(accessToken));
+          localStorage.setItem("accessToken", value);
         }))
       .catch(err => console.log(err));
   }
@@ -62,11 +62,14 @@ export async function fetchWithAuth(context: AuthContext, input: RequestInfo | U
     return Promise.reject(new Error("Token invalid or Timed out. New Login required!"));
   }
 
-  if (init == undefined) {
+  if (init === undefined) {
     init = {headers: [["token", accessToken]]};
+  } else if (init.headers === undefined) {
+    init.headers = [["token", accessToken]]
   } else {
     const headers: Headers = new Headers(init.headers!);
     headers.set("token", accessToken);
+    init.headers = headers;
   }
 
   const res = await fetch(input, init);

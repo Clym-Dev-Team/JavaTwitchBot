@@ -1,4 +1,5 @@
 import "./ReturnBtn.css"
+import {Link} from "react-router-dom";
 
 export interface ReturnBtnProps {
   link: string,
@@ -7,8 +8,8 @@ export interface ReturnBtnProps {
 }
 
 export default function ReturnBtn({link, iconLink, text}: ReturnBtnProps) {
-  return <a className="returnBtn" href={link}>
+  return <Link className="returnBtn" to={link}>
     {iconLink && <img className="returnBtn-icon" src={iconLink} alt="return Icon" />}
     <span className="returnBtn-text">{text}</span>
-  </a>
+  </Link>
 }

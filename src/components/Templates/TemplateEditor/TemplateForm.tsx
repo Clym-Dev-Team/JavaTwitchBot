@@ -1,6 +1,7 @@
 import {Template} from "../Template.ts";
 import {useForm} from "react-hook-form";
 import "./TemplateForm.css"
+import {Link} from "react-router-dom";
 
 export interface TemplateFormProps {
   template: Template,
@@ -33,7 +34,7 @@ export default function TemplateForm({template, onSave, exitRedirect}: TemplateF
     <div className="formBtns">
       <button onMouseDown={handleSubmit(submit)} type="submit">Save</button>
       <button onMouseDown={() => reset(template)} type="reset">Reset</button>
-      <a href={exitRedirect}>Cancel</a>
+      <Link to={exitRedirect}>Cancel</Link>
     </div>
   </form>
 }

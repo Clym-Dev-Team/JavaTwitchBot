@@ -6,13 +6,15 @@ import Loader from "../../common/LoadingSpinner/Loader.tsx";
 import {useForm} from "react-hook-form";
 import "./GoalEditor.css"
 import TitleBar from "../TitleBar/TitleBar.tsx";
+import {useAuth} from "../Login/AuthProvider.tsx";
 
 export function GoalEditorPane() {
+  const context = useAuth();
   const [loading, setLoading] = useState(true);
   const {handleSubmit, register, reset} = useForm<Goal>();
 
   useEffect(() => {
-    getGoal()
+    getGoal(context)
       .then(r => {
         reset(r);
       })
@@ -21,7 +23,7 @@ export function GoalEditorPane() {
   }, [])
 
   function submit(goal: Goal) {
-    saveGoal(goal).then(() => console.log("goal saved")); //TODO show toast os smth
+    saveGoal(context, goal).then(() => console.log("goal saved")); //TODO show toast os smth
   }
 
   return (

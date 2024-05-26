@@ -7,8 +7,10 @@ import TemplateForm from "./TemplateForm.tsx";
 import "./TemplateEditorTile.css"
 import TitleBar from "../../TitleBar/TitleBar.tsx";
 import ReturnBtn from "../../TitleBar/ReturnBtn.tsx";
+import {useAuth} from "../../Login/AuthProvider.tsx";
 
 export default function TemplateEditorPane() {
+  const context = useAuth();
   const query = useQuery();
   const [template, setTemplate] = useState<Template | null>(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +25,7 @@ export default function TemplateEditorPane() {
       setError(`Error: Request Parameters: "module", "type", "object" must all be given!`);
       setLoading(false);
     } else {
-      getTemplateById(module, type, object)
+      getTemplateById(context, module, type, object)
         .then(template => setTemplate(template))
         .catch(err => setError(err))
         .finally(() => setLoading(false));
@@ -31,7 +33,7 @@ export default function TemplateEditorPane() {
   }, []);
 
   function handleSave(template: Template) {
-    saveTemplate(template)
+    saveTemplate(context, template)
       .then(value => console.log(`saved template: ${value}`)) //TODO make toast
       .catch(reason => console.log(reason)) //TODO make toast
   }

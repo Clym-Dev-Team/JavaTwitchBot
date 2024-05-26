@@ -5,13 +5,15 @@ import TemplateListItem from "./TemplateListItem.tsx";
 import {getAllTemplates} from "../TemplateClient.ts";
 import "./TemplateList.css"
 import TitleBar from "../../TitleBar/TitleBar.tsx";
+import {useAuth} from "../../Login/AuthProvider.tsx";
 
 export default function TemplateListPane() {
+  const context = useAuth();
   const [templates, setTemplates] = useState<Template[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllTemplates()
+    getAllTemplates(context)
       .then(r => setTemplates(r))
       .catch(reason => console.log(reason))
       .finally(() => setLoading(false));
