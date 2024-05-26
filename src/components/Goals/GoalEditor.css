@@ -1,6 +1,7 @@
 .goalEditor {
-    padding: 1rem;
+
 }
-.goalEditor h1 {
-    margin: 0 0 10px;
+
+.goalEditor-content {
+    padding: 10px;
 }

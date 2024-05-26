@@ -4,6 +4,7 @@ import Loader from "../../LoadingSpinner/Loader.tsx";
 import TemplateListItem from "./TemplateListItem.tsx";
 import {getAllTemplates} from "../TemplateClient.ts";
 import "./TemplateList.css"
+import TitleBar from "../../TitleBar/TitleBar.tsx";
 
 export default function TemplateListPane() {
   const [templates, setTemplates] = useState<Template[]>();
@@ -18,12 +19,12 @@ export default function TemplateListPane() {
 
   return (
     <div className="templateList">
-      <div className="titleBar"></div>
+      <TitleBar title="List Templates"/>
       <div className="items">
-      {loading ? <Loader/> : templates?.map(
-        (template, key) =>
-          <TemplateListItem template={template} key={key}/>
-      )}
+        {loading ? <Loader/> : templates?.map(
+          (template, key) =>
+            <TemplateListItem template={template} key={key}/>
+        )}
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import {getGoal, saveGoal} from "./GoalClient.ts";
 import Loader from "../LoadingSpinner/Loader.tsx";
 import {useForm} from "react-hook-form";
 import "./GoalEditor.css"
+import TitleBar from "../TitleBar/TitleBar.tsx";
 
 export function GoalEditorPane() {
   const [loading, setLoading] = useState(true);
@@ -25,7 +26,8 @@ export function GoalEditorPane() {
 
   return (
     <div className="goalEditor">
-      <h1>Current Donation Goal:</h1>
+      <TitleBar title="Edit Active Donation Goal:"/>
+      <div className="goalEditor-content">
       {loading ? <Loader/> :
         <form onSubmit={handleSubmit(submit)}>
           <label className="goalForm">Name:
@@ -43,6 +45,7 @@ export function GoalEditorPane() {
           <button className="goalForm-save" id="submit" name="submit" type="submit">Save</button>
         </form>
       }
+      </div>
     </div>
   )
 }
