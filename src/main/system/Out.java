@@ -15,10 +15,12 @@ public class Out {
             Twitch4JInput.sendMessage(message);
         }
 
-        public static void sendNamedTemplate(String module, String name, String objectName, HashMap<String, Object> baseValues) {
-            Optional<Template> template = Template.repo.findByTypeAndNameAndObjectName(module, name, objectName);
+        public static void sendNamedTemplate(String module, String type, String object, HashMap<String, Object> baseValues) {
+            Optional<Template> template = Template.repo.findByModuleAndTypeAndObject(module, type, object);
             if (template.isEmpty()) {
                 //TODO error handling, throw
+                System.err.println("no template found for module " + module + " and type " + type + " and object " + object);
+                //TODO emit error as event
                 return;
             }
             //TODO resolve additional Contexts
