@@ -49,3 +49,11 @@ body {
 .contentRoot {
   width: 90%;
 }
+
+li.toast {
+  color: white;
+}
+
+li.toast-success {
+  background-color: var(--field-color);
+}

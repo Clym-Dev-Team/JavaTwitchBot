@@ -10,6 +10,7 @@ import TemplateEditorPane from "./components/Templates/TemplateEditor/TemplateEd
 import TemplateListPane from "./components/Templates/TemplateList/TemplateListPane.tsx";
 import NavMenu from "./components/NavMenu/NavMenu.tsx";
 import AuthProvider from "./components/Login/AuthProvider.tsx";
+import {Toaster} from "@shadcn/components/ui/toaster.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -28,18 +29,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <AuthProvider>
       <RouterProvider router={router}>
       </RouterProvider>
-      {/*<BrowserRouter>*/}
-      {/*  <NavMenu/>*/}
-      {/*  <div className="contentRoot">*/}
-      {/*    <Routes>*/}
-      {/*      <Route path="/goal" element={<GoalEditorPane/>}/>*/}
-      {/*      <Route path="/templates" element={<TemplateListPane/>}/>*/}
-      {/*      <Route path="/templates/edit" element={<TemplateEditorPane/>}/>*/}
-      {/*      <Route path="/test" element={<Test/>}/>*/}
-      {/*      <Route path="/history" element={<MessagePane/>}/>*/}
-      {/*    </Routes>*/}
-      {/*  </div>*/}
-      {/*</BrowserRouter>*/}
     </AuthProvider>
   </React.StrictMode>,
 )
@@ -47,8 +36,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 function Layout() {
   return <>
     <NavMenu/>
-    <div className="contentRoot">
+    <div className="contentRoot dark">
       <Outlet/>
+      <Toaster/>
     </div>
   </>;
 }
