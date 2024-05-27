@@ -22,10 +22,10 @@
 
     "baseUrl": ".",
     "paths": {
-      "/@/*": [
+      "/@shadcn/*": [
         "/@shadcn/*"
       ],
-      "@/*": [
+      "@shadcn/*": [
         "@shadcn/*"
       ]
     }
