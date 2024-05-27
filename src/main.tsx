@@ -20,6 +20,7 @@ const router = createBrowserRouter(
       <Route path="/templates/edit" element={<TemplateEditorPane/>}/>
       <Route path="/test" element={<Test/>}/>
       <Route path="/history" element={<MessagePane/>}/>
+      <Route path="*" element={<p>Diese seite gibt es nicht</p>}/>
     </Route>
   )
 );
