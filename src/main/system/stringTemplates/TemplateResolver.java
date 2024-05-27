@@ -57,7 +57,9 @@ public class TemplateResolver {
                 } else if (arguments.length != 0 && arguments[0].equals("if")) {
 
                 } else {
+                    System.out.println("statement not supported!");
                     //TODO error, statement not supported
+                    //TODO emit error as Event
                 }
             } else {
                 //both Indices are -1
