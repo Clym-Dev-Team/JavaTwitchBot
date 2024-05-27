@@ -1,6 +1,8 @@
 package main.modules.donation_alerts;
 
 import main.inputs.TipeeeStream.DonationEvent;
+import main.system.stringTemplates.Formatter;
+import main.system.stringTemplates.Template;
 
 import java.time.format.DateTimeFormatter;
 
@@ -10,7 +12,7 @@ public class DonationTemplateContext {
 
     public final String currencyCode;
     public final String currencySymbol;
-    public final double amount;
+    public final String amount;
     public final String message;
     public final boolean hasMessage;
     public final String tipeee_username;
@@ -21,7 +23,7 @@ public class DonationTemplateContext {
     public DonationTemplateContext(DonationEvent event) {
         this.currencyCode = "EUR";
         this.currencySymbol = "€";
-        this.amount = event.amount;
+        this.amount = Formatter.formatDoubleComma(event.amount);
         this.message = event.message;
         this.hasMessage = event.hasMessage;
         this.tipeee_username = event.tipeee_username;
@@ -29,4 +31,3 @@ public class DonationTemplateContext {
         this.time = event.donated_at.format(timeFormater);
     }
 }
-

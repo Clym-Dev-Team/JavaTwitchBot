@@ -1,6 +1,7 @@
 package main.modules.donation_goal;
 
 import main.system.ASCIIProgressbar;
+import main.system.stringTemplates.Formatter;
 
 public class GoalTemplateContext {
     public final String targetAmount;
@@ -10,13 +11,12 @@ public class GoalTemplateContext {
     public final String displayName;
     public final String progressBar;
 
-
     public GoalTemplateContext(DonationGoal goal) {
-        this.targetAmount = String.format("%.2f", goal.targetAmount);
-        this.currentAmount = String.format("%.2f", goal.amountInGoal);
+        this.targetAmount = Formatter.formatDoubleComma(goal.targetAmount);
+        this.currentAmount = Formatter.formatDoubleComma(goal.amountInGoal);
         double percent = (goal.amountInGoal / goal.targetAmount) * 100;
-        this.currentPercentDecimals = String.format("%.2f", percent);
-        this.currentPercentRounded = String.format("%.0f", percent);
+        this.currentPercentDecimals = Formatter.formatDoubleComma(percent);
+        this.currentPercentRounded = Formatter.formatDoubleComma( percent);
         this.displayName = goal.displayName;
         this.progressBar = ASCIIProgressbar.bar(goal.amountInGoal, goal.targetAmount, 10, "■", " ", false, false);
     }
