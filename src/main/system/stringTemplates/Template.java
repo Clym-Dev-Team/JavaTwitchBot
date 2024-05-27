@@ -7,14 +7,14 @@ import jakarta.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Table(name = "template_strings")
+@Table(name = "sys-static_templates")
 @Entity
 @Component
 @IdClass(TemplateID.class)
 public class Template {
+    public @Id String module;
     public @Id String type;
-    public @Id String name;
-    public @Id String objectName;
+    public @Id String object;
     public String template;
 
     @Autowired

@@ -110,6 +110,7 @@ public class Twitch4JInput implements BotInput {
         twitchClient.getEventManager().onEvent(TwitchEvent.class, EventDispatcher::dispatch);
 
         this.twitchClient = twitchClient;
+        chat = twitchClient.getChat();
 
         //GraphQL is disabled until we need it, because the module is not yet finished
         //broadCasterGraphQL = twitchClient.getGraphQL();
