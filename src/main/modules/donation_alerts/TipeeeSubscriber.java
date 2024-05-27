@@ -24,6 +24,8 @@ public class TipeeeSubscriber {
         HashMap<String, Object> baseValues = new HashMap<>();
         //TODO should be done via a system to attach additional context to a template
         GoalTemplateContext goal = new GoalTemplateContext(activeGoals.getFirst());
-        Out.Twitch.sendNamedTemplate("alert", "tipeee", "donation", baseValues);
+        baseValues.put("goal", goal);
+        baseValues.put("donation", donationContext);
+        Out.Twitch.sendNamedTemplate("alerts", "tipeee", "donation", baseValues);
     }
 }

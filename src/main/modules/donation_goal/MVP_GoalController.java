@@ -2,7 +2,6 @@ package main.modules.donation_goal;
 
 import com.google.gson.Gson;
 import main.system.stringTemplates.Template;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -12,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/donation_goals")
+@CrossOrigin(origins = "http://localhost:5173")
 public class MVP_GoalController {
 
     private final DonationGoalRepo donationGoalRepo;
@@ -23,7 +23,7 @@ public class MVP_GoalController {
     @GetMapping
     String donationGoal() {
         Optional<DonationGoal> goal = DonationGoal.repo.findById("goal");
-        Optional<Template> template = Template.repo.findByTypeAndNameAndObjectName("alert", "tipeee", "donation");
+        Optional<Template> template = Template.repo.findByModuleAndTypeAndObject("alerts", "tipeee", "donation");
         if (template.isEmpty() || goal.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found"
@@ -62,6 +62,6 @@ public class MVP_GoalController {
             );
         }
         donationGoalRepo.save(dg);
-        Template.repo.updateTemplateByTypeAndNameAndObjectName(goalJson.alertText(), "alert", "tipeee", "donation");
+        Template.repo.updateTemplateByTypeAndNameAndObjectName(goalJson.alertText(), "alerts", "tipeee", "donation");
     }
 }

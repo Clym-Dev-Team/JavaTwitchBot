@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Currency;
 
-@Table(name = "donation_goals")
+@Table(name = "goals-donation_goals")
 @Entity
 @Component
 public class DonationGoal {

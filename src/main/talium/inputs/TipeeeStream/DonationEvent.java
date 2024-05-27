@@ -9,7 +9,7 @@ import java.util.Currency;
 
 @Entity
 //Repo for this Class has nativ Queries, the Table Name musst be changed Manually!
-@Table(name = "Donations")
+@Table(name = "goals-donation_log")
 @Component
 public class DonationEvent {
     @Id
