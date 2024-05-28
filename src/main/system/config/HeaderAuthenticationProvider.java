@@ -1,12 +1,14 @@
 package main.system.config;
 
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import main.system.panelAuth.botUser.BotUser;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
 
 @Component
 public class HeaderAuthenticationProvider implements AuthenticationProvider {
@@ -19,7 +21,7 @@ public class HeaderAuthenticationProvider implements AuthenticationProvider {
         String accessToken = authentication.getPrincipal().toString();
         //TODO get user from accessToken
         //TODO auth
-        return new UserAuthenticationToken(accessToken, true, null);
+        return new UserAuthenticationToken(accessToken, true, new BotUser("test USer "));
     }
 
     @Override
