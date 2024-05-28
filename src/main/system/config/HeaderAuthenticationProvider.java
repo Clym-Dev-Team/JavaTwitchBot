@@ -1,5 +1,7 @@
 package main.system.config;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -11,9 +13,13 @@ public class HeaderAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        System.out.println("Authenticating! " + authentication.getPrincipal());
+        if (authentication.getPrincipal() == null) {
+            throw new AuthenticationCredentialsNotFoundException("Token header does not exist");
+        }
+        String accessToken = authentication.getPrincipal().toString();
+        //TODO get user from accessToken
         //TODO auth
-        return null;
+        return new UserAuthenticationToken(accessToken, true, null);
     }
 
     @Override
