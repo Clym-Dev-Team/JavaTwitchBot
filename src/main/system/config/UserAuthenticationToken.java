@@ -1,10 +1,9 @@
 package main.system.config;
 
-import main.system.panelAuth.BotUser;
+import main.system.panelAuth.botUser.BotUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.jackson2.SimpleGrantedAuthorityMixin;
 
 import java.util.*;
 
@@ -60,6 +59,6 @@ public class UserAuthenticationToken implements Authentication {
 
     @Override
     public String getName() {
-        return botUser.isEmpty() ? accessToken : botUser.get().username();
+        return botUser.isEmpty() ? accessToken : botUser.get().username;
     }
 }
