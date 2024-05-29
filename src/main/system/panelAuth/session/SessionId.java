@@ -1,14 +1,18 @@
 package main.system.panelAuth.session;
 
+import main.system.panelAuth.botUser.BotUser;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 public class SessionId implements Serializable {
     String accessToken;
-    String username;
+    BotUser botUser;
 
-    public SessionId(String accessToken, String username) {
+    public SessionId(String accessToken, BotUser botUser) {
         this.accessToken = accessToken;
-        this.username = username;
+        this.botUser = botUser;
     }
 
     public SessionId() {
@@ -19,13 +23,13 @@ public class SessionId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof SessionId sessionId)) return false;
 
-        return accessToken.equals(sessionId.accessToken) && username.equals(sessionId.username);
+        return Objects.equals(accessToken, sessionId.accessToken) && Objects.equals(botUser, sessionId.botUser);
     }
 
     @Override
     public int hashCode() {
-        int result = accessToken.hashCode();
-        result = 31 * result + username.hashCode();
+        int result = Objects.hashCode(accessToken);
+        result = 31 * result + Objects.hashCode(botUser);
         return result;
     }
 }
