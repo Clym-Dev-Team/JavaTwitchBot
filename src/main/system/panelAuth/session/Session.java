@@ -16,22 +16,19 @@ import java.time.Instant;
 public class Session {
     @Id
     String accessToken;
-    @Id
-    String username;
 
     String userAgent;
 
     Instant lastRefreshedAt;
 
-    @ManyToOne @NotNull
+    @ManyToOne @NotNull @Id
     private BotUser botUser;
 
     public Session() {
     }
 
-    public Session(String accessToken, String username, String userAgent, Instant lastRefreshedAt, @NotNull BotUser botUser) {
+    public Session(String accessToken, String userAgent, Instant lastRefreshedAt, @NotNull BotUser botUser) {
         this.accessToken = accessToken;
-        this.username = username;
         this.userAgent = userAgent;
         this.lastRefreshedAt = lastRefreshedAt;
         this.botUser = botUser;
