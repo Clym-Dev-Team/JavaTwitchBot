@@ -1,4 +1,4 @@
-package main.system.config;
+package main.system.springSecurity;
 
 import main.system.panelAuth.botUser.BotUser;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -7,8 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
 
 @Component
 public class HeaderAuthenticationProvider implements AuthenticationProvider {
