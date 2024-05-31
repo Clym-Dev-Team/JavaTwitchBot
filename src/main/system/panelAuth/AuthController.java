@@ -1,61 +1,77 @@
 package main.system.panelAuth;
 
+import com.github.twitch4j.common.exception.UnauthorizedException;
 import com.google.gson.Gson;
+import main.system.panelAuth.botLogin.BotLoginRepo;
 import main.system.panelAuth.botUser.BotUser;
 import main.system.panelAuth.botUser.BotUserRepo;
+import main.system.panelAuth.exceptions.*;
 import main.system.panelAuth.session.Session;
 import main.system.panelAuth.session.SessionRepo;
+import net.datafaker.Faker;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.time.Instant;
+import java.util.Locale;
 
 @RestController
 public class AuthController {
 
-    private final SessionRepo sessionRepo;
-    private final BotUserRepo botUserRepo;
+    private static final Faker faker = new Faker(Locale.GERMANY);
+    private static final Gson gson = new Gson();
+    private final AuthService authService;
 
     @Autowired
-    public AuthController(SessionRepo sessionRepo, BotUserRepo botUserRepo) {
-        this.sessionRepo = sessionRepo;
-        this.botUserRepo = botUserRepo;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/register")
-    String register(@RequestBody String body, @RequestHeader(value = "User-Agent") String userAgent) {
-        //TODO register user into DB
-        return "nope";
+    @Transactional
+    void register(@RequestBody String body) {
+        RegisterRequest register = gson.fromJson(body, RegisterRequest.class);
+        try {
+            authService.registerUser(register);
+        } catch (DuplicateUserException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "BotUser with same Name already exists");
+        }
     }
 
-
-        @PostMapping("/login")
+    @PostMapping("/login")
     String login(@RequestBody String body, @RequestHeader(value = "User-Agent") String userAgent) {
-        Gson gson = new Gson();
         LoginRequest login = gson.fromJson(body, LoginRequest.class);
-        //TODO search for user, create token, create session
-        var user = botUserRepo.findByUsername(login.username());
-        if (user == null) {
-            user = new BotUser(login.username());
-            botUserRepo.save(user);
+        try {
+            return authService.login(login, userAgent);
+        } catch (IncompatibleHashFunctions e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Login failed because of unexpected data format");
+        } catch (InvalidAuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }
-
-        String accessToken = RandomStringUtils.randomAlphanumeric(30);
-        Session s = new Session(accessToken, userAgent, Instant.now(), user);
-        sessionRepo.save(s);
-        return accessToken;
     }
 
     @PostMapping("/logout")
-    void logout(@RequestBody String accessToken) {
-        //TODO delete active session
+    void logout(Authentication authentication) {
+        authService.logout((String) authentication.getPrincipal());
     }
 
     @PostMapping("/forceLogout")
-    void sessionReset(@RequestBody String accessToken) {
-        //TODO delete all active sessions
+    void sessionReset(Authentication authentication) {
+        BotUser botUser = (BotUser) authentication.getDetails();
+        if (botUser != null) {
+            authService.forceLogout(botUser);
+            return;
+        }
+        try {
+            authService.proxyForceLogout((String) authentication.getPrincipal());
+        } catch (SessionCouldNotBeFound e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Authenticated, but User could not be found!");
+        }
     }
-
 }

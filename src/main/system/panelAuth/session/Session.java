@@ -21,7 +21,7 @@ public class Session {
 
     Instant lastRefreshedAt;
 
-    @ManyToOne @NotNull @Id
+    @ManyToOne(fetch = FetchType.LAZY) @NotNull @Id
     private BotUser botUser;
 
     public Session() {
@@ -32,5 +32,26 @@ public class Session {
         this.userAgent = userAgent;
         this.lastRefreshedAt = lastRefreshedAt;
         this.botUser = botUser;
+    }
+
+    public String accessToken() {
+        return accessToken;
+    }
+
+    public String userAgent() {
+        return userAgent;
+    }
+
+    public Instant lastRefreshedAt() {
+        return lastRefreshedAt;
+    }
+
+    public @NotNull BotUser botUser() {
+        return botUser;
+    }
+
+    public Session setLastRefreshedAt(Instant lastRefreshedAt) {
+        this.lastRefreshedAt = lastRefreshedAt;
+        return this;
     }
 }

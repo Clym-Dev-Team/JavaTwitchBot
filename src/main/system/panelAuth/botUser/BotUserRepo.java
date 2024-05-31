@@ -2,6 +2,6 @@ package main.system.panelAuth.botUser;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface BotUserRepo extends CrudRepository<BotUser, Long> {
+public interface BotUserRepo extends CrudRepository<BotUser, String> {
     BotUser findByUsername(String username);
 }

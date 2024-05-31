@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import main.system.panelAuth.exceptions.AuthenticationRejected;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -30,12 +31,18 @@ public class HeaderAuthProcessingFilter extends AbstractAuthenticationProcessing
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         var token = request.getHeader("token");
-        var auth = new PreAuthenticatedAuthenticationToken(token, null);
+        var userAgent = request.getHeader("User-Agent");
+        var auth = new PreAuthenticatedAuthenticationToken(userAgent, token);
         // Not trying to auth /login and /error Solution 2
         //if (request.getRequestURI().equals("/login") || request.getRequestURI().equals("/error")) {
         //    return auth;
         //}
-        return this.getAuthenticationManager().authenticate(auth);
+        try {
+            return this.getAuthenticationManager().authenticate(auth);
+        } catch (AuthenticationRejected e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication rejected or expired");
+            return null;
+        }
     }
 
     @Override
