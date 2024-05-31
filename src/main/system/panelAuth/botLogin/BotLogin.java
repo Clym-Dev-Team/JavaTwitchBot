@@ -29,5 +29,37 @@ public class BotLogin {
         this.hashedPassword = hashedPassword;
         this.alg1 = alg1;
         this.alg2 = alg2;
+        this.botUser = botUser;
+    }
+
+    public String username() {
+        return username;
+    }
+
+    public String hashedPassword() {
+        return hashedPassword;
+    }
+
+    public String alg1() {
+        return alg1;
+    }
+
+    public String alg2() {
+        return alg2;
+    }
+
+    public BotUser botUser() {
+        return botUser;
+    }
+
+    @Override
+    public String toString() {
+        return "BotLogin{" +
+                "username='" + username + '\'' +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                ", alg1='" + alg1 + '\'' +
+                ", alg2='" + alg2 + '\'' +
+                ", botUser=" + botUser +
+                '}';
     }
 }

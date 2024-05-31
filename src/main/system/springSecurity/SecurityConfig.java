@@ -51,8 +51,7 @@ public class SecurityConfig {
                 )
                 .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new HeaderAuthProcessingFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+                .addFilterBefore(new HeaderAuthProcessingFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

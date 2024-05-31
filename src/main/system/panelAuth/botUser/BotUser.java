@@ -25,4 +25,12 @@ public class BotUser {
         this.username = username;
         this.accountCreationTime = Instant.now();
     }
+
+    @Override
+    public String toString() {
+        return "BotUser{" +
+                "username='" + username + '\'' +
+                ", accountCreationTime=" + accountCreationTime +
+                '}';
+    }
 }
