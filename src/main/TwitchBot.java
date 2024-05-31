@@ -31,8 +31,8 @@ public class TwitchBot {
         SpringApplication.run(TwitchBot.class);
         System.out.println();
         System.out.println("DateFormat: DayNumber-Hour:Minute:Second:Millis");
-        System.out.println("DD-HH:mm:ss.SSS |LEVEL| [THREAD]        LOGGER (Source Class)               - MSG");
-        System.out.println("----------------|-----|-[-------------]---------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("DDD-HH:mm:ss.SSS |LEVEL| [THREAD]        LOGGER (Source Class)               - MSG");
+        System.out.println("-----------------|-----|-[-------------]---------------------------------------------------------------------------------------------------------------------------------------------");
         InputManager.startAllInputs();
         new CommandProcessor();
         HealthManager.subscribeNextChange(status -> time.close(), InputStatus.HEALTHY);
