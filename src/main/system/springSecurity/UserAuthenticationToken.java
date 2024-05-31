@@ -1,4 +1,4 @@
-package main.system.config;
+package main.system.springSecurity;
 
 import main.system.panelAuth.botUser.BotUser;
 import org.springframework.security.core.Authentication;
