@@ -34,7 +34,7 @@ record TextStatement(String text) implements Statement {}
 
 record VarStatement(String name) implements Statement {}
 
-record LoopStatement(String name, String var, Statement[] body) implements Statement {}
+record LoopStatement(String name, String var, List<Statement> body) implements Statement {}
 
 record IfStatement(Condition condition, List<Statement> then, List<Statement> other) implements Statement {}
 
@@ -83,12 +83,12 @@ public class TemplateParser {
             boolean isElse = false;
             while (!src.isEOF()) { // mostly equivalent to while(true), but with a overrun check
                 var curr = src.peek();
-                if(curr.getClass() == IfElseToken.class) {
+                if (curr.getClass() == IfElseToken.class) {
                     isElse = true;
                     src.next(); //consume else Token
                     continue;
                 }
-                if(curr.getClass() == IfEndToken.class) {
+                if (curr.getClass() == IfEndToken.class) {
                     src.next(); //consume ifEnd Token
                     break;
                 }
@@ -101,9 +101,21 @@ public class TemplateParser {
             return new IfStatement(parseCondition(condition), then, other);
         }
         if (current.getClass() == ForHeadToken.class) {
-            //TODO for
-
-            StringUtils.countMatches("HEAD", "[*]"); //TODO discard if more than one wildcard in string
+            String name = ((ForHeadToken) current).name();
+            String var = ((ForHeadToken) current).var();
+            if (StringUtils.countMatches(var, "[*]") > 1) {
+                throw new RuntimeException("Only one wildcard allowed in a for statement");
+            }
+            List<Statement> body = new ArrayList<>();
+            while (!src.isEOF()) { // mostly equivalent to while(true), but with a overrun check
+                var curr = src.peek();
+                if (curr.getClass() == ForEndTokenToken.class) {
+                    src.next();
+                    break;
+                }
+                body.add(parseToken());
+            }
+            return new LoopStatement(name, var, body);
 
         }
         return null;
@@ -118,14 +130,14 @@ public class TemplateParser {
             throw new IllegalArgumentException();
         }
         String left = matcher.group(1).trim();
-        boolean isLeftVar = left.startsWith("\"") && left.endsWith("\"");
-        if (isLeftVar) {
+        boolean leftIsLiteral = left.startsWith("\"") && left.endsWith("\"");
+        if (leftIsLiteral) {
             left = left.substring(1, left.length() - 1);
         }
         String eqString = matcher.group(2).trim();
         String right = matcher.group(3).trim();
-        boolean isRightVar = right.startsWith("\"") && right.endsWith("\"");
-        if (isRightVar) {
+        boolean rightIsLiteral = right.startsWith("\"") && right.endsWith("\"");
+        if (rightIsLiteral) {
             right = right.substring(1, right.length() - 1);
         }
 
@@ -138,7 +150,31 @@ public class TemplateParser {
             case ">=" -> Equals.GREATER_THAN_OR_EQUALS;
             default -> throw new IllegalStateException(STR."Not a valid Comparison Operator: \{eqString}");
         };
-        return new Condition(left, isLeftVar, equals, right, isRightVar);
+        return new Condition(left, !leftIsLiteral, equals, right, !rightIsLiteral);
 
+    }
+
+    public static void debugPrint(List<Statement> statements, int depth) {
+        String indent = " ".repeat(depth);
+        for (var statement : statements) {
+            if (statement instanceof TextStatement textStatement) {
+                System.out.println(STR."\{indent}Text(\{textStatement.text()}),");
+            }
+            if (statement instanceof VarStatement varStatement) {
+                System.out.println(STR."\{indent}Var(\{varStatement.name()}),");
+            }
+            if (statement instanceof IfStatement ifStatement) {
+                System.out.println(STR."\{indent}IF: \{ifStatement.condition()}");
+                debugPrint(ifStatement.then(),depth+1);
+                System.out.println(STR."\{indent}} else {");
+                debugPrint(ifStatement.other(),depth+1);
+                System.out.println(STR."\{indent}},");
+            }
+            if (statement instanceof LoopStatement forStatement) {
+                System.out.println(STR."\{indent}FOR: \{forStatement.name()} in \{forStatement.var()} {");
+                debugPrint(forStatement.body(),depth+1);
+                System.out.println(STR."\{indent}},");
+            }
+        }
     }
 }
