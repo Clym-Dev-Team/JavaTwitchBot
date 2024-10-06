@@ -1,6 +1,10 @@
 import "./CommandPopup.css"
 import {Input} from "@shadcn/components/ui/input.tsx";
-import {Label} from "@shadcn/components/ui/label.tsx";
+import VLabel from "../../common/VerticalLabel/VLabel.tsx";
+import IconCheckBox from "../../common/IconCheckBox/IconCheckBox.tsx";
+import IconList from "../../assets/IconList.tsx";
+import IconHidden from "../../assets/IconHidden.tsx";
+import {useState} from "react";
 
 
 export interface CommandPopupProps {
@@ -8,37 +12,37 @@ export interface CommandPopupProps {
 }
 
 export default function CommandPopup(props: CommandPopupProps) {
+  const [triggerChecked, setTriggerChecked] = useState(false);
+
   return <div className="commandPopup">
-    <Label htmlFor="commandId">Internal Command Nane/Id:</Label>
-    <Input id="commandId" type="text"/>
+    <VLabel name="Internal Command Nane/Id:">
+      <Input id="commandId" type="text"/>
+    </VLabel>
     <div className="triggers">
       Trigger:
       <div className="trigger">
         <Input type="text" placeholder="Trigger Pattern"/>
         <input type="checkbox" alt="Regex Trigger"/>
-        <input type="checkbox" alt="Visible in Command List"/>
+        <IconCheckBox checked={triggerChecked} onChange={setTriggerChecked} checkedIcon={<IconList/>} icon={<IconHidden/>} hoverText="Visible in Command List"/>
         <input type="checkbox" alt="Enabled"/>
       </div>
       <div className="addTrigger">Add a new Alias</div>
     </div>
-    <label>
-      Required Permission Level:
+    <VLabel name="Required Permission Level:">
       <select>
         <option>All</option>
         <option>Follower</option>
         <option>Mods</option>
         <option>Owner</option>
       </select>
-    </label>
+    </VLabel>
     <div className="cooldown">
-      <label>
-        Global Cooldown:
-        <input type="text"/>
-      </label>
-      <label>
-        User Cooldown:
-        <input type="text"/>
-      </label>
+      <VLabel name="Global Cooldown:">
+        <Input type="text"/>
+      </VLabel>
+      <VLabel name="User Cooldown:">
+        <Input type="text"/>
+      </VLabel>
     </div>
     <div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>
   </div>
