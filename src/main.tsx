@@ -11,6 +11,8 @@ import TemplateListPane from "./components/Templates/TemplateList/TemplateListPa
 import NavMenu from "./components/NavMenu/NavMenu.tsx";
 import AuthProvider from "./components/Login/AuthProvider.tsx";
 import {Toaster} from "@shadcn/components/ui/toaster.tsx";
+import TestingPopupBackground from "./components/TestingPopupBackground/TestingPopupBackground.tsx";
+import CommandPopup from "./components/CommandPopup/CommandPopup.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -21,6 +23,7 @@ const router = createBrowserRouter(
       <Route path="/test" element={<Test/>}/>
       <Route path="/history" element={<MessagePane/>}/>
       <Route path="*" element={<p>Diese seite gibt es nicht</p>}/>
+      <Route path="/commands" element={<TestingPopupBackground content={<CommandPopup/>}/>}/>
     </Route>
   )
 );

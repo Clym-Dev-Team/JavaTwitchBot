@@ -1,0 +1,33 @@
+.commandPopup {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.trigger {
+    display: flex;
+    flex-direction: row;
+}
+
+.cooldown {
+    display: flex;
+    flex-direction: row;
+}
+
+.templateSpacer {
+    height: 20rem;
+    width: 100%;
+    background: repeating-linear-gradient(
+            45deg,
+            #606dbc,
+            #606dbc 10px,
+            #465298 10px,
+            #465298 20px
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Bahnschrift;
+    font-size: 2rem;
+}

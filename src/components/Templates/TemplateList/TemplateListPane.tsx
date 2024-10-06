@@ -23,7 +23,7 @@ export default function TemplateListPane() {
     <div className="templateList">
       <TitleBar title="List Templates"/>
       <div className="items">
-        {loading ? <Loader/> : templates?.map(
+        {loading ? <Loader/> : templates!.map(
           (template, key) =>
             <TemplateListItem template={template} key={key}/>
         )}
