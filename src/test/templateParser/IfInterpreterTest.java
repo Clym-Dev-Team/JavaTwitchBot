@@ -1,9 +1,9 @@
-package test.templateParser;
+package templateParser;
 
-import main.system.templateParser.IfInterpreter;
-import main.system.templateParser.UnsupportedComparandType;
-import main.system.templateParser.statements.Equals;
-import main.system.templateParser.tokens.Comparison;
+import talium.system.templateParser.ifParser.IfInterpreter;
+import talium.system.templateParser.UnsupportedComparandType;
+import talium.system.templateParser.statements.Equals;
+import talium.system.templateParser.tokens.Comparison;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 

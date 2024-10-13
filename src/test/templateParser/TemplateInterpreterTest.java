@@ -1,15 +1,15 @@
 package test.templateParser;
 
-import main.system.templateParser.statements.*;
-import main.system.templateParser.tokens.Comparison;
+import talium.system.templateParser.statements.*;
+import talium.system.templateParser.tokens.Comparison;
 import org.apache.commons.lang.NullArgumentException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static main.system.templateParser.TemplateInterpreter.getNestedReplacement;
-import static main.system.templateParser.TemplateInterpreter.populate;
+import static talium.system.templateParser.TemplateInterpreter.getNestedReplacement;
+import static talium.system.templateParser.TemplateInterpreter.populate;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class TemplateInterpreterTest {

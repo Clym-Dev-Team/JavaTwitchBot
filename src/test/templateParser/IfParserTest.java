@@ -1,12 +1,11 @@
-package test.templateParser;
+package templateParser;
 
-import main.system.templateParser.statements.Equals;
-import main.system.templateParser.statements.TextStatement;
-import main.system.templateParser.statements.VarStatement;
-import main.system.templateParser.tokens.Comparison;
+import talium.system.templateParser.statements.Equals;
+import talium.system.templateParser.statements.VarStatement;
+import talium.system.templateParser.tokens.Comparison;
 import org.junit.jupiter.api.Test;
 
-import static main.system.templateParser.IfParser.parse;
+import static talium.system.templateParser.ifParser.IfParser.parse;
 
 public class IfParserTest {
     //TODO test comparison between all types of objects

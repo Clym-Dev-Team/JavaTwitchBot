@@ -1,6 +1,6 @@
-package test.stringTemplates;
+package stringTemplates;
 
-import main.system.stringTemplates.TemplateResolver;
+import talium.system.stringTemplates.TemplateResolver;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
