@@ -1,12 +1,9 @@
 package hooksystem;
 
-import main.system.commandSystem.repositories.Message;
-import main.system.hookSystem.Hook;
+import talium.system.commandSystem.repositories.Message;
+import talium.system.hookSystem.Hook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class TestHooks {
 

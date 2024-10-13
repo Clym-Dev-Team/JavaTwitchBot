@@ -13,8 +13,8 @@
     <groupId>de.orciument</groupId>
     <artifactId>JavaTwitchBot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>JavaTwitchBot</name>
-    <description>JavaTwitchBot</description>
+    <name>Talium</name>
+    <description>Talium, a Java Twitch Bot</description>
     <properties>
         <java.version>21</java.version>
     </properties>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.github.twitch4j</groupId>
             <artifactId>twitch4j</artifactId>
-            <version>1.12.0</version>
+            <version>1.14.0</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -133,7 +133,7 @@
                 <directory>src/resources</directory>
             </resource>
             <resource>
-                <directory>src/main/modules/</directory>
+                <directory>src/main/talium/modules/</directory>
             </resource>
 <!--            <resource>-->
 <!--                <directory>src/main/modules/testModule/resources</directory>-->

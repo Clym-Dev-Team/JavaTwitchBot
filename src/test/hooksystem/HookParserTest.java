@@ -1,15 +1,15 @@
 package hooksystem;
 
-import main.system.commandSystem.repositories.Message;
-import main.system.commandSystem.repositories.TwitchUser;
-import main.system.commandSystem.repositories.TwitchUserPermission;
-import main.system.hookSystem.HookMethodRunner;
+import talium.system.commandSystem.repositories.Message;
+import talium.system.commandSystem.repositories.TwitchUser;
+import talium.system.commandSystem.repositories.TwitchUserPermission;
+import talium.system.hookSystem.HookMethodRunner;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
-import static main.system.hookSystem.HookParser.parseCommand;
+import static talium.system.hookSystem.HookParser.parseCommand;
 
 public class HookParserTest {
 

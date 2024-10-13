@@ -16,16 +16,16 @@
     <logger name="main.inputs" level="WARN"/>
     <logger name="main.modules" level="INFO"/>
     <logger name="main.system" level="INFO"/>
-    <logger name="main.system.inputSystem.HealthManager" level="INFO" additivity="false">
+    <logger name="main.talium.system.inputSystem.HealthManager" level="INFO" additivity="false">
         <appender-ref ref="SYSTEM"/>
     </logger>
-    <logger name="main.system.StopWatch" level="INFO" additivity="false">
+    <logger name="main.talium.system.StopWatch" level="INFO" additivity="false">
         <appender-ref ref="SYSTEM"/>
     </logger>
     <logger name="main.system.eventSystem" level="INFO"/>
     <logger name="main.system.commandSystem" level="INFO"/>
-    <logger name="main.system.commandSystem.CommandProcessor.Chat" level="DEBUG"/>
-    <logger name="main.system.ASCIIProgressbar" level="INFO"/>
+    <logger name="main.talium.system.commandSystem.CommandProcessor.Chat" level="DEBUG"/>
+    <logger name="main.talium.system.ASCIIProgressbar" level="INFO"/>
     <logger name="logback" level="INFO"/>
     <logger name="org.springframework.security.web" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
