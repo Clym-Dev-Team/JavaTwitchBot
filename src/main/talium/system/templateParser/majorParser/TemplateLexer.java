@@ -3,6 +3,7 @@ package talium.system.templateParser.majorParser;
 
 import talium.system.templateParser.CharakterStream;
 import talium.system.templateParser.TokenStream;
+import talium.system.templateParser.UnexpectedEndOfInputException;
 import talium.system.templateParser.tokens.TemplateTokenKind;
 import talium.system.templateParser.tokens.TemplateToken;
 
@@ -28,7 +29,13 @@ public class TemplateLexer implements TokenStream<TemplateToken> {
     public List<TemplateToken> parse() {
         List<TemplateToken> list = new ArrayList<>();
         while (!src.isEOF()) {
-            TemplateToken next = next();
+            TemplateToken next;
+            try {
+                next = next();
+            } catch (UnexpectedEndOfInputException e) {
+                e.printStackTrace();
+                break;
+            }
             if (next == null) {
                 break;
             }
@@ -59,7 +66,7 @@ public class TemplateLexer implements TokenStream<TemplateToken> {
      * consume a singe major token from the character stream
      * @return the next token
      */
-    private TemplateToken parseToken() {
+    private TemplateToken parseToken() throws UnexpectedEndOfInputException {
         if (src.isEOF()) {
             return null;
         }

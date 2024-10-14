@@ -12,12 +12,16 @@ public class CharakterStream implements TokenStream<Character> {
     }
 
     @Override
-    public Character peek() {
+    public Character peek() throws UnsupportedOperationException {
+        if (isEOF())
+            throw new UnexpectedEndOfInputException();
         return src.charAt(pos);
     }
 
     @Override
-    public Character next() {
+    public Character next() throws UnexpectedEndOfInputException {
+        if (isEOF())
+            throw new UnexpectedEndOfInputException();
         char c = src.charAt(pos);
         pos += 1;
         return c;
@@ -27,7 +31,7 @@ public class CharakterStream implements TokenStream<Character> {
      * peeks the character after the next one
      * @return the character after the next one
      */
-    public Character future() {
+    public Character future() throws UnexpectedEndOfInputException {
         if (pos + 1 >= src.length()) {
             return ' ';
         }
@@ -44,11 +48,11 @@ public class CharakterStream implements TokenStream<Character> {
      * @param c target character
      * @return return all consumed characters up to the target
      */
-    public String readUntil(char c) {
+    public String readUntil(char c) throws UnexpectedEndOfInputException {
         skipWhitespace();
         String buffer = "";
         boolean escapeNext = false;
-        while (peek() != c || escapeNext) {
+        while (!isEOF() && peek() != c || escapeNext) {
             if (peek() == '\\') { //TODO this impossible, we need to save separately if the last char was a -> \ (or check in the buffer) (also, if \ is the target char, we should exit)
                 escapeNext = true;
             }
@@ -65,7 +69,7 @@ public class CharakterStream implements TokenStream<Character> {
      * @return return all consumed characters up to the non digit char
      * @see Character#isDigit(char)
      */
-    public String readTillNotDigit() {
+    public String readTillNotDigit() throws UnexpectedEndOfInputException {
         skipWhitespace();
         String buffer = "";
         while (!Character.isDigit(peek())) {
@@ -79,7 +83,7 @@ public class CharakterStream implements TokenStream<Character> {
      * @return return all consumed characters up to the whitespace
      * @see Character#isWhitespace(char)
      */
-    public String readTillWhitespace() {
+    public String readTillWhitespace() throws UnexpectedEndOfInputException {
         skipWhitespace();
         String buffer = "";
         while (!isEOF() && !Character.isWhitespace(peek())) {
@@ -91,7 +95,7 @@ public class CharakterStream implements TokenStream<Character> {
     /**
      * consumes all characters until a non whitespace character is encountered
      */
-    public void skipWhitespace() {
+    public void skipWhitespace() throws UnexpectedEndOfInputException {
         while (!isEOF() && Character.isWhitespace(peek())) {
             pos += 1;
         }
