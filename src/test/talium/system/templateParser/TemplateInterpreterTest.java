@@ -29,7 +29,7 @@ public class TemplateInterpreterTest {
     );
     static List<Statement> TEMPLATE_LOOP = List.of(
             new TextStatement("Hello,"),
-            new LoopStatement("loopVar", "varName", Arrays.asList(
+            new LoopStatement("varName", "loopVar", Arrays.asList(
                     new TextStatement(" "),
                     new VarStatement("varName")
             )),
@@ -37,28 +37,29 @@ public class TemplateInterpreterTest {
     );
 
 
-    //TODO try iterating non list object
     @Test
-    void iterate_non_iterable() {
+    void iterate_non_iterable() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException {
         HashMap<String, Object> map = new HashMap<>();
         map.put("loopVar", "this_is_not_a_list");
-        System.out.println(populate(TEMPLATE_LOOP, map));
+        try {
+            System.out.println(populate(TEMPLATE_LOOP, map));
+            fail("Should have thrown UnIterableArgumentException");
+        } catch (UnIterableArgumentException _) {
+        }
     }
 
-    //TODO try vars
     @Test
-    void var() {
+    void var() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException {
         HashMap<String, Object> map = new HashMap<>();
         map.put("name", "dummy name");
         assert populate(TEMPLATE_VAR, map).equals("Hello, dummy name!");
     }
 
-    //TODO try empty list
     @Test
-    void iterate_empty_list() {
+    void iterate_empty_list() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException {
         HashMap<String, Object> map = new HashMap<>();
         map.put("loopVar", new ArrayList<>());
-        System.out.println(populate(TEMPLATE_LOOP, map));
+        assert populate(TEMPLATE_LOOP, map).equals("Hello,!");
     }
 
     //TODO try error if statement
@@ -70,7 +71,7 @@ public class TemplateInterpreterTest {
         }
 
         @Test
-        void string() throws NoSuchFieldException, IllegalAccessException {
+        void string() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException {
             HashMap<String, Object> map = new HashMap<>();
             map.put("test", "testing String");
             map.put("dummyVar", 23899);
@@ -78,7 +79,7 @@ public class TemplateInterpreterTest {
         }
 
         @Test
-        void integer() throws NoSuchFieldException, IllegalAccessException {
+        void integer() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException {
             HashMap<String, Object> map = new HashMap<>();
             map.put("integerValue", 23899);
             map.put("dummyVar", "testing String");
@@ -86,7 +87,7 @@ public class TemplateInterpreterTest {
         }
 
         @Test
-        void object_path() throws NoSuchFieldException, IllegalAccessException {
+        void object_path() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException {
             TestClass testClass = new TestClass("testString", 23899);
             HashMap<String, Object> map = new HashMap<>();
             map.put("testObject", testClass);
@@ -95,7 +96,7 @@ public class TemplateInterpreterTest {
         }
 
         @Test
-        void list() throws NoSuchFieldException, IllegalAccessException {
+        void list() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException {
             HashMap<String, Object> map = new HashMap<>();
             ArrayList<String> list = new ArrayList<>();
             list.add("dummyValue");
@@ -113,12 +114,12 @@ public class TemplateInterpreterTest {
             try {
                 System.out.println(getNestedReplacement("testObject.testInteger", map));
                 fail("Should have thrown NullArgumentException");
-            } catch (NullArgumentException _) {
+            } catch (ArgumentValueNullException _) {
             }
         }
 
         @Test
-        void end_value_null() throws NoSuchFieldException, IllegalAccessException {
+        void end_value_null() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException {
             TestClass testClass = new TestClass(null, 23899);
             HashMap<String, Object> map = new HashMap<>();
             map.put("testObject", testClass);
@@ -127,7 +128,7 @@ public class TemplateInterpreterTest {
         }
 
         @Test
-        void private_var() throws NoSuchFieldException, IllegalAccessException {
+        void private_var() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException {
             class PrivateClass {
                 private final String testString;
                 final int testInteger;
@@ -145,7 +146,7 @@ public class TemplateInterpreterTest {
         }
 
         @Test
-        void missing_field() throws IllegalAccessException {
+        void missing_field() throws IllegalAccessException, ArgumentValueNullException {
             TestClass testClass = new TestClass("testString", 23899);
             HashMap<String, Object> map = new HashMap<>();
             map.put("testObject", testClass);
