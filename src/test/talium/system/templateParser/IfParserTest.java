@@ -1,4 +1,4 @@
-package templateParser;
+package talium.system.templateParser;
 
 import talium.system.templateParser.statements.Equals;
 import talium.system.templateParser.statements.VarStatement;

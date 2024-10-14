@@ -1,4 +1,4 @@
-package test.templateParser;
+package talium.system.templateParser;
 
 public class TemplateLexerTest {
     //TODO inject string, walk entire string and test if all chars are given out
