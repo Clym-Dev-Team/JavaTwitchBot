@@ -1,4 +1,4 @@
-package templateParser;
+package talium.system.templateParser;
 
 import talium.system.templateParser.ifParser.IfInterpreter;
 import talium.system.templateParser.UnsupportedComparandType;

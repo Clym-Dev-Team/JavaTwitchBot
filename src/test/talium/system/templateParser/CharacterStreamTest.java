@@ -1,6 +1,5 @@
-package templateParser;
+package talium.system.templateParser;
 
-import talium.system.templateParser.CharakterStream;
 import org.junit.jupiter.api.Test;
 
 class CharacterStreamTest {

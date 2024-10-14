@@ -1,4 +1,4 @@
-package test.templateParser;
+package talium.system.templateParser;
 
 import talium.system.templateParser.statements.*;
 import talium.system.templateParser.tokens.Comparison;
