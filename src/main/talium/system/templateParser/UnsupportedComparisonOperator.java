@@ -1,3 +1,10 @@
 package talium.system.templateParser;
 
-public class UnsupportedComparisonOperator extends IllegalArgumentException {}
+/**
+ * Comparison Operator (==, >, >=, ...) not supported
+ */
+public class UnsupportedComparisonOperator extends Exception {
+    public UnsupportedComparisonOperator(String s) {
+        super(s);
+    }
+}

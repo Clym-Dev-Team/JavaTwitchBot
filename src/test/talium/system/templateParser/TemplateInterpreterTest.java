@@ -20,11 +20,10 @@ public class TemplateInterpreterTest {
     );
     static List<Statement> TEMPLATE_IF = Arrays.asList(
             new TextStatement("Hello, "),
-            new IfStatement(new Comparison("var.name", Equals.NOT_EQUALS, "test"), List.of(
-                    new VarStatement("var.name")
-            ), List.of(
-                    new TextStatement("unnamed")
-            )),
+            new IfStatement(new Comparison(new VarStatement("compLeft"), Equals.EQUALS, "testString"),
+                    List.of(new VarStatement("compLeft")),
+                    List.of(new TextStatement("unnamed"))
+            ),
             new TextStatement("!")
     );
     static List<Statement> TEMPLATE_LOOP = List.of(
@@ -35,35 +34,73 @@ public class TemplateInterpreterTest {
             )),
             new TextStatement("!")
     );
+    static List<Statement> NESTED_LOOP = Arrays.asList(
+            new TextStatement("Hello,"),
+            new LoopStatement("innerLoop", "loopVar", Arrays.asList(
+                    new LoopStatement("varName", "innerLoop", Arrays.asList(
+                            new TextStatement(" "),
+                            new VarStatement("varName")
+                    )),
+                    new TextStatement(" |")
+            )),
+            new TextStatement("!")
+    );
 
+    @Nested
+    class Populate {
+        @Test
+        void iterate_non_iterable() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnsupportedComparandType, UnsupportedComparisonOperator {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("loopVar", "this_is_not_a_list");
+            try {
+                System.out.println(populate(TEMPLATE_LOOP, map));
+                fail("Should have thrown UnIterableArgumentException");
+            } catch (UnIterableArgumentException _) {
+            }
+        }
 
-    @Test
-    void iterate_non_iterable() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("loopVar", "this_is_not_a_list");
-        try {
-            System.out.println(populate(TEMPLATE_LOOP, map));
-            fail("Should have thrown UnIterableArgumentException");
-        } catch (UnIterableArgumentException _) {
+        @Test
+        void var() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException, UnsupportedComparandType, UnsupportedComparisonOperator {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("name", "dummy name");
+            assert populate(TEMPLATE_VAR, map).equals("Hello, dummy name!");
+        }
+
+        @Test
+        void iterate_empty_list() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException, UnsupportedComparandType, UnsupportedComparisonOperator {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("loopVar", new ArrayList<>());
+            assert populate(TEMPLATE_LOOP, map).equals("Hello,!");
+        }
+
+        @Test
+        void nestedLoop() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException, UnsupportedComparandType, UnsupportedComparisonOperator {
+            HashMap<String, Object> map = new HashMap<>();
+            ArrayList<List<String>> list = new ArrayList<>();
+            list.add(List.of("t-1.1", "t-1.2"));
+            list.add(List.of("t-2.1", "t-2.2"));
+            map.put("loopVar", list);
+            assert populate(NESTED_LOOP, map).equals("Hello, t-1.1 t-1.2 | t-2.1 t-2.2 |!");
+        }
+
+        @Test
+        void if_() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException, UnsupportedComparandType, UnsupportedComparisonOperator {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("compLeft", "testString");
+            assert populate(TEMPLATE_IF, map).equals("Hello, testString!");
+        }
+
+        @Test
+        void wrong_condition_type() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException, UnsupportedComparisonOperator {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("compLeft", false);
+            try {
+                populate(TEMPLATE_IF, map);
+                fail("Should have thrown UnIterableArgumentException");
+            } catch (UnsupportedComparandType _) {
+            }
         }
     }
-
-    @Test
-    void var() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("name", "dummy name");
-        assert populate(TEMPLATE_VAR, map).equals("Hello, dummy name!");
-    }
-
-    @Test
-    void iterate_empty_list() throws NoSuchFieldException, IllegalAccessException, ArgumentValueNullException, UnIterableArgumentException {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("loopVar", new ArrayList<>());
-        assert populate(TEMPLATE_LOOP, map).equals("Hello,!");
-    }
-
-    //TODO try error if statement
-    //TODO try nested loops
 
     @Nested
     class NestedReplacement {
@@ -112,7 +149,7 @@ public class TemplateInterpreterTest {
             map.put("testObject", null);
             map.put("dummyVar", "testing String");
             try {
-                System.out.println(getNestedReplacement("testObject.testInteger", map));
+                getNestedReplacement("testObject.testInteger", map);
                 fail("Should have thrown NullArgumentException");
             } catch (ArgumentValueNullException _) {
             }
@@ -152,7 +189,7 @@ public class TemplateInterpreterTest {
             map.put("testObject", testClass);
             map.put("dummyVar", "testing String");
             try {
-                System.out.println(getNestedReplacement("testObject.testBoolean", map));
+                getNestedReplacement("testObject.testBoolean", map);
             } catch (NoSuchFieldException _) {
             }
         }

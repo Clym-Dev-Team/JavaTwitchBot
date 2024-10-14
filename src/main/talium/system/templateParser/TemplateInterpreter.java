@@ -20,7 +20,7 @@ public class TemplateInterpreter {
      * @param values a map with all top level variables and their names
      * @return the resulting string
      */
-    public static String populate(List<Statement> template, HashMap<String, Object> values) throws NoSuchFieldException, ArgumentValueNullException, IllegalAccessException, UnIterableArgumentException {
+    public static String populate(List<Statement> template, HashMap<String, Object> values) throws NoSuchFieldException, ArgumentValueNullException, IllegalAccessException, UnIterableArgumentException, UnsupportedComparandType, UnsupportedComparisonOperator {
         String out = "";
         for (Statement statement : template) {
             if (statement instanceof TextStatement textStatement) {
@@ -31,11 +31,11 @@ public class TemplateInterpreter {
                 // replace Vars with actual values
                 Object left = ifStatement.comparison().left();
                 if (left instanceof VarStatement leftVar) {
-                    left = getNestedReplacement(leftVar.name(), values).toString();
+                    left = castToValidInput(getNestedReplacement(leftVar.name(), values));
                 }
                 Object right = ifStatement.comparison().right();
                 if (right instanceof VarStatement rightVar) {
-                    right = getNestedReplacement(rightVar.name(), values).toString();
+                    right = castToValidInput(getNestedReplacement(rightVar.name(), values));
                 }
 
                 boolean condition = IfInterpreter.compare(new Comparison(left, ifStatement.comparison().equals(), right));
@@ -64,6 +64,25 @@ public class TemplateInterpreter {
             }
         }
         return out;
+    }
+
+    /**
+     * Casts all into String, Character, Boolean, or Number for later Comparison Operations.
+     * <br><br>
+     * If the input is of type String, Character, Boolean, or Number, nothing is done and the input is returned as-is.
+     * If the Input is of a different type, Object.toString() is called on it to make it into a String.
+     *
+     * @apiNote This function garanties to only return values of type String, Character, Boolean, or Number
+     * @see Object#toString()
+     * @param input original object
+     * @return the value, of type String, Character, Boolean, Number (superclass over int, float, short, ...)
+     */
+    public static Object castToValidInput(Object input) {
+        if (input instanceof String || input instanceof Character || input instanceof Number || input instanceof Boolean) {
+            return input;
+        } else {
+            return input.toString();
+        }
     }
 
     /**
