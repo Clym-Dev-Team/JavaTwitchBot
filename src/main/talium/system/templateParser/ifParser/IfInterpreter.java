@@ -35,21 +35,21 @@ public class IfInterpreter {
                 case EQUALS -> l.equals(r);
                 case NOT_EQUALS -> !l.equals(r);
                 case LESS_THAN, LESS_THAN_OR_EQUALS, GREATER_THAN, GREATER_THAN_OR_EQUALS ->
-                        throw new UnsupportedOperationException(STR."\{comp.equals().name()} is not a supported comparison operation between Strings");
+                        throw new UnsupportedComparisonOperator(STR."\{comp.equals().name()} is not a supported comparison operation between Strings");
             };
         } else if (l instanceof Character && r instanceof Character) {
             return switch (comp.equals()) {
                 case EQUALS -> l.equals(r);
                 case NOT_EQUALS -> !l.equals(r);
                 case LESS_THAN, LESS_THAN_OR_EQUALS, GREATER_THAN, GREATER_THAN_OR_EQUALS ->
-                        throw new UnsupportedOperationException(STR."\{comp.equals().name()} is not a supported comparison operation between characters");
+                        throw new UnsupportedComparisonOperator(STR."\{comp.equals().name()} is not a supported comparison operation between characters");
             };
         } else if (l instanceof Boolean && r instanceof Boolean) {
             return switch (comp.equals()) {
                 case EQUALS -> l.equals(r);
                 case NOT_EQUALS -> !l.equals(r);
                 case LESS_THAN, LESS_THAN_OR_EQUALS, GREATER_THAN, GREATER_THAN_OR_EQUALS ->
-                        throw new UnsupportedOperationException(STR."\{comp.equals().name()} is not a supported comparison operation between booleans");
+                        throw new UnsupportedComparisonOperator(STR."\{comp.equals().name()} is not a supported comparison operation between booleans");
             };
         } else if ((l instanceof Double || l instanceof Float) && (r instanceof Double || r instanceof Float)) {
             Double ld = ((Number) l).doubleValue();
