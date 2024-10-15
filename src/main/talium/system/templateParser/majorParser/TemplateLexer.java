@@ -2,6 +2,7 @@ package talium.system.templateParser.majorParser;
 
 
 import talium.system.templateParser.CharakterStream;
+import talium.system.templateParser.TemplateSyntaxException;
 import talium.system.templateParser.TokenStream;
 import talium.system.templateParser.UnexpectedEndOfInputException;
 import talium.system.templateParser.tokens.TemplateTokenKind;
@@ -9,6 +10,7 @@ import talium.system.templateParser.tokens.TemplateToken;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * A Lexer for String Templates that consumes a CharacterStream and provides the tokens as a TokenStream
  */
@@ -24,6 +26,7 @@ public class TemplateLexer implements TokenStream<TemplateToken> {
 
     /**
      * performs the first parse pass and returns a list of major tokens
+     *
      * @return list of major tokens
      */
     public List<TemplateToken> parse() {
@@ -63,7 +66,23 @@ public class TemplateLexer implements TokenStream<TemplateToken> {
     }
 
     /**
+     * Consumes the next token if it is the expected token.
+     * If a different token is encountered, a syntax exception is thrown.
+     *
+     * @param token the next expected token
+     */
+    public void consume(TemplateTokenKind token) {
+        if (isEOF()) {
+            throw new TemplateSyntaxException(token.name(), "END-OF-INPUT", src.pos() - 1, src.src());
+        } TemplateToken next = next();
+        if (next.kind() != token) {
+            throw new TemplateSyntaxException(token.name(), next.kind().name(), src.pos() - 1, src.src());
+        }
+    }
+
+    /**
      * consume a singe major token from the character stream
+     *
      * @return the next token
      */
     private TemplateToken parseToken() throws UnexpectedEndOfInputException {
