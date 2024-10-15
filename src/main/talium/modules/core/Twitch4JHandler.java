@@ -62,11 +62,7 @@ public class Twitch4JHandler {
     @Deprecated(forRemoval = true)
     public static void CheerEvent(CheerEvent cheerEvent) {
         //Do Database Stuff
-        HashSet<CommandPermission> permissions = new HashSet<>();
-        permissions.add(CommandPermission.MODERATOR);
-        permissions.add(CommandPermission.BROADCASTER);
-
-        EventDispatcher.dispatch(new ChannelMessageEvent(cheerEvent.getChannel(), cheerEvent.getMessageEvent(), cheerEvent.getUser(), "!testCommand", permissions));
+        EventDispatcher.dispatch(new ChannelMessageEvent(cheerEvent.getChannel(), cheerEvent.getMessageEvent(), cheerEvent.getUser(), "!testCommand"));
     }
 
     @Subscriber
