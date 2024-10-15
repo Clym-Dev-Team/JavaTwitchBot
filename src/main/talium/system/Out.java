@@ -2,10 +2,18 @@ package talium.system;
 
 import talium.inputs.Twitch4J.Twitch4JInput;
 import talium.system.stringTemplates.Template;
-import talium.system.stringTemplates.TemplateResolver;
+import talium.system.templateParser.ArgumentValueNullException;
+import talium.system.templateParser.UnIterableArgumentException;
+import talium.system.templateParser.UnsupportedComparandType;
+import talium.system.templateParser.UnsupportedComparisonOperator;
+import talium.system.templateParser.majorParser.TemplateParser;
+import talium.system.templateParser.statements.Statement;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
+
+import static talium.system.templateParser.TemplateInterpreter.populate;
 
 public class Out {
 
@@ -28,11 +36,34 @@ public class Out {
         }
 
         public static void sendRawTemplate(String template, HashMap<String, Object> values) {
-            String message = TemplateResolver.populate(template, values);
+            String message;
+            try {
+                var parsed = new TemplateParser(template).parse();
+                message = populate(parsed, values);
+            } catch (UnsupportedComparisonOperator | NoSuchFieldException | ArgumentValueNullException |
+                     IllegalAccessException | UnIterableArgumentException | UnsupportedComparandType e) {
+                //TODO handle exceptions
+                throw new RuntimeException(e);
+            }
             Twitch4JInput.sendMessage(message);
         }
     }
 
-    public static class Discord {}
-    public static class Alert {}
+    public static class Discord {
+    }
+
+    public static class Alert {
+    }
+
+    /**
+     * Used for errors that should be displayed via a popup message in the panel
+     */
+    public static class MajorError {
+    }
+
+    /**
+     * Errors important enough to warrant email alerting
+     */
+    public static class CriticalError {
+    }
 }
