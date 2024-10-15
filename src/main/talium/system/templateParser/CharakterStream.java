@@ -28,7 +28,24 @@ public class CharakterStream implements TokenStream<Character> {
     }
 
     /**
+     * Consumes the next character if it is the expected character.
+     * If a different character is encountered, a syntax exception is thrown.
+     * @param c the next expected character
+     */
+    public void consume(Character c) {
+        if (isEOF()) {
+            throw new TemplateSyntaxException(String.valueOf(c), "END-OF-INPUT", pos - 1, src);
+        }
+        Character next = next();
+        if (next != c) {
+            throw new TemplateSyntaxException(c, next, pos - 1, src);
+        }
+    }
+
+
+    /**
      * peeks the character after the next one
+     *
      * @return the character after the next one
      */
     public Character future() throws UnexpectedEndOfInputException {
@@ -45,6 +62,7 @@ public class CharakterStream implements TokenStream<Character> {
 
     /**
      * consume all characters up to and excluding the first found target character
+     *
      * @param c target character
      * @return return all consumed characters up to the target
      */
@@ -66,6 +84,7 @@ public class CharakterStream implements TokenStream<Character> {
 
     /**
      * consume all characters up to and excluding the first character that is not a digit
+     *
      * @return return all consumed characters up to the non digit char
      * @see Character#isDigit(char)
      */
@@ -80,6 +99,7 @@ public class CharakterStream implements TokenStream<Character> {
 
     /**
      * consume all characters up to and excluding the first character that is whitespace
+     *
      * @return return all consumed characters up to the whitespace
      * @see Character#isWhitespace(char)
      */

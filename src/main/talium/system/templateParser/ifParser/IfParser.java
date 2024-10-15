@@ -66,7 +66,7 @@ public class IfParser {
         src.skipWhitespace();
 
         if (src.peek() == '"') { // hard coded Strings
-            src.next(); // consume first "
+            src.consume('\"');
             return new IfToken(IfTokenKind.STRING, src.readUntil('"'));
 
         } else if (Character.isDigit(src.peek())) { // numbers
