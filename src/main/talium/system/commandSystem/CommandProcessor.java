@@ -1,7 +1,7 @@
 package talium.system.commandSystem;
 
+import talium.system.Out;
 import talium.system.commandSystem.repositories.*;
-import talium.system.hookSystem.HookParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import talium.system.commandSystem.repositories.*;
@@ -123,13 +123,15 @@ public class CommandProcessor {
         }
 
         // Build Response based on the Command and the Chat Message
-        String response = HookParser.parseCommand(message, command.uniqueName(), command.commandText());
+        //TODO get template id for command
+        //TODO construct varMap for command
+        var response = Out.Twitch.sendNamedTemplate("", "", "", null);
 
         if (chat.isInfoEnabled())
-            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT=| " + message.getUser().name() + ": " + message.message());
+            System.out.println(STR."\{simpleDateFormat.format(new Date())} |CHAT=| \{message.getUser().name()}: \{message.message()}");
         chat.debug("Response Latency: {} Millis", message.sendAT().until(Instant.now(), ChronoUnit.MILLIS));
         if (chat.isInfoEnabled())
-            System.out.println(simpleDateFormat.format(new Date()) + " |CHAT=| KMAB: " + response);
+            System.out.println(STR."\{simpleDateFormat.format(new Date())} |CHAT=| KMAB: \{response}");
     }
 
     /**
