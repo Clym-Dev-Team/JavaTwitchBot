@@ -1,9 +1,9 @@
 package talium.system.templateParser.ifParser;
 
 import talium.system.templateParser.CharakterStream;
-import talium.system.templateParser.TemplateSyntaxException;
-import talium.system.templateParser.UnexpectedEndOfInputException;
-import talium.system.templateParser.UnsupportedComparisonOperator;
+import talium.system.templateParser.exeptions.TemplateSyntaxException;
+import talium.system.templateParser.exeptions.UnexpectedEndOfInputException;
+import talium.system.templateParser.exeptions.UnsupportedComparisonOperator;
 import talium.system.templateParser.statements.Equals;
 import talium.system.templateParser.statements.VarStatement;
 import talium.system.templateParser.tokens.Comparison;

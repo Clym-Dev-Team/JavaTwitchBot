@@ -1,4 +1,4 @@
-package talium.system.templateParser;
+package talium.system.templateParser.exeptions;
 
 public class ArgumentValueNullException extends Exception {
     public ArgumentValueNullException(String argName) {

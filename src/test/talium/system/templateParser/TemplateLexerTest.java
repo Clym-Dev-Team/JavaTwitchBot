@@ -2,7 +2,6 @@ package talium.system.templateParser;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import talium.system.templateParser.majorParser.TemplateLexer;
 
 // the correct behaviour is not entirely specified, thats why this test is disabled by default.
 // more or less: if a token is started it has to be finished, otherwise it is a syntax error
