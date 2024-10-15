@@ -71,40 +71,40 @@ public class TemplateLexer implements TokenStream<TemplateToken> {
             return null;
         }
         if (src.peek() == '$' && src.future() == '{') {
-            src.next(); // consume $
-            src.next(); // consume {
+            src.consume('$');
+            src.consume('{');
             String varName = src.readUntil('}');
-            src.next(); //consume }
+            src.consume('}');
             return new TemplateToken(TemplateTokenKind.VAR, varName);
 
         } else if (src.peek() == '%' && src.future() == '{') {
             // Get type of directive if or for
-            src.next(); //consume %
-            src.next(); //consume {
+            src.consume('%');
+            src.consume('{');
             String directive = src.readTillWhitespace();
             src.skipWhitespace();
 
             if (directive.equals("if")) {
                 String condition = src.readUntil('}');
                 src.skipWhitespace();
-                src.next(); //consume }
+                src.consume('}');
                 return new TemplateToken(TemplateTokenKind.IF_HEAD, condition);
             } else if (directive.equals("else")) {
                 src.skipWhitespace();
-                src.next(); //consume }
+                src.consume('}');
                 return new TemplateToken(TemplateTokenKind.IF_ELSE, "");
             } else if (directive.equals("endif")) {
                 src.skipWhitespace();
-                src.next(); //consume }
+                src.consume('}');
                 return new TemplateToken(TemplateTokenKind.IF_END, "");
             } else if (directive.equals("for")) {
                 String head = src.readUntil('}');
                 src.skipWhitespace();
-                src.next(); //consume }
+                src.consume('}');
                 return new TemplateToken(TemplateTokenKind.FOR_HEAD, head);
             } else if (directive.equals("endfor")) {
                 src.skipWhitespace();
-                src.next(); //consume }
+                src.consume('}');
                 return new TemplateToken(TemplateTokenKind.FOR_END, "");
             } else {
                 throw new RuntimeException(STR."Directive not supported: \{directive}");

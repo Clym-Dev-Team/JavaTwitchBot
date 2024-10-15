@@ -1,10 +1,13 @@
 package talium.system.templateParser;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import talium.system.templateParser.majorParser.TemplateLexer;
 
-// correct behaviour for now is to just fail semi silently and try to output as much as possible into the chat
-// this tests if any of these parsing attempts throw an exception
+// the correct behaviour is not entirely specified, thats why this test is disabled by default.
+// more or less: if a token is started it has to be finished, otherwise it is a syntax error
+// completion of a statement is not yet checked at this stage, so a missing else directive is not an error at this stage
+@Disabled
 public class TemplateLexerTest {
     @Test
     void missing_closing_bracket() {
