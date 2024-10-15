@@ -60,11 +60,11 @@ public class TemplateParser {
                 var curr = src.peek();
                 if (curr.kind() == TemplateTokenKind.IF_ELSE) {
                     isElse = true;
-                    src.next(); //consume else Token
+                    src.consume(TemplateTokenKind.IF_ELSE);
                     continue;
                 }
                 if (curr.kind() == TemplateTokenKind.IF_END) {
-                    src.next(); //consume ifEnd Token
+                    src.consume(TemplateTokenKind.IF_END);
                     break;
                 }
                 if (!isElse) {
@@ -84,7 +84,7 @@ public class TemplateParser {
             while (!src.isEOF()) { // mostly equivalent to while(true), but with a overrun check
                 var curr = src.peek();
                 if (curr.kind() == TemplateTokenKind.FOR_END) {
-                    src.next();
+                    src.consume(TemplateTokenKind.FOR_END);
                     break;
                 }
                 body.add(parseToken());

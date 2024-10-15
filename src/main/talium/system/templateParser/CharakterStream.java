@@ -120,4 +120,12 @@ public class CharakterStream implements TokenStream<Character> {
             pos += 1;
         }
     }
+
+    public String src() {
+        return src;
+    }
+
+    public int pos() {
+        return pos;
+    }
 }
