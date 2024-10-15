@@ -30,19 +30,14 @@ public class IfInterpreter {
     public static boolean compare(Comparison comp) throws UnsupportedComparisonOperator, UnsupportedComparandType {
         Object l = comp.left();
         Object r = comp.right();
-        if (l instanceof String && r instanceof String) {
+        if (l instanceof String || l instanceof Character && r instanceof String || r instanceof Character) {
+            l = l.toString();
+            r = r.toString();
             return switch (comp.equals()) {
                 case EQUALS -> l.equals(r);
                 case NOT_EQUALS -> !l.equals(r);
                 case LESS_THAN, LESS_THAN_OR_EQUALS, GREATER_THAN, GREATER_THAN_OR_EQUALS ->
-                        throw new UnsupportedComparisonOperator(STR."\{comp.equals().name()} is not a supported comparison operation between Strings");
-            };
-        } else if (l instanceof Character && r instanceof Character) {
-            return switch (comp.equals()) {
-                case EQUALS -> l.equals(r);
-                case NOT_EQUALS -> !l.equals(r);
-                case LESS_THAN, LESS_THAN_OR_EQUALS, GREATER_THAN, GREATER_THAN_OR_EQUALS ->
-                        throw new UnsupportedComparisonOperator(STR."\{comp.equals().name()} is not a supported comparison operation between characters");
+                        throw new UnsupportedComparisonOperator(STR."\{comp.equals().name()} is not a supported comparison operation between Strings/Charactern");
             };
         } else if (l instanceof Boolean && r instanceof Boolean) {
             return switch (comp.equals()) {

@@ -1,7 +1,9 @@
 package talium.system.templateParser.ifParser;
 
 import talium.system.templateParser.CharakterStream;
+import talium.system.templateParser.TemplateSyntaxException;
 import talium.system.templateParser.UnexpectedEndOfInputException;
+import talium.system.templateParser.UnsupportedComparisonOperator;
 import talium.system.templateParser.statements.Equals;
 import talium.system.templateParser.statements.VarStatement;
 import talium.system.templateParser.tokens.Comparison;
@@ -28,15 +30,22 @@ public class IfParser {
      * @param srcString entire unparsed if head
      * @return Comparison object
      */
-    public static Comparison parse(String srcString) {
+    public static Comparison parse(String srcString) throws UnsupportedComparisonOperator {
         CharakterStream src = new CharakterStream(srcString);
         IfToken[] tokens = new IfToken[3];
         for (int i = 0; i < 3; i++) {
             tokens[i] = parseToken(src);
         }
-        assert tokens[0].kind() != IfTokenKind.COMPARISON;
-        assert tokens[1].kind() == IfTokenKind.COMPARISON;
-        assert tokens[2].kind() != IfTokenKind.COMPARISON;
+
+        if (tokens[0].kind() == IfTokenKind.COMPARISON) {
+            throw new TemplateSyntaxException(STR."Expected IfToken of type other than a comparison operator as the first token of a comparison!");
+        }
+        if (tokens[1].kind() != IfTokenKind.COMPARISON) {
+            throw new TemplateSyntaxException(STR."Expected IfToken of type comparison operator as the second token of a comparison!");
+        }
+        if (tokens[2].kind() == IfTokenKind.COMPARISON) {
+            throw new TemplateSyntaxException(STR."Expected IfToken of type other than a comparison operator as the third token of a comparison!");
+        }
 
         Equals equals = switch (tokens[1].value()) {
             case "==" -> Equals.EQUALS;
@@ -45,7 +54,7 @@ public class IfParser {
             case "<=" -> Equals.LESS_THAN_OR_EQUALS;
             case ">" -> Equals.GREATER_THAN;
             case ">=" -> Equals.GREATER_THAN_OR_EQUALS;
-            default -> throw new IllegalStateException(STR."Not a valid Comparison Operator: \{tokens[1].value()}");
+            default -> throw new UnsupportedComparisonOperator(STR."Not a valid Comparison Operator: \{tokens[1].value()}");
         };
         return new Comparison(tokenToObject(tokens[0]), equals, tokenToObject(tokens[2]));
     }
@@ -58,16 +67,16 @@ public class IfParser {
      */
     private static IfToken parseToken(CharakterStream src) throws UnexpectedEndOfInputException {
         //TODO rebuild to consume one character per loop, save current state in var
-        //TODO make return optional
         if (src.isEOF()) {
             throw new UnexpectedEndOfInputException();
         }
-//        System.out.println(src.src.substring(src.pos));
         src.skipWhitespace();
 
         if (src.peek() == '"') { // hard coded Strings
-            src.consume('\"');
-            return new IfToken(IfTokenKind.STRING, src.readUntil('"'));
+            src.consume('"');
+            String until = src.readUntil('"');
+            src.consume('"');
+            return new IfToken(IfTokenKind.STRING, until);
 
         } else if (Character.isDigit(src.peek())) { // numbers
             String number = src.readTillWhitespace();
@@ -99,7 +108,13 @@ public class IfParser {
         return switch (token.kind()) {
             case STRING -> token.value();
             case VAR -> new VarStatement(token.value());
-            case INT -> Integer.parseInt(token.value());
+            case INT -> {
+                var initialLong = Long.parseLong(token.value());
+                if (initialLong > Integer.MIN_VALUE && initialLong < Integer.MAX_VALUE) {
+                    yield (int) initialLong;
+                }
+                yield initialLong;
+            }
             case DOUBLE -> Double.parseDouble(token.value());
             case BOOLEAN -> Boolean.parseBoolean(token.value());
             case COMPARISON -> throw new RuntimeException(STR."Another Comparison not a valid Object for an comparison comparand");

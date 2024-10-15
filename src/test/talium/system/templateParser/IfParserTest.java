@@ -1,33 +1,63 @@
 package talium.system.templateParser;
 
+import org.junit.jupiter.api.Nested;
 import talium.system.templateParser.statements.Equals;
 import talium.system.templateParser.statements.VarStatement;
 import talium.system.templateParser.tokens.Comparison;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static talium.system.templateParser.ifParser.IfParser.parse;
 
 public class IfParserTest {
-    //TODO test comparison between all types of objects
-    //TODO test "Another Comparison not a valid Object for an comparison comparand"
 
     @Test
-    void test_success() {
+    void test_success() throws UnsupportedComparisonOperator {
         var comp = new Comparison(new VarStatement("var.name"), Equals.NOT_EQUALS, "test");
         assert parse("var.name != \"test\"").equals(comp);
     }
 
     @Test
-    void test_invalidSyntax() {
-        var comp = new Comparison(new VarStatement("var.name"), Equals.NOT_EQUALS, "test");
-        assert parse("var.name != \"test\" && true").equals(comp);
-        //TODO this should fail
+    void invalid_operator() throws UnsupportedComparisonOperator {
+        try {
+            parse("var.name !!== \"test\"");
+            fail("Should have thrown UnsupportedComparisonOperator");
+        } catch (UnsupportedComparisonOperator _) {
+        }
+        try {
+            parse("var.name lessThan \"test\"");
+            fail("Should have thrown TemplateSyntaxException");
+        } catch (TemplateSyntaxException _) {
+        }
     }
 
-    //TODO
-//    @Test
-    void test_types() {}
+    @Test
+    void test_types() throws UnsupportedComparisonOperator {
+        var bool = new Comparison(new VarStatement("var.name"), Equals.EQUALS, false);
+        assert parse("var.name == false").equals(bool);
 
-//    @Test
-    void test_invalid_types() {}
+        var string = new Comparison(new VarStatement("var.name"), Equals.EQUALS, "test");
+        assert parse("var.name == \"test\"").equals(string);
+
+        var character = new Comparison(new VarStatement("var.name"), Equals.EQUALS, "a");
+        assert parse("var.name == \"a\"").equals(character);
+
+        var byte_ = new Comparison(new VarStatement("var.name"), Equals.EQUALS, 159);
+        assert parse("var.name == 159").equals(byte_);
+
+        var short_ = new Comparison(new VarStatement("var.name"), Equals.EQUALS, 16000);
+        assert parse("var.name == 16000").equals(short_);
+
+        var int_ = new Comparison(new VarStatement("var.name"), Equals.EQUALS, 273650);
+        assert parse("var.name == 273650").equals(int_);
+
+        var long_ = new Comparison(new VarStatement("var.name"), Equals.EQUALS, 1729010172331L);
+        assert parse("var.name == 1729010172331").equals(long_);
+
+        var float_ = new Comparison(new VarStatement("var.name"), Equals.EQUALS, 69.4200);
+        assert parse("var.name == 69.4200").equals(float_);
+
+        var double_ = new Comparison(new VarStatement("var.name"), Equals.EQUALS, 3.1415d);
+        assert parse("var.name == 3.1415").equals(double_);
+    }
 }
