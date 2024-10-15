@@ -1,6 +1,6 @@
-package talium.system.templateParser.majorParser;
+package talium.system.templateParser;
 
-import talium.system.templateParser.UnsupportedComparisonOperator;
+import talium.system.templateParser.exeptions.UnsupportedComparisonOperator;
 import talium.system.templateParser.ifParser.IfParser;
 import talium.system.templateParser.statements.*;
 import talium.system.templateParser.tokens.Comparison;

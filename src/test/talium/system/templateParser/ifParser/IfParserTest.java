@@ -1,6 +1,7 @@
-package talium.system.templateParser;
+package talium.system.templateParser.ifParser;
 
-import org.junit.jupiter.api.Nested;
+import talium.system.templateParser.exeptions.TemplateSyntaxException;
+import talium.system.templateParser.exeptions.UnsupportedComparisonOperator;
 import talium.system.templateParser.statements.Equals;
 import talium.system.templateParser.statements.VarStatement;
 import talium.system.templateParser.tokens.Comparison;

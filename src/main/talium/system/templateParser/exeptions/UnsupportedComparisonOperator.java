@@ -1,4 +1,4 @@
-package talium.system.templateParser;
+package talium.system.templateParser.exeptions;
 
 /**
  * Comparison Operator (==, >, >=, ...) not supported

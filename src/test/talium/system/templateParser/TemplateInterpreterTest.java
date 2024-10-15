@@ -1,8 +1,11 @@
 package talium.system.templateParser;
 
+import talium.system.templateParser.exeptions.ArgumentValueNullException;
+import talium.system.templateParser.exeptions.UnIterableArgumentException;
+import talium.system.templateParser.exeptions.UnsupportedComparandType;
+import talium.system.templateParser.exeptions.UnsupportedComparisonOperator;
 import talium.system.templateParser.statements.*;
 import talium.system.templateParser.tokens.Comparison;
-import org.apache.commons.lang.NullArgumentException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 

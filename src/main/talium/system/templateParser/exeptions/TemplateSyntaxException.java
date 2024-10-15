@@ -1,4 +1,4 @@
-package talium.system.templateParser;
+package talium.system.templateParser.exeptions;
 
 public class TemplateSyntaxException extends RuntimeException {
     public TemplateSyntaxException(String expected, String actual, int atIndex, String source) {

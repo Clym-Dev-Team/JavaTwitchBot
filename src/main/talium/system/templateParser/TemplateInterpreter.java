@@ -1,5 +1,9 @@
 package talium.system.templateParser;
 
+import talium.system.templateParser.exeptions.ArgumentValueNullException;
+import talium.system.templateParser.exeptions.UnIterableArgumentException;
+import talium.system.templateParser.exeptions.UnsupportedComparandType;
+import talium.system.templateParser.exeptions.UnsupportedComparisonOperator;
 import talium.system.templateParser.ifParser.IfInterpreter;
 import talium.system.templateParser.statements.*;
 import talium.system.templateParser.tokens.Comparison;

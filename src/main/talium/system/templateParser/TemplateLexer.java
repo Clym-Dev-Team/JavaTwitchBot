@@ -1,10 +1,8 @@
-package talium.system.templateParser.majorParser;
+package talium.system.templateParser;
 
 
-import talium.system.templateParser.CharakterStream;
-import talium.system.templateParser.TemplateSyntaxException;
-import talium.system.templateParser.TokenStream;
-import talium.system.templateParser.UnexpectedEndOfInputException;
+import talium.system.templateParser.exeptions.TemplateSyntaxException;
+import talium.system.templateParser.exeptions.UnexpectedEndOfInputException;
 import talium.system.templateParser.tokens.TemplateTokenKind;
 import talium.system.templateParser.tokens.TemplateToken;
 

@@ -1,7 +1,7 @@
 package talium.system.templateParser.ifParser;
 
-import talium.system.templateParser.UnsupportedComparandType;
-import talium.system.templateParser.UnsupportedComparisonOperator;
+import talium.system.templateParser.exeptions.UnsupportedComparandType;
+import talium.system.templateParser.exeptions.UnsupportedComparisonOperator;
 import talium.system.templateParser.statements.Equals;
 import talium.system.templateParser.tokens.Comparison;
 

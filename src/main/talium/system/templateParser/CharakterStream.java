@@ -1,5 +1,8 @@
 package talium.system.templateParser;
 
+import talium.system.templateParser.exeptions.TemplateSyntaxException;
+import talium.system.templateParser.exeptions.UnexpectedEndOfInputException;
+
 /**
  * A indexed Stream of characters for parsing.
  */
