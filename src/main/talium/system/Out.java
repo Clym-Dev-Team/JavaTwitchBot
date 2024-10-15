@@ -1,17 +1,14 @@
 package talium.system;
 
 import talium.inputs.Twitch4J.Twitch4JInput;
-import talium.system.commandSystem.repositories.Message;
 import talium.system.stringTemplates.Template;
-import talium.system.templateParser.ArgumentValueNullException;
-import talium.system.templateParser.UnIterableArgumentException;
-import talium.system.templateParser.UnsupportedComparandType;
-import talium.system.templateParser.UnsupportedComparisonOperator;
-import talium.system.templateParser.majorParser.TemplateParser;
-import talium.system.templateParser.statements.Statement;
+import talium.system.templateParser.exeptions.ArgumentValueNullException;
+import talium.system.templateParser.exeptions.UnIterableArgumentException;
+import talium.system.templateParser.exeptions.UnsupportedComparandType;
+import talium.system.templateParser.exeptions.UnsupportedComparisonOperator;
+import talium.system.templateParser.TemplateParser;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 

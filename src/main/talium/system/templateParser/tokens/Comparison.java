@@ -16,7 +16,7 @@ import talium.system.templateParser.statements.Equals;
  * All other Types are currently not handled and will cause the comparison to throw an exception
  *
  * @see Number
- * @see main.system.templateParser.statements.VarStatement
+ * @see talium.system.templateParser.statements.VarStatement
  * @see Equals
  * @param left comparand
  * @param equals operator
