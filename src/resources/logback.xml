@@ -13,19 +13,19 @@
         </encoder>
     </appender>
 
-    <logger name="main.inputs" level="WARN"/>
-    <logger name="main.modules" level="INFO"/>
-    <logger name="main.system" level="INFO"/>
-    <logger name="main.talium.system.inputSystem.HealthManager" level="INFO" additivity="false">
+    <logger name="talium.inputs" level="WARN"/>
+    <logger name="talium.modules" level="INFO"/>
+    <logger name="talium.system" level="INFO"/>
+    <logger name="talium.system.inputSystem.HealthManager" level="INFO" additivity="false">
         <appender-ref ref="SYSTEM"/>
     </logger>
-    <logger name="main.talium.system.StopWatch" level="INFO" additivity="false">
+    <logger name="talium.system.StopWatch" level="INFO" additivity="false">
         <appender-ref ref="SYSTEM"/>
     </logger>
-    <logger name="main.system.eventSystem" level="INFO"/>
-    <logger name="main.system.commandSystem" level="INFO"/>
-    <logger name="main.talium.system.commandSystem.CommandProcessor.Chat" level="DEBUG"/>
-    <logger name="main.talium.system.ASCIIProgressbar" level="INFO"/>
+    <logger name="talium.system.eventSystem" level="INFO"/>
+    <logger name="talium.system.commandSystem" level="INFO"/>
+    <logger name="talium.system.commandSystem.CommandProcessor.Chat" level="DEBUG"/>
+    <logger name="talium.system.ASCIIProgressbar" level="INFO"/>
     <logger name="logback" level="INFO"/>
     <logger name="org.springframework.security.web" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>

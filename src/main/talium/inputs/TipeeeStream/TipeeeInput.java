@@ -30,7 +30,6 @@ import java.time.Instant;
 import java.util.Arrays;
 
 @Input
-//@ConditionalOnProperty(matchIfMissing = true, havingValue = "false", name = "disableTipeee")
 public class TipeeeInput implements BotInput {
     // we can get the tipeeeSocketUrl from this
     private static final String tipeeeSocketInfoUrl = "https://api.tipeeestream.com/v2.0/site/socket";
