@@ -3,6 +3,7 @@ package talium.inputs.TipeeeStream;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.engineio.client.EngineIOException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,18 +40,21 @@ public class TipeeeInput implements BotInput {
     public static void setTipeeeSocketUrl(String tipeeeSocketUrl) {
         TipeeeInput.tipeeeSocketUrl = tipeeeSocketUrl;
     }
+
     private static String tipeeeSocketUrl;
 
     @Value("${tipeeeApikey}")
     public void setApiKey(String apiKey) {
         TipeeeInput.apiKey = apiKey;
     }
+
     private static String apiKey;
 
     @Value("${tipeeeChannel}")
     public void setChannelName(String channelName) {
         TipeeeInput.channelName = channelName;
     }
+
     private static String channelName;
 
     private Socket socket;
@@ -87,10 +92,17 @@ public class TipeeeInput implements BotInput {
 
         socket.on(Socket.EVENT_CONNECT_ERROR, objects -> {
             report(InputStatus.DEAD);
-            if (objects.length == 1 && objects[0] instanceof EngineIOException ioe) {
-                ioe.printStackTrace();
+            if (objects.length == 1 && objects[0] instanceof EngineIOException && ((EngineIOException) objects[0]).getCause() instanceof IOException io) {
+                if (io.getMessage().equals("403")) {
+                    LOGGER.error("TipeeeStream Authentication failed, likely because the Apikey is invalid");
+                    socket.disconnect();
+                } else if (StringUtils.isNumeric(io.getMessage())) {
+                    LOGGER.error("TipeeeStream Socket connection failed with (what likely is) Http Status code: {}", io.getMessage());
+                    ((EngineIOException) objects[0]).printStackTrace();
+                }
+            } else {
+                throw new RuntimeException(Arrays.toString(objects));
             }
-            throw new RuntimeException(Arrays.toString(objects));
         });
 
         socket.on(Socket.EVENT_CONNECT, objects -> {
@@ -122,9 +134,11 @@ public class TipeeeInput implements BotInput {
             var d = new JSONObject(httpResponse.body()).getJSONObject("datas");
             return STR."\{d.getString("host")}:\{d.getString("port")}";
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("Error while requesting tipeeeStream socket url!", e);
+            throw new RuntimeException("Error while requesting tipeeeStream socket url!", e);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("TipeeeStream socket info Url responded with unknown format!", e);
+            throw new RuntimeException("TipeeeStream socket info Url responded with unknown format!", e);
         }
     }
 
