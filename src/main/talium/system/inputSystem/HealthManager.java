@@ -43,7 +43,9 @@ public class HealthManager {
     public static void reportStatus(BotInput input, InputStatus status) {
         var statusOptional = statuses.stream().filter(s -> s.input == input).findFirst();
         if (statusOptional.isEmpty()) {
-            statuses.add(new Status(status, input));
+            synchronized (statuses) {
+                statuses.add(new Status(status, input));
+            }
         } else {
             statusOptional.get().status = status;
         }
@@ -61,7 +63,11 @@ public class HealthManager {
 
     private static InputStatus calcOverallStatus() {
         InputStatus worstYet = InputStatus.STOPPED;
-        for (Status status : statuses) {
+        ArrayList<Status> copyied;
+        synchronized (statuses) {
+            copyied = (ArrayList<Status>) statuses.clone();
+        }
+        for (Status status : copyied) {
             if (status.status.compareTo(worstYet) > 0) {
                 worstYet = status.status;
             }
@@ -74,6 +80,7 @@ public class HealthManager {
     }
 
     record StringStatus(String name, InputStatus status) {}
+
     public static List<StringStatus> allStatuses() {
         return statuses.stream().map(status -> new StringStatus(status.input.threadName(), status.status)).toList();
     }
