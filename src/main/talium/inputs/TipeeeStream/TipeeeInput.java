@@ -2,6 +2,11 @@ package talium.inputs.TipeeeStream;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.engineio.client.EngineIOException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import talium.TwitchBot;
 import talium.system.UnexpectedShutdownException;
 import talium.system.inputSystem.BotInput;
@@ -13,23 +18,35 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-
+import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Instant;
 import java.util.Arrays;
 
 @Input
+//@ConditionalOnProperty(matchIfMissing = true, havingValue = "false", name = "disableTipeee")
 public class TipeeeInput implements BotInput {
+    // we can get the tipeeeSocketUrl from this
+    private static final String tipeeeSocketInfoUrl = "https://api.tipeeestream.com/v2.0/site/socket";
 
-    public static final String TIPEEE_API_URL = "https://sso-cf.tipeeestream.com:443?access_token=";
+    // we can set this manually as a backup if the response of the tipeeeSocketInfoUrl isn't updated
+    @Value("${tipeeeSocketUrl}")
+    public static void setTipeeeSocketUrl(String tipeeeSocketUrl) {
+        TipeeeInput.tipeeeSocketUrl = tipeeeSocketUrl;
+    }
+    private static String tipeeeSocketUrl;
 
-    @Value("${tipeee_apiKey}")
+    @Value("${tipeeeApikey}")
     public void setApiKey(String apiKey) {
         TipeeeInput.apiKey = apiKey;
     }
     private static String apiKey;
 
-    @Value("${tipeee_channel}")
+    @Value("${tipeeeChannel}")
     public void setChannelName(String channelName) {
         TipeeeInput.channelName = channelName;
     }
@@ -43,49 +60,70 @@ public class TipeeeInput implements BotInput {
     public void shutdown() {
         socket.close();
         LOGGER.info("Shut down Tipeee input");
+        report(InputStatus.STOPPED);
     }
 
     @Override
     public void run() {
         report(InputStatus.STARTING);
         LOGGER.info("Stating TipeeeInput for Channel {}", channelName);
+        if (tipeeeSocketUrl == null || tipeeeSocketUrl.isEmpty()) {
+            LOGGER.info("Getting current Tipeee Socket.io url...");
+            tipeeeSocketUrl = STR."\{getSocketUrlFromUrl()}?access_token=";
+        }
+
+        URI socketUrl;
         try {
-            socket = IO.socket(TIPEEE_API_URL + apiKey);
-
-            socket.on("new-event", data -> TipeeeEventHandler.handleDonationEvent(Arrays.toString(data)));
-
-            socket.on(Socket.EVENT_CONNECT_ERROR, objects -> {
-                report(InputStatus.DEAD);
-                throw new RuntimeException(Arrays.toString(objects));
-            });
-
-            socket.on(Socket.EVENT_CONNECT, objects -> {
-                try {
-                    socket.emit("join-room", new JSONObject()
-                            .put("room", apiKey)
-                            .put("username", channelName));
-                    report(InputStatus.HEALTHY);
-                } catch (JSONException e) {
-                    report(InputStatus.DEAD);
-                    throw new RuntimeException(e);
-                }
-            });
-
-            socket.connect();
-            //Wait for the Socket to connect, because it will be opened in a new Thread and
-            // so will otherwise not be done by the time we check if the starting has worked
-            Instant end = Instant.now().plusSeconds(10);
-            while (!socket.connected() || end.isBefore(Instant.now()) && !TwitchBot.requestedShutdown)
-                Thread.onSpinWait();
-
-            if (TwitchBot.requestedShutdown) {
-                throw new UnexpectedShutdownException();
-            }
-
-            LOGGER.info("Tipeee socket connected");
+            socketUrl = new URI(tipeeeSocketUrl + apiKey);
         } catch (URISyntaxException e) {
-            LOGGER.error("Could not connect to Tipeee socket");
+            LOGGER.error("tipeeeSocketUrl is not a valid url", e);
             report(InputStatus.DEAD);
+            throw new RuntimeException(e);
+        }
+
+        LOGGER.info("using Socket.io url: {}", socketUrl);
+        socket = IO.socket(socketUrl);
+
+
+        socket.on(Socket.EVENT_CONNECT_ERROR, objects -> {
+            report(InputStatus.DEAD);
+            if (objects.length == 1 && objects[0] instanceof EngineIOException ioe) {
+                ioe.printStackTrace();
+            }
+            throw new RuntimeException(Arrays.toString(objects));
+        });
+
+        socket.on(Socket.EVENT_CONNECT, objects -> {
+            socket.emit("join-room", STR."{ room: '\{apiKey}', username: '\{channelName}'}");
+            report(InputStatus.HEALTHY);
+        });
+
+        socket.on("new-event", data -> TipeeeEventHandler.handleDonationEvent(Arrays.toString(data)));
+
+        socket.connect();
+        //Wait for the Socket to connect, because it will be opened in a new Thread and
+        // so will otherwise not be done by the time we check if the starting has worked
+        Instant end = Instant.now().plusSeconds(10);
+        while (!socket.connected() || end.isBefore(Instant.now()) && !TwitchBot.requestedShutdown) Thread.onSpinWait();
+
+        if (TwitchBot.requestedShutdown) {
+            throw new UnexpectedShutdownException();
+        }
+
+        LOGGER.info("Tipeee socket connected");
+    }
+
+    private String getSocketUrlFromUrl() {
+        try {
+            var client = HttpClient.newBuilder().build();
+            var request = HttpRequest.newBuilder(URI.create(tipeeeSocketInfoUrl)).GET().build();
+            var httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+            client.close();
+            var d = new JSONObject(httpResponse.body()).getJSONObject("datas");
+            return STR."\{d.getString("host")}:\{d.getString("port")}";
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
