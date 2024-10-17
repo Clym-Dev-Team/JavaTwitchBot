@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -34,7 +35,7 @@ public class EventDispatcher {
      * @return List of Standard Java Methods
      */
     private static Method[] scanForSubscriber() {
-        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("main.modules").addScanners(Scanners.MethodsAnnotated));
+        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("talium.modules").addScanners(Scanners.MethodsAnnotated));
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Subscriber.class);
         return methods.stream()
                 .filter(method -> Modifier.isStatic(method.getModifiers()))
@@ -57,7 +58,7 @@ public class EventDispatcher {
         new Thread(() -> {
             StringJoiner invokedMethods = new StringJoiner(",");
             for (Method method : subscriber) {
-                if (!method.getParameters()[0].getClass().equals(event.getClass()))
+                if (!method.getParameters()[0].getType().equals(event.getClass()))
                     continue;
 
                 try {
