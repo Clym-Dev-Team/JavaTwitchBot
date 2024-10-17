@@ -26,13 +26,12 @@ public class EventDispatcher {
     private static final Method[] subscriber = scanForSubscriber();
 
     /**
-     * Uses Spring and Java Reflection to collect all Methods that are Annotated with @Subscriber and are Valid in the
+     * Uses Spring and Java Reflection to collect all Methods that are Annotated with @Subscriber and are valid in the
      * main.modules folder and its subfolders.
-     * A Method is Valid as a Subcriber if it: <br/>
+     * A Method is Valid as a Subscriber if it: <br/>
      * - is static <br/>
      * - only has one Parameter <br/>
-     * - the Parameter is of the same Class as specified in the Annotation <br/>
-     * @return List of Standard Java Methods
+     * @return array of Standard Java Methods
      */
     private static Method[] scanForSubscriber() {
         Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("talium.modules").addScanners(Scanners.MethodsAnnotated));
@@ -51,8 +50,8 @@ public class EventDispatcher {
      * If you want to call only your specific Subscriber with an Event that other Subscriber could also consume
      * then you should create a new Class that either hold all the same values or just inherits all of them. <br/>
      *
-     * The Matching is done via the Class Name of the Subscriber and the Class specified in the @Subscriber Annotation
-     * @param event
+     * A Subscriber is executed when the parameter and the event have the same type, or the events type inherits from the parameter type
+     * @param event event to dispatch
      */
     public static void dispatch(Object event) {
         new Thread(() -> {
