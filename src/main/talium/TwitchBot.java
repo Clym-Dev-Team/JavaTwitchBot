@@ -34,9 +34,7 @@ public class TwitchBot {
         System.out.println("DDD-HH:mm:ss.SSS |LEVEL| [THREAD]        LOGGER (Source Class)               - MSG");
         System.out.println("-----------------|-----|-[-------------]---------------------------------------------------------------------------------------------------------------------------------------------");
         InputManager.startAllInputs();
-        new CommandProcessor();
         HealthManager.subscribeNextChange(status -> time.close(), InputStatus.HEALTHY);
-//        CommandProcessor.generateJunkCommands();
     }
 
     @PreDestroy
