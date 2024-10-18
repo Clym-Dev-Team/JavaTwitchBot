@@ -22,7 +22,7 @@ export default function TwitchMenuTile({icon, target, label}: TwitchMenuTileProp
       <span className="tooltipContent">{label}</span>
     </TooltipContent>
     <TooltipTrigger>
-      <a href={target} className={"twitchMenuTile" + (highlight ? "highlight" : "")}>
+      <a href={target} className={"twitchMenuTile " + (highlight ? "highlight" : "")}>
         {icon}
       </a>
     </TooltipTrigger>

@@ -21,6 +21,12 @@ export default function TwitchNavMenu() {
       <NavLink target="/test" name="Message History Test"/>
       <NavLink target="/commands" name="Command Popup"/>
     </div>
-    <div className="account"/>
+    <div className="account">
+      {/*
+      - username
+      - your twitch profile picture
+      (not sure if we will sink the panel accs to twitch acc's, but we wouldn't need that for this. We could also just have a twitch name field in the account creation panel, and the get the picture for that account
+      */}
+    </div>
   </div>
 }
