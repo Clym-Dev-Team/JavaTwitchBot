@@ -16,6 +16,9 @@ import CommandPopup from "./components/CommandPopup/CommandPopup.tsx";
 import TwitchNavMenu from "./components/NavMenuTwitch/TwitchNavMenu.tsx";
 import {TooltipProvider} from "@radix-ui/react-tooltip";
 
+export const BOT_BACKEND_ADDR = "http://localhost:80"
+export const HISTORY_BACKEND_ADDR = "http://localhost:8080"
+
 const router = createBrowserRouter(
   createRoutesFromChildren(
     <Route element={<Layout/>}>

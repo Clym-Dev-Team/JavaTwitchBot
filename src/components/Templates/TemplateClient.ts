@@ -1,8 +1,9 @@
 import {Template} from "./Template.ts";
 import {AuthContext, fetchWithAuth} from "../Login/AuthProvider.tsx";
+import {BOT_BACKEND_ADDR} from "../../main.tsx";
 
 export async function getAllTemplates(context: AuthContext): Promise<Template[]> {
-  const r  = await fetchWithAuth(context,"http://localhost:80/templates/all");
+  const r  = await fetchWithAuth(context,`${BOT_BACKEND_ADDR}/templates/all`);
   if(!r.ok) {
     console.log(r.status)
     console.log(r.statusText)
@@ -17,7 +18,7 @@ export async function getTemplateById(context: AuthContext, module: string, type
       object: object,
     }
   )
-  const r  = await fetchWithAuth(context, "http://localhost:80/templates?" + params);
+  const r  = await fetchWithAuth(context, `${BOT_BACKEND_ADDR}/templates?` + params);
   if(!r.ok) {
     console.log(r.status)
     console.log(r.statusText)
@@ -32,7 +33,7 @@ export async function saveTemplate(context: AuthContext, template: Template): Pr
     object: template.object,
     }
   )
-  const r  = await fetchWithAuth(context,"http://localhost:80/templates?" + params, {method: "POST", body: template.template});
+  const r  = await fetchWithAuth(context,`${BOT_BACKEND_ADDR}/templates?` + params, {method: "POST", body: template.template});
   if(!r.ok) {
     console.log(r.status)
     console.log(r.statusText)

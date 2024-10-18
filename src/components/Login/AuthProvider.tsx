@@ -1,6 +1,7 @@
 import {createContext, PropsWithChildren, useContext, useState} from "react";
 import LoginPane, {Login} from "./LoginPane.tsx"
 import {sha3_512} from "js-sha3";
+import {BOT_BACKEND_ADDR} from "../../main.tsx";
 
 export interface AuthContext {
   accessToken?: string;
@@ -41,7 +42,7 @@ export default function AuthProvider(props: PropsWithChildren<Record<never, neve
       hash: sha3_512(login.password),
       alg: "SHA3-512"
     }
-    fetch("http://localhost:80/login", {method: "POST", body: JSON.stringify(request)}).then()
+    fetch(`${BOT_BACKEND_ADDR}/login`, {method: "POST", body: JSON.stringify(request)}).then()
       .then(res => res.text()
         .then(value => {
           setAccessToken(value);
