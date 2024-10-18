@@ -5,19 +5,22 @@ import IconCheckBox from "../../common/IconCheckBox/IconCheckBox.tsx";
 import IconList from "../../assets/IconList.tsx";
 import IconHidden from "../../assets/IconHidden.tsx";
 import {useState} from "react";
+import TemplateEditor from "./TemplateEditor.tsx";
+import {Command} from "./Command.ts";
 
 
 export interface CommandPopupProps {
 
 }
 
-export default function CommandPopup(props: CommandPopupProps) {
+export default function CommandPopup(props: Command) {
   const [triggerChecked, setTriggerChecked] = useState(false);
 
   return <div className="commandPopup">
     <VLabel name="Internal Command Nane/Id:">
       <Input id="commandId" type="text"/>
     </VLabel>
+
     <div className="triggers">
       Trigger:
       <div className="trigger">
@@ -28,6 +31,7 @@ export default function CommandPopup(props: CommandPopupProps) {
       </div>
       <div className="addTrigger">Add a new Alias</div>
     </div>
+
     <VLabel name="Required Permission Level:">
       <select>
         <option>All</option>
@@ -36,6 +40,7 @@ export default function CommandPopup(props: CommandPopupProps) {
         <option>Owner</option>
       </select>
     </VLabel>
+
     <div className="cooldown">
       <VLabel name="Global Cooldown:">
         <Input type="text"/>
@@ -44,6 +49,8 @@ export default function CommandPopup(props: CommandPopupProps) {
         <Input type="text"/>
       </VLabel>
     </div>
-    <div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>
+
+    <TemplateEditor template={{template: "tetst", vars: [{name: "testvar", type:"string"}]}}/>
+    {/*<div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>*/}
   </div>
 }

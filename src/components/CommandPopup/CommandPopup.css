@@ -8,11 +8,13 @@
 .trigger {
     display: flex;
     flex-direction: row;
+    height: 3rem;
 }
 
 .cooldown {
     display: flex;
     flex-direction: row;
+    gap: 0.5rem;
 }
 
 .templateSpacer {

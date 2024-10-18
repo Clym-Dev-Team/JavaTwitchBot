@@ -1,3 +1,4 @@
 .iconCheckBox {
-    width: -webkit-fill-available;
+    height: 100%;
+    aspect-ratio: 1;
 }
