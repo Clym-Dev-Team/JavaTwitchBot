@@ -15,11 +15,12 @@ export default function TwitchNavMenu() {
       <TwitchMenuTile icon={<IconMegaphone/>} label="Alerts" target="/"/>
     </div>
     <div className="otherOptions">
-      <NavLink target="/" name="WebConsole"/>
+      <NavLink target="/commands" name="Command Popup"/>
+      <NavLink target="/test" name="Message History Test"/>
+      <NavLink target="/health" name="Health"/>
       <NavLink target="/goal" name="Goals"/>
       <NavLink target="/templates" name="Templates"/>
-      <NavLink target="/test" name="Message History Test"/>
-      <NavLink target="/commands" name="Command Popup"/>
+      <NavLink target="/" name="WebConsole"/>
     </div>
     <div className="account">
       {/*
