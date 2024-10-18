@@ -15,7 +15,7 @@ export default function HealthOverview() {
 
   useEffect(() => {
     getAllHealthStatuses(context)
-      .then(r =>{r.push(...r); r.push(...r); setHealth(r)})
+      .then(r =>{setHealth(r)})
       .then(() => setLoading(false))
       .catch(reason => toast.toast(
         {className: "toast toast-failure", title: "ERROR Loading Health", description: reason.toString()}))
