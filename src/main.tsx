@@ -13,6 +13,8 @@ import AuthProvider from "./components/Login/AuthProvider.tsx";
 import {Toaster} from "@shadcn/components/ui/toaster.tsx";
 import TestingPopupBackground from "./components/TestingPopupBackground/TestingPopupBackground.tsx";
 import CommandPopup from "./components/CommandPopup/CommandPopup.tsx";
+import TwitchNavMenu from "./components/NavMenuTwitch/TwitchNavMenu.tsx";
+import {TooltipProvider} from "@radix-ui/react-tooltip";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -31,15 +33,18 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>
+      <TooltipProvider>
       <RouterProvider router={router}>
       </RouterProvider>
+      </TooltipProvider>
     </AuthProvider>
   </React.StrictMode>,
 )
 
 function Layout() {
   return <>
-    <NavMenu/>
+    {/*<NavMenu/>*/}
+    <TwitchNavMenu/>
     <div className="contentRoot dark">
       <Outlet/>
       <Toaster/>
