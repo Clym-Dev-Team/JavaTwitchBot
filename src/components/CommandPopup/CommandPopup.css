@@ -5,10 +5,20 @@
     padding: 2rem;
 }
 
+.triggers {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .trigger {
     display: flex;
     flex-direction: row;
     height: 3rem;
+}
+
+.addTrigger {
+    width: 100%;
 }
 
 .cooldown {

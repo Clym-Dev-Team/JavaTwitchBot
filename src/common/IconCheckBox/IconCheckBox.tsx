@@ -1,5 +1,6 @@
 import React from "react";
 import "./IconCheckBox.css"
+import {Tooltip, TooltipContent, TooltipTrigger} from "@shadcn/components/ui/tooltip.tsx";
 
 export interface IconCheckBoxProps {
   checked: boolean;
@@ -10,7 +11,12 @@ export interface IconCheckBoxProps {
 }
 
 export default function IconCheckBox(props: IconCheckBoxProps) {
-  return <div className="iconCheckBox" onClick={() => props.onChange(!props.checked)}>
-    {props.checked ? props.checkedIcon : props.icon}
-  </div>;
+  return <Tooltip>
+    <TooltipContent>{props.hoverText}</TooltipContent>
+    <TooltipTrigger>
+      <div className="iconCheckBox" onClick={() => props.onChange(!props.checked)}>
+        {props.checked ? props.checkedIcon : props.icon}
+      </div>
+    </TooltipTrigger>
+  </Tooltip>;
 }

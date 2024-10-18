@@ -6,7 +6,18 @@ import IconList from "../../assets/IconList.tsx";
 import IconHidden from "../../assets/IconHidden.tsx";
 import {useState} from "react";
 import TemplateEditor from "./TemplateEditor.tsx";
-import {Command} from "./Command.ts";
+import {Command, CommandPermission} from "./Command.ts";
+import CheckBox from "../../common/CheckBox/CheckBox.tsx";
+import IconPowerOff from "../../assets/IconPowerOff.tsx";
+import IconPowerOn from "../../assets/IconPowerOn.tsx";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@shadcn/components/ui/select.tsx";
+import {Button} from "@shadcn/components/ui/button.tsx";
 
 
 export interface CommandPopupProps {
@@ -25,20 +36,27 @@ export default function CommandPopup(props: Command) {
       Trigger:
       <div className="trigger">
         <Input type="text" placeholder="Trigger Pattern"/>
-        <input type="checkbox" alt="Regex Trigger"/>
-        <IconCheckBox checked={triggerChecked} onChange={setTriggerChecked} checkedIcon={<IconList/>} icon={<IconHidden/>} hoverText="Visible in Command List"/>
-        <input type="checkbox" alt="Enabled"/>
+        <CheckBox checked={triggerChecked} onChange={setTriggerChecked} hoverText="Regex Trigger"/>
+        <IconCheckBox checked={triggerChecked} onChange={setTriggerChecked} checkedIcon={<IconList/>}
+                      icon={<IconHidden/>} hoverText="Visible in Command List"/>
+        <IconCheckBox checked={triggerChecked} onChange={setTriggerChecked} hoverText="Enabled"
+                      icon={<IconPowerOff/>} checkedIcon={<IconPowerOn/>}/>
       </div>
-      <div className="addTrigger">Add a new Alias</div>
+      <Button variant="secondary" className="addTrigger">Add a new Alias</Button>
     </div>
 
     <VLabel name="Required Permission Level:">
-      <select>
-        <option>All</option>
-        <option>Follower</option>
-        <option>Mods</option>
-        <option>Owner</option>
-      </select>
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Select a Permission Level"/>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={"EVERYONE"}>EVERYONE</SelectItem>
+          <SelectItem value={"VIP"}>VIP</SelectItem>
+          <SelectItem value={"MODERATOR"}>MODERATOR</SelectItem>
+          <SelectItem value={"OWNER"}>OWNER</SelectItem>
+        </SelectContent>
+      </Select>
     </VLabel>
 
     <div className="cooldown">
@@ -50,7 +68,9 @@ export default function CommandPopup(props: Command) {
       </VLabel>
     </div>
 
-    <TemplateEditor template={{template: "tetst", vars: [{name: "testvar", type:"string"}]}}/>
-    {/*<div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>*/}
+    <VLabel name="Template:">
+      <TemplateEditor template={{template: "tetst", vars: [{name: "testvar", type: "string"}]}}/>
+      {/*<div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>*/}
+    </VLabel>
   </div>
 }
