@@ -48,7 +48,8 @@ function InfiniteScroll() {
 
     containerRef.current.addEventListener('scroll', handleScroll);
     return () => {
-      containerRef.current.removeEventListener('scroll', handleScroll);
+      // causes null errors
+      // containerRef.current.removeEventListener('scroll', handleScroll);
     };
   }, [items]); // Re-run effect when items change
 

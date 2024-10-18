@@ -25,6 +25,7 @@ const router = createBrowserRouter(
       <Route path="/test" element={<Test/>}/>
       <Route path="/history" element={<MessagePane/>}/>
       <Route path="*" element={<p>Diese seite gibt es nicht</p>}/>
+      <Route path="/" element={<p>Diese seite gibt es nicht</p>}/>
       <Route path="/commands" element={<TestingPopupBackground content={<CommandPopup/>}/>}/>
     </Route>
   )
