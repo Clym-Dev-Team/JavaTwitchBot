@@ -12,7 +12,7 @@ import NavMenu from "./components/NavMenu/NavMenu.tsx";
 import AuthProvider from "./components/Login/AuthProvider.tsx";
 import {Toaster} from "@shadcn/components/ui/toaster.tsx";
 import TestingPopupBackground from "./components/TestingPopupBackground/TestingPopupBackground.tsx";
-import CommandPopup from "./components/CommandPopup/CommandPopup.tsx";
+import CommandPopup from "./components/Commands/CommandPopup.tsx";
 import TwitchNavMenu from "./components/NavMenuTwitch/TwitchNavMenu.tsx";
 import {TooltipProvider} from "@radix-ui/react-tooltip";
 import HealthOverview from "./components/Health/HealthOverview.tsx";
