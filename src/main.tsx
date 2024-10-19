@@ -16,6 +16,8 @@ import CommandPopup from "./components/CommandPopup/CommandPopup.tsx";
 import TwitchNavMenu from "./components/NavMenuTwitch/TwitchNavMenu.tsx";
 import {TooltipProvider} from "@radix-ui/react-tooltip";
 import HealthOverview from "./components/Health/HealthOverview.tsx";
+import OauthSetup from "./components/OauthManager/OauthSetup.tsx";
+import OauthResult from "./components/OauthManager/OauthResult.tsx";
 
 export const BOT_BACKEND_ADDR = "http://localhost:80"
 export const HISTORY_BACKEND_ADDR = "http://localhost:8080"
@@ -32,6 +34,8 @@ const router = createBrowserRouter(
       <Route path="/" element={<p>Diese seite gibt es nicht</p>}/>
       <Route path="/commands" element={<TestingPopupBackground content={<CommandPopup/>}/>}/>
       <Route path="/health" element={<HealthOverview/>}/>
+      <Route path="/oauth" element={<OauthSetup/>}/>
+      <Route path="/oauth/result" element={<OauthResult/>}/>
     </Route>
   )
 );

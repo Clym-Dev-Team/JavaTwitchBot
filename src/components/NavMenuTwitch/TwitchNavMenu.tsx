@@ -18,6 +18,7 @@ export default function TwitchNavMenu() {
       <NavLink target="/commands" name="Command Popup"/>
       <NavLink target="/test" name="Message History Test"/>
       <NavLink target="/health" name="Health"/>
+      <NavLink target="/oauth" name="External accounts"/>
       <NavLink target="/goal" name="Goals"/>
       <NavLink target="/templates" name="Templates"/>
       <NavLink target="/" name="WebConsole" allowChildren={false}/>

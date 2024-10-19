@@ -1,0 +1,30 @@
+.authTile {
+    min-height: 10rem;
+    max-height: fit-content;
+    min-width: fit-content;
+    max-width: 100%;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    background-color: darkorange;
+}
+
+.accountName {
+    font-family: "Quantico", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: right;
+}
+
+.serviceName {
+    font-family: "Roboto", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 2rem;
+}
