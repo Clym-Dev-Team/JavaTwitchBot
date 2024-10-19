@@ -9,10 +9,10 @@ import NavLink from "../NavMenu/NavLink.tsx";
 export default function TwitchNavMenu() {
   return <div className="navMenu">
     <div className="twitchTiles">
-      <TwitchMenuTile icon={<IconTextBox/>} label="Commands" target="/"/>
-      <TwitchMenuTile icon={<IconGift/>} label="Giveaways" target="/"/>
-      <TwitchMenuTile icon={<IconTimer/>} label="Timer" target="/"/>
-      <TwitchMenuTile icon={<IconMegaphone/>} label="Alerts" target="/"/>
+      <TwitchMenuTile allowChildren={false} icon={<IconTextBox/>} label="Commands" target="/"/>
+      <TwitchMenuTile allowChildren={false} icon={<IconGift/>} label="Giveaways" target="/"/>
+      <TwitchMenuTile allowChildren={false} icon={<IconTimer/>} label="Timer" target="/"/>
+      <TwitchMenuTile allowChildren={false} icon={<IconMegaphone/>} label="Alerts" target="/"/>
     </div>
     <div className="otherOptions">
       <NavLink target="/commands" name="Command Popup"/>
@@ -20,7 +20,7 @@ export default function TwitchNavMenu() {
       <NavLink target="/health" name="Health"/>
       <NavLink target="/goal" name="Goals"/>
       <NavLink target="/templates" name="Templates"/>
-      <NavLink target="/" name="WebConsole"/>
+      <NavLink target="/" name="WebConsole" allowChildren={false}/>
     </div>
     <div className="account">
       {/*

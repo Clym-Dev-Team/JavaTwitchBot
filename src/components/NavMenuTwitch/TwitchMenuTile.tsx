@@ -7,15 +7,21 @@ export interface TwitchMenuTileProps {
   icon: React.ReactNode
   label: string;
   target: string
+  allowChildren?: boolean
 }
 
-export default function TwitchMenuTile({icon, target, label}: TwitchMenuTileProps) {
+export default function TwitchMenuTile({icon, target, allowChildren, label}: TwitchMenuTileProps) {
   const {pathname} = useLocation();
   const [highlight, setHighlight] = React.useState(false);
 
   useEffect(() => {
-    setHighlight(pathname == target);
+    if (allowChildren == undefined || allowChildren) {
+      setHighlight(pathname.startsWith(target));
+    } else {
+      setHighlight(pathname == target);
+    }
   }, [pathname, target]);
+
 
   return <Tooltip>
     <TooltipContent>
