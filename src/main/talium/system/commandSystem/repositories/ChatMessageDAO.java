@@ -13,7 +13,7 @@ import java.time.Instant;
 @Component
 @Entity
 @Table(name = "Core-Twitch_Chat_Messages")
-public class Message {
+public class ChatMessageDAO {
     //Annotate all Columns explicitly
     @Id private String messageID;
     private String message;
@@ -44,10 +44,10 @@ public class Message {
         repo = messageRepo;
     }
 
-    Message() {
+    public ChatMessageDAO() {
     }
 
-    public Message(String messageID, String message, TwitchUser user, boolean isHighlightedMessage, boolean isSkipSubsModeMessage, boolean isDesignatedFirstMessage, boolean isUserIntroduction, @Nullable String getCustomRewardId, @Nullable String replyToMessageID, String channelID, Instant sendAT) {
+    public ChatMessageDAO(String messageID, String message, TwitchUser user, boolean isHighlightedMessage, boolean isSkipSubsModeMessage, boolean isDesignatedFirstMessage, boolean isUserIntroduction, @Nullable String getCustomRewardId, @Nullable String replyToMessageID, String channelID, Instant sendAT) {
         this.messageID = messageID;
         this.message = message;
         this.user = user;
@@ -61,15 +61,15 @@ public class Message {
         this.sendAT = sendAT;
     }
 
-    public static Message simulatedMessage(String message, boolean isHighlightedMessage, boolean isSkipSubsModeMessage, boolean isDesignatedFirstMessage, boolean isUserIntroduction, String getCustomRewardId) {
+    public static ChatMessageDAO simulatedMessage(String message, boolean isHighlightedMessage, boolean isSkipSubsModeMessage, boolean isDesignatedFirstMessage, boolean isUserIntroduction, String getCustomRewardId) {
         //TODO getChannel ID aus config
         String channelIdclym = "21045643";
         String channelIDOrciu = "427320589";
-        return new Message("-SYSTEM-", message, TwitchUser.getSystemUser(), isHighlightedMessage, isSkipSubsModeMessage, isDesignatedFirstMessage, isUserIntroduction, getCustomRewardId, null, channelIdclym, Instant.now());
+        return new ChatMessageDAO("-SYSTEM-", message, TwitchUser.getSystemUser(), isHighlightedMessage, isSkipSubsModeMessage, isDesignatedFirstMessage, isUserIntroduction, getCustomRewardId, null, channelIdclym, Instant.now());
     }
 
-    public static Message simulatedMessage(String message) {
-        return Message.simulatedMessage(message, false, false, false, false, null);
+    public static ChatMessageDAO simulatedMessage(String message) {
+        return ChatMessageDAO.simulatedMessage(message, false, false, false, false, null);
     }
 
     public String messageID() {
