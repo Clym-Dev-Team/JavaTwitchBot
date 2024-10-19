@@ -1,8 +1,7 @@
 package talium.system.chatTrigger;
 
-import talium.system.commandSystem.repositories.CooldownType;
+import talium.system.chatTrigger.cooldown.ChatCooldown;
 import talium.system.commandSystem.repositories.TwitchUserPermission;
-import talium.system.stringTemplates.Template;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package talium.system.chatTrigger;
 
 import java.util.regex.Pattern;
 
-import talium.system.Out;
+import talium.system.chatTrigger.cooldown.ChatCooldown;
 import talium.system.commandSystem.repositories.ChatMessage;
 import talium.system.commandSystem.repositories.CooldownType;
 import talium.system.commandSystem.repositories.TwitchUserPermission;
@@ -10,7 +10,7 @@ import talium.system.eventSystem.Subscriber;
 
 import java.util.List;
 
-import static talium.system.chatTrigger.CooldownService.*;
+import static talium.system.chatTrigger.cooldown.CooldownService.*;
 
 record ManagedTrigger(
         String id,
