@@ -4,9 +4,9 @@ import VLabel from "../../common/VerticalLabel/VLabel.tsx";
 import IconCheckBox from "../../common/IconCheckBox/IconCheckBox.tsx";
 import IconList from "../../assets/IconList.tsx";
 import IconHidden from "../../assets/IconHidden.tsx";
-import {useState} from "react";
+import React, {useState} from "react";
 import TemplateEditor from "./TemplateEditor.tsx";
-import {Command, CommandPermission} from "./Command.ts";
+import {Command} from "./Command.ts";
 import CheckBox from "../../common/CheckBox/CheckBox.tsx";
 import IconPowerOff from "../../assets/IconPowerOff.tsx";
 import IconPowerOn from "../../assets/IconPowerOn.tsx";
@@ -18,17 +18,38 @@ import {
   SelectValue
 } from "@shadcn/components/ui/select.tsx";
 import {Button} from "@shadcn/components/ui/button.tsx";
-
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from "@shadcn/components/ui/sheet.tsx";
 
 export interface CommandPopupProps {
-
+  command: Command;
+  children: React.ReactNode;
 }
 
-export default function CommandPopup(props: Command) {
+export default function CommandEditSheet({command, children}: CommandPopupProps) {
+  return <Sheet>
+    <SheetTrigger>{children}</SheetTrigger>
+    <SheetContent style={{minWidth: "40%", overflowY: "auto"}}>
+      <SheetHeader>
+        <SheetTitle>Edit Command:</SheetTitle>
+        <SheetDescription>Edit a command. All empty trigger will be ignored</SheetDescription>
+      </SheetHeader>
+      {CommandEdit(command)}
+    </SheetContent>
+  </Sheet>
+}
+
+function CommandEdit(command: Command) {
   const [triggerChecked, setTriggerChecked] = useState(false);
 
   return <div className="commandPopup">
-    <VLabel name="Internal Command Nane/Id:">
+    <VLabel name="Internal Command Name/Id:">
       <Input id="commandId" type="text"/>
     </VLabel>
 

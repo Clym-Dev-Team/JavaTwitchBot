@@ -11,8 +11,6 @@ import TemplateListPane from "./components/Templates/TemplateList/TemplateListPa
 import NavMenu from "./components/NavMenu/NavMenu.tsx";
 import AuthProvider from "./components/Login/AuthProvider.tsx";
 import {Toaster} from "@shadcn/components/ui/toaster.tsx";
-import TestingPopupBackground from "./components/TestingPopupBackground/TestingPopupBackground.tsx";
-import CommandPopup from "./components/Commands/CommandPopup.tsx";
 import TwitchNavMenu from "./components/NavMenuTwitch/TwitchNavMenu.tsx";
 import {TooltipProvider} from "@radix-ui/react-tooltip";
 import HealthOverview from "./components/Health/HealthOverview.tsx";
@@ -32,7 +30,7 @@ const router = createBrowserRouter(
       <Route path="/history" element={<MessagePane/>}/>
       <Route path="*" element={<p>Diese seite gibt es nicht</p>}/>
       <Route path="/" element={<p>Diese seite gibt es nicht</p>}/>
-      <Route path="/commands" element={<TestingPopupBackground content={<CommandPopup/>}/>}/>
+      <Route path="/commands" element={<CommandList/>}/>
       <Route path="/health" element={<HealthOverview/>}/>
       <Route path="/oauth" element={<OauthSetup/>}/>
       <Route path="/oauth/result" element={<OauthResult/>}/>
