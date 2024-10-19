@@ -1,4 +1,4 @@
-package talium.system.chatTrigger;
+package talium.system.chatTrigger.cooldown;
 
 import talium.system.commandSystem.repositories.CooldownType;
 
