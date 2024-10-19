@@ -6,8 +6,8 @@ import com.github.twitch4j.chat.events.channel.CheerEvent;
 import com.github.twitch4j.chat.events.channel.FollowEvent;
 import com.github.twitch4j.common.enums.CommandPermission;
 import com.github.twitch4j.common.events.domain.EventUser;
-import talium.system.commandSystem.CommandProcessor;
-import talium.system.commandSystem.repositories.Message;
+import talium.system.chatTrigger.CooldownService;
+import talium.system.commandSystem.repositories.ChatMessage;
 import talium.system.commandSystem.repositories.TwitchUser;
 import talium.system.commandSystem.repositories.TwitchUserPermission;
 import talium.system.eventSystem.EventDispatcher;
@@ -41,8 +41,10 @@ public class Twitch4JHandler {
         String replyToID = null;
         if (messageEvent.getReplyInfo() != null)
             replyToID = messageEvent.getReplyInfo().getMessageId();
-        Message message = new Message(
+        ChatMessage message = new ChatMessage(
                 messageEvent.getMessageEvent().getEventId(),
+                CooldownService.computeMessageUserIndex(user),
+                CooldownService.computeMessageGlobalIndex(user),
                 messageEvent.getMessage(),
                 user,
                 messageEvent.isHighlightedMessage(),
@@ -53,7 +55,8 @@ public class Twitch4JHandler {
                 replyToID,
                 messageEvent.getChannel().getId(),
                 messageEvent.getFiredAtInstant());
-        CommandProcessor.processMessage(message);
+        EventDispatcher.dispatch(message);
+//        CommandProcessor.processMessage(message);
     }
 
 

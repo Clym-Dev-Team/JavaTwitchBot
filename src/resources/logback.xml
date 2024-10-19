@@ -24,6 +24,7 @@
     </logger>
     <logger name="talium.system.eventSystem" level="INFO"/>
     <logger name="talium.system.commandSystem" level="INFO"/>
+    <logger name="talium.system.chatTrigger.CooldownService" level="INFO"/>
     <logger name="talium.system.commandSystem.CommandProcessor.Chat" level="DEBUG"/>
     <logger name="talium.system.ASCIIProgressbar" level="INFO"/>
     <logger name="logback" level="INFO"/>

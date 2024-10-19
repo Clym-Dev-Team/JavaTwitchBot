@@ -34,7 +34,7 @@ public class EventDispatcher {
      * @return array of Standard Java Methods
      */
     private static Method[] scanForSubscriber() {
-        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("talium.modules").addScanners(Scanners.MethodsAnnotated));
+        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("talium").addScanners(Scanners.MethodsAnnotated));
         Set<Method> methods = reflections.getMethodsAnnotatedWith(Subscriber.class);
         return methods.stream()
                 .filter(method -> Modifier.isStatic(method.getModifiers()))

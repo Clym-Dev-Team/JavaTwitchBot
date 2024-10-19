@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Table(name = "Core-Twitch_ChatUser")
 @Entity
 public class TwitchUser {
-    @Id private String id;
+    @Id private Long id;
     private String name;
     private TwitchUserPermission permission;
     private int subscriberMonths;
@@ -34,11 +34,11 @@ public class TwitchUser {
 //        repo = twitchUserRepo;
 //    }
 
-    TwitchUser() {
+    public TwitchUser() {
     }
 
     public TwitchUser(String id, String name, int subscriberMonths, int subscriptionTier, TwitchUserPermission permission) {
-        this.id = id;
+        this.id = Long.valueOf(id);
         this.name = name;
         this.subscriberMonths = subscriberMonths;
         this.subscriptionTier = subscriptionTier;
@@ -49,7 +49,7 @@ public class TwitchUser {
         return new TwitchUser("-SYSTEM-", "-SYSTEM-",Integer.MAX_VALUE, Integer.MAX_VALUE, TwitchUserPermission.SYSTEM);
     }
 
-    public String id() {
+    public Long id() {
         return id;
     }
 

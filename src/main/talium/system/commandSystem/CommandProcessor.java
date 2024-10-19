@@ -4,7 +4,6 @@ import talium.system.Out;
 import talium.system.commandSystem.repositories.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import talium.system.commandSystem.repositories.*;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -76,7 +75,7 @@ public class CommandProcessor {
      * Evaluates the Chat Messages and executes every Command that fits this onto this Message
      * @param message The Chat Message
      */
-    public static void processMessage(Message message) {
+    public static void processMessage(ChatMessageDAO message) {
         //TODO Thread Pool; wäre vermutlich effizienter und schneller
         new Thread(() -> {
             logger.debug(message.toString());
@@ -92,7 +91,7 @@ public class CommandProcessor {
      * @param message The Chatmessage
      * @param cached The Cache of the Command the Message should be checked against
      */
-    private static void match(Message message, CachedCommand cached) {
+    private static void match(ChatMessageDAO message, CachedCommand cached) {
         //TODO DEBUG statements ausschmücken
         if (!cached.regex().matcher(message.message()).matches()) {
             //If Command does not match to this message, then do nothing
