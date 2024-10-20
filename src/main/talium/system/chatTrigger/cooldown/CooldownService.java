@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class CooldownService {
+    //TODO resetable caches
+
     // User Cooldowns
     /** Map of Twitch User IDs to their last Message Index, increased on each messsage. Used to assign message indexes for each user */
     private static final TreeMap<Long, Integer> messageIndexes = new TreeMap<>();
