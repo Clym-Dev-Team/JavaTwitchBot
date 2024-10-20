@@ -12,6 +12,17 @@ import java.util.List;
 
 import static talium.system.chatTrigger.cooldown.CooldownService.*;
 
+//TODO reference id guidelines
+/**
+ * A version of the {@link ChatTrigger} modified for runtime use in the {@link TriggerManager}.
+ * The Patterns are unified in a list of Regex Pattern. Callback functions an added, these are executed if a message satisfies all these conditions.
+ * @param id a unique id that identifies this trigger. Is not allowed to collide with other triggerIds
+ * @param patterns a list of regex Patterns that the message content is matched against. It is enough if any of these patterns match
+ * @param permission a minimum permission level a user of the message needs to have
+ * @param userCooldown a user specific cooldown for this trigger
+ * @param globalCooldown a global (for all users) cooldown for this trigger
+ * @param callback the function to call after a successfull trigger
+ */
 record ManagedTrigger(
         String id,
         List<Pattern> patterns,
@@ -22,6 +33,10 @@ record ManagedTrigger(
 ) {
 }
 
+/**
+ * Evaluates if a message satisfies all the conditions of a trigger.
+ * If a message matches, a callback function is called with this message.
+ */
 public class TriggerManager {
     // TODO:REMOVE tests
     public static void testFunction(ChatMessage messageEvent) {
@@ -38,11 +53,21 @@ public class TriggerManager {
     //TODO get list of triggers
 
 
+    /**
+     * Consumes {@link ChatMessage}s from the Twitch Input and checks if any triggers match this message.
+     * If so, they callbacks are executed.
+     * @param messsage the message to check
+     */
     @Subscriber
     public static void triggerFromMessage(ChatMessage messsage) {
         triggers.forEach(t -> processTrigger(t, messsage));
     }
 
+    /**
+     * Check if a message matches a specific trigger
+     * @param trigger the trigger to check for
+     * @param message the message to check against
+     */
     private static void processTrigger(ManagedTrigger trigger, ChatMessage message) {
         // if ordinal of user is smaller than the command/trigger, than the user has fewer permissions and is not allowed to execute
         if (message.user().permission().ordinal() <= trigger.permission().ordinal()) {
@@ -50,6 +75,7 @@ public class TriggerManager {
         }
 
         // check matcher
+        //TODO matcher isEnabled
         boolean isMatched = false;
         for (var pat : trigger.patterns()) {
             if (pat.matcher(message.message()).matches()) {
