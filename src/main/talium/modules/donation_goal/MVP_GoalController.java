@@ -1,10 +1,12 @@
 package talium.modules.donation_goal;
 
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import talium.system.stringTemplates.Template;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import talium.system.stringTemplates.TemplateService;
 
 import java.util.Currency;
 import java.util.Optional;
@@ -14,15 +16,18 @@ import java.util.Optional;
 public class MVP_GoalController {
 
     private final DonationGoalRepo donationGoalRepo;
+    private final TemplateService templateService;
 
-    public MVP_GoalController(DonationGoalRepo donationGoalRepo) {
+    @Autowired
+    public MVP_GoalController(DonationGoalRepo donationGoalRepo, TemplateService templateService) {
         this.donationGoalRepo = donationGoalRepo;
+        this.templateService = templateService;
     }
 
     @GetMapping
     String donationGoal() {
         Optional<DonationGoal> goal = DonationGoal.repo.findById("goal");
-        Optional<Template> template = Template.repo.findByModuleAndTypeAndObject("alerts", "tipeee", "donation");
+        Optional<Template> template = templateService.getTemplateById("alerts.tipeee.donation");
         if (template.isEmpty() || goal.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found"
@@ -61,6 +66,6 @@ public class MVP_GoalController {
             );
         }
         donationGoalRepo.save(dg);
-        Template.repo.updateTemplateByTypeAndNameAndObjectName(goalJson.alertText(), "alerts", "tipeee", "donation");
+        templateService.updateTemplateStringById(goalJson.alertText(), "alerts.tipeee.donation");
     }
 }

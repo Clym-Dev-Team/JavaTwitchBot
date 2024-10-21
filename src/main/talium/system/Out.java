@@ -1,7 +1,10 @@
 package talium.system;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import talium.inputs.Twitch4J.Twitch4JInput;
 import talium.system.stringTemplates.Template;
+import talium.system.stringTemplates.TemplateService;
 import talium.system.templateParser.exeptions.ArgumentValueNullException;
 import talium.system.templateParser.exeptions.UnIterableArgumentException;
 import talium.system.templateParser.exeptions.UnsupportedComparandType;
@@ -14,7 +17,16 @@ import java.util.Optional;
 
 import static talium.system.templateParser.TemplateInterpreter.populate;
 
+@Component
 public class Out {
+
+    private static TemplateService templateService;
+
+    @Autowired
+    public void setTemplateService(TemplateService templateService) {
+        System.out.println("set autowird");
+        Out.templateService = templateService;
+    }
 
     public static class Twitch {
 
@@ -22,10 +34,10 @@ public class Out {
             Twitch4JInput.sendMessage(message);
         }
 
-        public static String sendNamedTemplate(String module, String type, String object, HashMap<String, Object> baseValues) throws NoSuchElementException {
-            Optional<Template> template = Template.repo.findByModuleAndTypeAndObject(module, type, object);
+        public static String sendNamedTemplate(String id, HashMap<String, Object> baseValues) throws NoSuchElementException {
+            Optional<Template> template = templateService.getTemplateById(id);;
             if (template.isEmpty()) {
-                throw new NoSuchElementException(STR."no template found for module \{module} and type \{type} and object \{object}");
+                throw new NoSuchElementException(STR."no template found for id: \{id}");
                 //TODO emit error as event
                 //edit: ^^ not sure why we would need to do this. Just output error into console/webconsole clearly our caller has no fucking idea what they want, so we shouldn't even throw. There is no way they could fix this
             }
