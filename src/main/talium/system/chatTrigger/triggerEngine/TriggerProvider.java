@@ -1,8 +1,6 @@
 package talium.system.chatTrigger.triggerEngine;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import talium.system.chatTrigger.persistence.TriggerEntity;
 import talium.system.chatTrigger.cooldown.ChatCooldown;
@@ -46,7 +44,7 @@ public class TriggerProvider {
 
     /**
      * Builds the trigger list of triggers defined in code, and triggers form the trigger database.
-     * If a particular id is found in the code and the database the callback of the code trigger and
+     * If a particular triggerId is found in the code and the database the callback of the code trigger and
      * the data of the database trigger is used, since it may have been changed by the user.
      * @return a list of processed RuntimeTriggers
      */
@@ -59,19 +57,19 @@ public class TriggerProvider {
         HashMap<String, RuntimeTrigger> resultMap = getUserTriggerDB();
 
         // get overlap between sets
-        // if id is on both sets, the values from the db are preferred, bot the callback is taken from the code
-        // if an id is only in the code not in the db, the full trigger from the code is used
+        // if triggerId is on both sets, the values from the db are preferred, bot the callback is taken from the code
+        // if an triggerId is only in the code not in the db, the full trigger from the code is used
         // if a trigger is only in the db and not in the code the triggerId is removed from the DB, because it is not used anymore
         for (var trigger : codeTriggers.values()) {
             if (dbCodeTriggers.containsKey(trigger.id())) {
-                // id is in both maps, use DB instance with code callback
+                // triggerId is in both maps, use DB instance with code callback
                 TriggerEntity triggerEntity = dbCodeTriggers.get(trigger.id());
                 RuntimeTrigger runtimeTrigger = transformTrigger(triggerEntity, trigger.callback());
                 resultMap.put(trigger.id(), runtimeTrigger);
-                // remove id from db callbacks so that we can later clean up all unused code callbacks from the DB
+                // remove triggerId from db callbacks so that we can later clean up all unused code callbacks from the DB
                 dbCodeTriggers.remove(trigger.id());
             } else {
-                // if id is not in DB we use the code instance
+                // if triggerId is not in DB we use the code instance
                 resultMap.put(trigger.id(), trigger);
             }
         }
@@ -81,14 +79,14 @@ public class TriggerProvider {
     }
 
     /**
-     * Replaces a trigger with the same id of the new trigger, with the new trigger instance.
+     * Replaces a trigger with the same triggerId of the new trigger, with the new trigger instance.
      * Used for updates to triggers to edits in the ui
      * @param newTrigger replacement trigger
      * @param callback replacement callback
      */
     public static void updateTrigger(TriggerEntity newTrigger, TriggerCallback callback) {
         for (RuntimeTrigger trigger : triggers) {
-            if (trigger.id().equals(newTrigger.id())) {
+            if (trigger.id().equals(newTrigger.triggerId())) {
                 triggers.remove(trigger);
                 triggers.add(transformTrigger(newTrigger, callback));
                 return;
@@ -117,7 +115,7 @@ public class TriggerProvider {
             }
         }
         return new RuntimeTrigger(
-                trigger.id(),
+                trigger.triggerId(),
                 regexes,
                 trigger.permission(),
                 trigger.userCooldown(),
