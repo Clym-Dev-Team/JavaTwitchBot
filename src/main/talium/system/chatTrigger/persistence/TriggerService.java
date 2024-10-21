@@ -22,7 +22,7 @@ public class TriggerService {
         HashMap<String, TriggerEntity> map = new HashMap<>();
         var list = repo.getAllByisUserTrigger(false);
         for (var item : list) {
-            map.put(item.id(), item);
+            map.put(item.triggerId(), item);
         }
         return map;
     }
@@ -31,7 +31,7 @@ public class TriggerService {
         HashMap<String, RuntimeTrigger> map = new HashMap<>();
         var list = repo.getAllByisUserTrigger(true);
         for (var item : list) {
-            map.put(item.id(), transformTrigger(item, TriggerService::TESINGCALLBACK));
+            map.put(item.triggerId(), transformTrigger(item, TriggerService::TESINGCALLBACK));
         }
         return map;
     }

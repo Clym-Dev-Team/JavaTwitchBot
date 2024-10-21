@@ -6,7 +6,7 @@ import talium.system.eventSystem.Subscriber;
 import static talium.system.chatTrigger.triggerEngine.TriggerProvider.triggers;
 import static talium.system.chatTrigger.cooldown.CooldownService.*;
 
-//TODO reference id guidelines
+//TODO reference triggerId guidelines
 
 /**
  * Evaluates if a message satisfies all the conditions of a trigger.

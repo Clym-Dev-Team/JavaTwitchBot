@@ -160,7 +160,7 @@ public class CooldownService {
     /**
      * Updates the stored information for the last message that executed a trigger. <br/>
      * @param message message was successfully in satisfying all the trigger conditions
-     * @param triggerId the trigger id that was satisfied
+     * @param triggerId the triggerId that was satisfied
      * @param globalCooldown the globalCooldown of this trigger
      * @param userCooldown the userCooldown of this trigger
      */
