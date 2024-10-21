@@ -22,6 +22,7 @@ import java.util.List;
 @Table(name = "sys-chatTrigger-trigger")
 public record TriggerEntity(
         @Id String triggerId,
+        String description,
         @OneToMany(mappedBy = "parentTrigger")
         List<MessagePattern> patterns,
         TwitchUserPermission permission,
