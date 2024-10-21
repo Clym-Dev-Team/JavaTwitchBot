@@ -1,9 +1,6 @@
 package talium.system.chatTrigger.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 /**
  * A pattern that a message needs to match against in a {@link TriggerEntity}
@@ -15,7 +12,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "sys-chatTrigger-patterns")
 public record MessagePattern(
-        @Id @GeneratedValue long id,
+        @Id long id,
+        @ManyToOne(fetch = FetchType.EAGER) @PrimaryKeyJoinColumn
+        TriggerEntity parentTrigger,
         String pattern,
         boolean isRegex,
         boolean isVisible,

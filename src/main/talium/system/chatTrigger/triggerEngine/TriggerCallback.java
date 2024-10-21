@@ -9,7 +9,7 @@ import talium.system.commandSystem.repositories.ChatMessage;
 public interface TriggerCallback {
     /**
      * The Callback function
-     * @param triggerId the id of the trigger that triggered the callback
+     * @param triggerId the triggerId of the trigger that triggered the callback
      * @param message the message object that satisfied the trigger conditions
      */
     void triggerCallback(String triggerId, ChatMessage message);
