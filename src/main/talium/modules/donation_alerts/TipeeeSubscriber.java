@@ -26,6 +26,6 @@ public class TipeeeSubscriber {
         GoalTemplateContext goal = new GoalTemplateContext(activeGoals.getFirst());
         baseValues.put("goal", goal);
         baseValues.put("donation", donationContext);
-        Out.Twitch.sendNamedTemplate("alerts", "tipeee", "donation", baseValues);
+        Out.Twitch.sendNamedTemplate("alerts.tipeee.donation", baseValues);
     }
 }
