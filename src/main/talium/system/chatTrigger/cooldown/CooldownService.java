@@ -26,13 +26,13 @@ public class CooldownService {
 
     // User Cooldowns
     /** Map of Twitch User IDs to their last Message Index, increased on each messsage. Used to assign message indexes for each user */
-    private static final TreeMap<Long, Integer> messageIndexes = new TreeMap<>();
+    private static final TreeMap<String, Integer> messageIndexes = new TreeMap<>();
     /** Map of a combination between a triggerId and a TwitchUserID, to the last message Index of the message, that the
      * user used to successfully trigger this command the last time. Updated on successfull command execution */
-    private static final HashMap<Pair<String, Long>, Integer> messageUserCooldown = new HashMap<>();
+    private static final HashMap<Pair<String, String>, Integer> messageUserCooldown = new HashMap<>();
     /** Map of a combination between a triggerId and a TwitchUserID, to the Instant of the last message, that the
      * user used to successfully trigger this command the last time. Updated on successfull command execution */
-    private static final HashMap<Pair<String, Long>, Instant> secondsUserCooldown = new HashMap<>();
+    private static final HashMap<Pair<String, String>, Instant> secondsUserCooldown = new HashMap<>();
 
     // Global Cooldowns
     /** Current Global message index, updated on each received message. Used to assign global message indexes */
@@ -186,7 +186,7 @@ public class CooldownService {
         log.info("Running Cooldown cleanup task");
         // if the index of the message that executed this command last is more than 100 messages ago than the last send message of the user we remove the message
         for (var entry : messageUserCooldown.entrySet()) {
-            Long userId = entry.getKey().component2();
+            String userId = entry.getKey().component2();
             var messsageIndexDelta = messageIndexes.get(userId) - entry.getValue();
             if (messsageIndexDelta > 100) {
                 messageUserCooldown.remove(entry.getKey());
@@ -194,7 +194,7 @@ public class CooldownService {
         }
         // if an entry of the time the user used this command last is more than 60 minutes old, we remove that entry
         for (var entry : secondsUserCooldown.entrySet()) {
-            Long userId = entry.getKey().component2();
+            String userId = entry.getKey().component2();
             var timeDelta = ChronoUnit.MINUTES.between(Instant.now(), entry.getValue());
             if (timeDelta > 60) {
                 secondsUserCooldown.remove(entry.getKey());

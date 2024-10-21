@@ -37,7 +37,7 @@ public class Twitch4JHandler {
 
         //Convert ChatMessage
         EventUser eUser = messageEvent.getUser();
-        TwitchUser user = new TwitchUser(eUser.getId(), eUser.getName(), messageEvent.getSubscriberMonths(), messageEvent.getSubscriptionTier(), convertUserPermissions(messageEvent.getPermissions()));
+        TwitchUser user = new TwitchUser(eUser.getId(), eUser.getName(), convertUserPermissions(messageEvent.getPermissions()), messageEvent.getSubscriberMonths(), messageEvent.getSubscriptionTier());
         String replyToID = null;
         if (messageEvent.getReplyInfo() != null)
             replyToID = messageEvent.getReplyInfo().getMessageId();
