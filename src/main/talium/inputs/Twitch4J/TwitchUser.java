@@ -1,10 +1,4 @@
-package talium.system.commandSystem.repositories;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import org.junit.jupiter.api.Disabled;
-import org.springframework.stereotype.Component;
+package talium.inputs.Twitch4J;
 
 /**
  * TwitchUser, lediglich dazu gedacht, um einen TwitchUser in einer Chatnachricht zu repräsentieren,

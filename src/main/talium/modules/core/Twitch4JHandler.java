@@ -7,9 +7,9 @@ import com.github.twitch4j.chat.events.channel.FollowEvent;
 import com.github.twitch4j.common.enums.CommandPermission;
 import com.github.twitch4j.common.events.domain.EventUser;
 import talium.system.chatTrigger.cooldown.CooldownService;
-import talium.system.commandSystem.repositories.ChatMessage;
-import talium.system.commandSystem.repositories.TwitchUser;
-import talium.system.commandSystem.repositories.TwitchUserPermission;
+import talium.inputs.Twitch4J.ChatMessage;
+import talium.inputs.Twitch4J.TwitchUser;
+import talium.inputs.Twitch4J.TwitchUserPermission;
 import talium.system.eventSystem.EventDispatcher;
 import talium.system.eventSystem.Subscriber;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static talium.system.commandSystem.repositories.TwitchUserPermission.*;
+import static talium.inputs.Twitch4J.TwitchUserPermission.*;
 
 /**
  * Handels all Events from Twitch4J that are needed for the core of the bot to function

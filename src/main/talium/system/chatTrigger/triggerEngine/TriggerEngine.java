@@ -1,6 +1,6 @@
 package talium.system.chatTrigger.triggerEngine;
 
-import talium.system.commandSystem.repositories.ChatMessage;
+import talium.inputs.Twitch4J.ChatMessage;
 import talium.system.eventSystem.Subscriber;
 
 import static talium.system.chatTrigger.triggerEngine.TriggerProvider.triggers;
