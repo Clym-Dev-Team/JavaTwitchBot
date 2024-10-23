@@ -1,6 +1,6 @@
 package talium.system.chatTrigger.triggerEngine;
 
-import talium.system.commandSystem.repositories.ChatMessage;
+import talium.inputs.Twitch4J.ChatMessage;
 
 /**
  * Defies the functions that are valid as triggerCallbacks. <br/>

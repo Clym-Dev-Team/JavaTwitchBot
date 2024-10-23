@@ -1,7 +1,6 @@
 package talium.system.chatTrigger.cooldown;
 
 import jakarta.persistence.Embeddable;
-import talium.system.commandSystem.repositories.CooldownType;
 
 /**
  * A Cooldown with an amount of some unit. <br/>

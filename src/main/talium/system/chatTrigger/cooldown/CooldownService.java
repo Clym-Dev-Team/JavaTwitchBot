@@ -5,9 +5,8 @@ import org.checkerframework.dataflow.qual.Impure;
 import org.checkerframework.dataflow.qual.Pure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import talium.system.commandSystem.repositories.CooldownType;
-import talium.system.commandSystem.repositories.ChatMessage;
-import talium.system.commandSystem.repositories.TwitchUser;
+import talium.inputs.Twitch4J.ChatMessage;
+import talium.inputs.Twitch4J.TwitchUser;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

@@ -3,7 +3,7 @@ package talium.system.chatTrigger.persistence;
 import jakarta.persistence.*;
 import talium.system.chatTrigger.cooldown.ChatCooldown;
 import talium.system.chatTrigger.triggerEngine.TriggerEngine;
-import talium.system.commandSystem.repositories.TwitchUserPermission;
+import talium.inputs.Twitch4J.TwitchUserPermission;
 
 import java.util.List;
 

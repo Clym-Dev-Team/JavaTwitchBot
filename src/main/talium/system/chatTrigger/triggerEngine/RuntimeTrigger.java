@@ -2,7 +2,7 @@ package talium.system.chatTrigger.triggerEngine;
 
 import talium.system.chatTrigger.persistence.TriggerEntity;
 import talium.system.chatTrigger.cooldown.ChatCooldown;
-import talium.system.commandSystem.repositories.TwitchUserPermission;
+import talium.inputs.Twitch4J.TwitchUserPermission;
 
 import java.util.List;
 import java.util.regex.Pattern; /**
