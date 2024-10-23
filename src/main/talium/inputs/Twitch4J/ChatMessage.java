@@ -1,4 +1,4 @@
-package talium.system.commandSystem.repositories;
+package talium.inputs.Twitch4J;
 
 import org.jetbrains.annotations.Nullable;
 

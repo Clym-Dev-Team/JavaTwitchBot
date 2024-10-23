@@ -3,7 +3,7 @@ package talium.system.chatTrigger.persistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import talium.system.chatTrigger.triggerEngine.RuntimeTrigger;
-import talium.system.commandSystem.repositories.ChatMessage;
+import talium.inputs.Twitch4J.ChatMessage;
 
 import java.util.HashMap;
 
