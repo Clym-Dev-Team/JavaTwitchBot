@@ -1,7 +1,7 @@
-package talium.system.chatTrigger.persistence;
+package talium.system.twitchCommands.persistence;
 
 import jakarta.persistence.*;
-import talium.system.chatTrigger.controller.MessagePatternDTO;
+import talium.system.twitchCommands.controller.MessagePatternDTO;
 
 /**
  * A pattern that a message needs to match against in a {@link TriggerEntity}

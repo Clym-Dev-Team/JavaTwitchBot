@@ -6,7 +6,7 @@ import com.github.twitch4j.chat.events.channel.CheerEvent;
 import com.github.twitch4j.chat.events.channel.FollowEvent;
 import com.github.twitch4j.common.enums.CommandPermission;
 import com.github.twitch4j.common.events.domain.EventUser;
-import talium.system.chatTrigger.cooldown.CooldownService;
+import talium.system.twitchCommands.cooldown.CooldownService;
 import talium.inputs.Twitch4J.ChatMessage;
 import talium.inputs.Twitch4J.TwitchUser;
 import talium.inputs.Twitch4J.TwitchUserPermission;

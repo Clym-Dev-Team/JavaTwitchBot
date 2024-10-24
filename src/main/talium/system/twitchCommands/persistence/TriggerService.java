@@ -1,8 +1,8 @@
-package talium.system.chatTrigger.persistence;
+package talium.system.twitchCommands.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import talium.system.chatTrigger.triggerEngine.RuntimeTrigger;
+import talium.system.twitchCommands.triggerEngine.RuntimeTrigger;
 import talium.inputs.Twitch4J.ChatMessage;
 import talium.system.stringTemplates.TemplateService;
 
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static talium.system.chatTrigger.triggerEngine.TriggerProvider.transformTrigger;
+import static talium.system.twitchCommands.triggerEngine.TriggerProvider.transformTrigger;
 
 @Service
 public class TriggerService {
