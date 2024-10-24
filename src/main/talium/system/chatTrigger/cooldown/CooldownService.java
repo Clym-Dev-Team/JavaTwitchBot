@@ -114,20 +114,20 @@ public class CooldownService {
      * @return if the user is still in cooldown. True means forbidden from executing the trigger
      */
     public static boolean inUserCooldown(ChatMessage message, String triggerId, ChatCooldown userCooldown) {
-        if (userCooldown.cooldownType() == CooldownType.MESSAGES) {
+        if (userCooldown.type == CooldownType.MESSAGES) {
             Integer lastUseMessageId = messageUserCooldown.get(new Pair<>(triggerId, message.user().id()));
             if (lastUseMessageId == null) {
                 return false;
             }
             var idDelta = message.userMessageIndex() - lastUseMessageId;
-            return idDelta <= userCooldown.amount();
+            return idDelta <= userCooldown.amount;
         }
         var lastUseInstant = secondsUserCooldown.get(new Pair<>(triggerId, message.user().id()));
         if (lastUseInstant == null) {
             return false;
         }
         var secondsBetween = ChronoUnit.SECONDS.between(message.sendAT(),lastUseInstant);
-        return secondsBetween <= userCooldown.amount();
+        return secondsBetween <= userCooldown.amount;
     }
 
     /**
@@ -140,20 +140,20 @@ public class CooldownService {
      * @return if a user is still in cooldown. True means forbidden from executing the trigger
      */
     public static boolean inGlobalCooldown(ChatMessage message, String triggerId, ChatCooldown globalCooldown) {
-        if (globalCooldown.cooldownType() == CooldownType.MESSAGES) {
+        if (globalCooldown.type == CooldownType.MESSAGES) {
             Integer lastUseMessageId = messageGlobalCooldown.get(triggerId);
             if (lastUseMessageId == null) {
                 return false;
             }
             int delta = message.globalMessageIndex() - lastUseMessageId;
-            return delta <= globalCooldown.amount();
+            return delta <= globalCooldown.amount;
         }
         var lastUseInstant = secondsGlobalCooldown.get(triggerId);
         if (lastUseInstant == null) {
             return false;
         }
         var secondsBetween = ChronoUnit.SECONDS.between(message.sendAT(),lastUseInstant);
-        return secondsBetween <= globalCooldown.amount();
+        return secondsBetween <= globalCooldown.amount;
     }
 
     /**
@@ -164,14 +164,14 @@ public class CooldownService {
      * @param userCooldown the userCooldown of this trigger
      */
     public static void updateCooldownState(ChatMessage message, String triggerId, ChatCooldown globalCooldown, ChatCooldown userCooldown) {
-        if (userCooldown.cooldownType() == CooldownType.MESSAGES) {
+        if (userCooldown.type == CooldownType.MESSAGES) {
             messageUserCooldown.put(new Pair<>(triggerId, message.user().id()), message.userMessageIndex());
             return;
         } else {
             secondsUserCooldown.put(new Pair<>(triggerId, message.user().id()), Instant.now());
         }
 
-        if (globalCooldown.cooldownType() == CooldownType.MESSAGES) {
+        if (globalCooldown.type == CooldownType.MESSAGES) {
             messageGlobalCooldown.put(triggerId, message.globalMessageIndex());
         } else {
             secondsGlobalCooldown.put(triggerId, Instant.now());

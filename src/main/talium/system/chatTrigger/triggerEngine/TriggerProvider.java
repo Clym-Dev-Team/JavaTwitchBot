@@ -86,7 +86,7 @@ public class TriggerProvider {
      */
     public static void updateTrigger(TriggerEntity newTrigger, TriggerCallback callback) {
         for (RuntimeTrigger trigger : triggers) {
-            if (trigger.id().equals(newTrigger.triggerId())) {
+            if (trigger.id().equals(newTrigger.id)) {
                 triggers.remove(trigger);
                 triggers.add(transformTrigger(newTrigger, callback));
                 return;
@@ -104,22 +104,22 @@ public class TriggerProvider {
      */
     public static RuntimeTrigger transformTrigger(TriggerEntity trigger, TriggerCallback callback) {
         List<Pattern> regexes = new ArrayList<>();
-        for (var pattern : trigger.patterns()) {
-            if (!pattern.isEnabled()) {
+        for (var pattern : trigger.patterns) {
+            if (!pattern.isEnabled) {
                 continue;
             }
-            if (pattern.isRegex()) {
-                regexes.add(Pattern.compile(pattern.pattern()));
+            if (pattern.isRegex) {
+                regexes.add(Pattern.compile(pattern.pattern));
             } else {
-                regexes.add(Pattern.compile(STR."^\{pattern.pattern()}( |.).*$", Pattern.CASE_INSENSITIVE));
+                regexes.add(Pattern.compile(STR."^\{pattern.pattern}( |.).*$", Pattern.CASE_INSENSITIVE));
             }
         }
         return new RuntimeTrigger(
-                trigger.triggerId(),
+                trigger.id,
                 regexes,
-                trigger.permission(),
-                trigger.userCooldown(),
-                trigger.globalCooldown(),
+                trigger.permission,
+                trigger.userCooldown,
+                trigger.globalCooldown,
                 callback
         );
     }
@@ -129,7 +129,7 @@ public class TriggerProvider {
     }
 
     private static HashMap<String, RuntimeTrigger> getUserTriggerDB() {
-        return triggerService.getUerTriggers();
+        return triggerService.getUserTriggers();
     }
 
     private static HashMap<String, RuntimeTrigger> getCodeTrigger() {

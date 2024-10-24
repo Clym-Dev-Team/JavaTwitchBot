@@ -34,5 +34,7 @@ public class TemplateService {
         return (List<Template>) repo.findAll();
     }
 
-    public void save(Template template) {}
+    public void save(Template template) {
+        repo.save(template);
+    }
 }
