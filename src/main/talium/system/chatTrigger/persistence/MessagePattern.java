@@ -1,8 +1,7 @@
 package talium.system.chatTrigger.persistence;
 
 import jakarta.persistence.*;
-
-import java.util.Objects;
+import talium.system.chatTrigger.controller.MessagePatternDTO;
 
 /**
  * A pattern that a message needs to match against in a {@link TriggerEntity}
@@ -59,7 +58,7 @@ public class MessagePattern {
         return STR."MessagePattern[parentTrigger=\{parentTrigger != null ? parentTrigger.id : ""}, pattern=\{pattern}, isRegex=\{isRegex}, isVisible=\{isVisible}, isEnabled=\{isEnabled}\{']'}";
     }
 
-    MessagePatternDTO toMessagePatternDTO() {
+    public MessagePatternDTO toMessagePatternDTO() {
         return new MessagePatternDTO(this);
     }
 }
