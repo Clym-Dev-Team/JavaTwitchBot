@@ -1,15 +1,15 @@
-package talium.system.chatTrigger.controller;
+package talium.system.twitchCommands.controller;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import talium.inputs.Twitch4J.TwitchUserPermission;
-import talium.system.chatTrigger.cooldown.ChatCooldown;
-import talium.system.chatTrigger.cooldown.CooldownType;
-import talium.system.chatTrigger.persistence.MessagePattern;
-import talium.system.chatTrigger.persistence.TriggerEntity;
-import talium.system.chatTrigger.persistence.TriggerService;
+import talium.system.twitchCommands.cooldown.ChatCooldown;
+import talium.system.twitchCommands.cooldown.CooldownType;
+import talium.system.twitchCommands.persistence.MessagePattern;
+import talium.system.twitchCommands.persistence.TriggerEntity;
+import talium.system.twitchCommands.persistence.TriggerService;
 import talium.system.stringTemplates.Template;
 
 import java.util.List;

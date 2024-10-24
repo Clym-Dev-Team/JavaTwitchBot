@@ -1,4 +1,4 @@
-package talium.system.chatTrigger.persistence;
+package talium.system.twitchCommands.persistence;
 
 import java.io.Serializable;
 

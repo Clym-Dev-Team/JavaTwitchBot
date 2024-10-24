@@ -2,9 +2,6 @@ package talium.system.stringTemplates;
 
 import jakarta.persistence.*;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import talium.system.chatTrigger.persistence.TriggerEntity;
 
 @Table(name = "sys-string_templates")
 @Entity

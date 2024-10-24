@@ -1,10 +1,10 @@
-package talium.system.chatTrigger.triggerEngine;
+package talium.system.twitchCommands.triggerEngine;
 
 import talium.inputs.Twitch4J.ChatMessage;
 import talium.system.eventSystem.Subscriber;
 
-import static talium.system.chatTrigger.triggerEngine.TriggerProvider.triggers;
-import static talium.system.chatTrigger.cooldown.CooldownService.*;
+import static talium.system.twitchCommands.triggerEngine.TriggerProvider.triggers;
+import static talium.system.twitchCommands.cooldown.CooldownService.*;
 
 //TODO reference triggerId guidelines
 

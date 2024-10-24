@@ -1,4 +1,4 @@
-package talium.system.chatTrigger.cooldown;
+package talium.system.twitchCommands.cooldown;
 
 import kotlin.Pair;
 import org.checkerframework.dataflow.qual.Impure;

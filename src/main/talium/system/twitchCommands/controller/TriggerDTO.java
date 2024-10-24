@@ -1,9 +1,9 @@
-package talium.system.chatTrigger.controller;
+package talium.system.twitchCommands.controller;
 
 import talium.inputs.Twitch4J.TwitchUserPermission;
-import talium.system.chatTrigger.cooldown.ChatCooldown;
-import talium.system.chatTrigger.persistence.MessagePattern;
-import talium.system.chatTrigger.persistence.TriggerEntity;
+import talium.system.twitchCommands.cooldown.ChatCooldown;
+import talium.system.twitchCommands.persistence.MessagePattern;
+import talium.system.twitchCommands.persistence.TriggerEntity;
 
 import java.util.List;
 

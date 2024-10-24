@@ -1,6 +1,6 @@
-package talium.system.chatTrigger.controller;
+package talium.system.twitchCommands.controller;
 
-import talium.system.chatTrigger.persistence.MessagePattern;
+import talium.system.twitchCommands.persistence.MessagePattern;
 
 public record MessagePatternDTO(
         String pattern,

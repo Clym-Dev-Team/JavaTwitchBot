@@ -1,7 +1,7 @@
-package talium.system.chatTrigger.triggerEngine;
+package talium.system.twitchCommands.triggerEngine;
 
-import talium.system.chatTrigger.persistence.TriggerEntity;
-import talium.system.chatTrigger.cooldown.ChatCooldown;
+import talium.system.twitchCommands.persistence.TriggerEntity;
+import talium.system.twitchCommands.cooldown.ChatCooldown;
 import talium.inputs.Twitch4J.TwitchUserPermission;
 
 import java.util.List;
