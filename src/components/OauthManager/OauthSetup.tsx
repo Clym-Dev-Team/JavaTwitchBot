@@ -7,9 +7,9 @@ import "./AuthList.css"
 import {Loader} from "lucide-react";
 
 export interface Oauth {
-  serviceName: string,
-  accountName: string,
-  authUrl: string,
+  service: string,
+  accName: string,
+  url: string,
 }
 
 export default function OauthSetup() {
@@ -37,7 +37,7 @@ export default function OauthSetup() {
   return <div className="authListContainer">
     <h1>External accounts that need to be setup:</h1>
     <div className="authList">
-      {oauth.map((oauth) => <AuthTile oauth={oauth}/>)}
+      {oauth.map((oauth, index) => <AuthTile key={index} oauth={oauth}/>)}
     </div>
   </div>
 }

@@ -8,10 +8,10 @@ export interface AuthTileProps {
 }
 
 export default function AuthTile({oauth}: AuthTileProps) {
-  return <Link to={oauth.authUrl}>
+  return <Link to={oauth.url}>
     <div className={"authTile"}>
-      <span className="serviceName">{oauth.serviceName}</span>
-      <span className="accountName">{oauth.accountName}</span>
+      <span className="serviceName">{oauth.service}</span>
+      <span className="accountName">{oauth.accName}</span>
     </div>
   </Link>
 }
