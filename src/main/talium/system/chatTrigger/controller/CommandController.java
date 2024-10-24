@@ -1,4 +1,4 @@
-package talium.system.commands;
+package talium.system.chatTrigger.controller;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
