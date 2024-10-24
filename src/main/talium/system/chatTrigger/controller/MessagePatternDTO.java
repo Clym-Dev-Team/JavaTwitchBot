@@ -1,6 +1,6 @@
-package talium.system.chatTrigger.persistence;
+package talium.system.chatTrigger.controller;
 
-import jakarta.persistence.Id;
+import talium.system.chatTrigger.persistence.MessagePattern;
 
 public record MessagePatternDTO(
         String pattern,

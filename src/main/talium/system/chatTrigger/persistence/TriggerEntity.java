@@ -2,13 +2,13 @@ package talium.system.chatTrigger.persistence;
 
 import jakarta.persistence.*;
 import org.jetbrains.annotations.Nullable;
+import talium.system.chatTrigger.controller.TriggerDTO;
 import talium.system.chatTrigger.cooldown.ChatCooldown;
 import talium.system.chatTrigger.triggerEngine.TriggerEngine;
 import talium.inputs.Twitch4J.TwitchUserPermission;
 import talium.system.stringTemplates.Template;
 
 import java.util.List;
-import java.util.Objects;
 
 //TODO reference triggerId guidelines
 
