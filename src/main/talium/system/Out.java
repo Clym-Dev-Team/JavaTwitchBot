@@ -24,7 +24,6 @@ public class Out {
 
     @Autowired
     public void setTemplateService(TemplateService templateService) {
-        System.out.println("set autowird");
         Out.templateService = templateService;
     }
 

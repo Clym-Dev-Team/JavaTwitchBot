@@ -7,12 +7,25 @@ import jakarta.persistence.Embeddable;
  * E.g.: <br/>
  * - 4 MESSAGES <br/>
  * - 27 SECONDS
- * @param cooldownType the unit of the amount value
- * @param amount amount of the unit CooldownType
  */
 @Embeddable
-public record ChatCooldown(
-        CooldownType cooldownType,
-        int amount
-) {
+public class ChatCooldown {
+    CooldownType type;
+    int amount;
+
+    /**
+     * @param type the unit of the amount value
+     * @param amount       amount of the unit CooldownType
+     */
+    public ChatCooldown(
+            CooldownType type,
+            int amount
+    ) {
+        this.type = type;
+        this.amount = amount;
+    }
+
+    protected ChatCooldown() {
+
+    }
 }
