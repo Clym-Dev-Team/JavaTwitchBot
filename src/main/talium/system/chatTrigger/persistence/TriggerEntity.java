@@ -66,4 +66,8 @@ public class TriggerEntity {
     protected TriggerEntity() {
 
     }
+
+    public TriggerDTO toTriggerDTO() {
+        return new TriggerDTO(this);
+    }
 }
