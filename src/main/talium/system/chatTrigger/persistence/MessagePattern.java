@@ -59,4 +59,7 @@ public class MessagePattern {
         return STR."MessagePattern[parentTrigger=\{parentTrigger != null ? parentTrigger.id : ""}, pattern=\{pattern}, isRegex=\{isRegex}, isVisible=\{isVisible}, isEnabled=\{isEnabled}\{']'}";
     }
 
+    MessagePatternDTO toMessagePatternDTO() {
+        return new MessagePatternDTO(this);
+    }
 }

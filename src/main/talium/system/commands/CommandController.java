@@ -2,10 +2,8 @@ package talium.system.commands;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import talium.inputs.Twitch4J.TwitchUserPermission;
 import talium.system.chatTrigger.cooldown.ChatCooldown;
 import talium.system.chatTrigger.cooldown.CooldownType;
@@ -17,7 +15,7 @@ import talium.system.stringTemplates.Template;
 import java.util.List;
 
 @RestController
-@RequestMapping("/commands")
+@RequestMapping(value = "/commands", produces = "application/json")
 public class CommandController {
     TriggerService triggerService;
 
@@ -43,15 +41,18 @@ public class CommandController {
     @GetMapping("/all")
     String getAllCommands() {
         var gson = new Gson();
-        var list = triggerService.getAllTriggers();
+        var list = triggerService.getAllTriggers().stream().map(TriggerEntity::toTriggerDTO).toList();
         return gson.toJson(list);
     }
 
     @GetMapping("/id/{triggerId}")
-    String getByTriggerId(@PathVariable String triggerId) {
+    ResponseEntity<String> getByTriggerId(@PathVariable String triggerId) {
         var gson = new Gson();
         var command = triggerService.getTriggersId(triggerId);
-        return gson.toJson(command);
+        if (command.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(gson.toJson(command.get().toTriggerDTO()));
     }
 
 }

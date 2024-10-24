@@ -8,6 +8,7 @@ import talium.system.stringTemplates.TemplateService;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static talium.system.chatTrigger.triggerEngine.TriggerProvider.transformTrigger;
 
@@ -56,8 +57,8 @@ public class TriggerService {
         return repo.findAll();
     }
 
-    public List<TriggerEntity> getTriggersId(String id) {
-        return repo.getAllById(id);
+    public Optional<TriggerEntity> getTriggersId(String id) {
+        return repo.findById(id);
     }
 
     public static void TESINGCALLBACK(String triggerId, ChatMessage message) {
