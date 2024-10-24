@@ -1,12 +1,12 @@
-package talium.system.chatTrigger.triggerEngine;
+package talium.system.twitchCommands.triggerEngine;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import talium.system.chatTrigger.persistence.TriggerEntity;
-import talium.system.chatTrigger.cooldown.ChatCooldown;
-import talium.system.chatTrigger.persistence.TriggerService;
+import talium.system.twitchCommands.persistence.TriggerEntity;
+import talium.system.twitchCommands.cooldown.ChatCooldown;
+import talium.system.twitchCommands.persistence.TriggerService;
 import talium.inputs.Twitch4J.ChatMessage;
-import talium.system.chatTrigger.cooldown.CooldownType;
+import talium.system.twitchCommands.cooldown.CooldownType;
 import talium.inputs.Twitch4J.TwitchUserPermission;
 
 import java.util.ArrayList;

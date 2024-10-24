@@ -1,10 +1,10 @@
-package talium.system.chatTrigger.persistence;
+package talium.system.twitchCommands.persistence;
 
 import jakarta.persistence.*;
 import org.jetbrains.annotations.Nullable;
-import talium.system.chatTrigger.controller.TriggerDTO;
-import talium.system.chatTrigger.cooldown.ChatCooldown;
-import talium.system.chatTrigger.triggerEngine.TriggerEngine;
+import talium.system.twitchCommands.controller.TriggerDTO;
+import talium.system.twitchCommands.cooldown.ChatCooldown;
+import talium.system.twitchCommands.triggerEngine.TriggerEngine;
 import talium.inputs.Twitch4J.TwitchUserPermission;
 import talium.system.stringTemplates.Template;
 
