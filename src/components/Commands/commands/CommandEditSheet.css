@@ -37,7 +37,12 @@
 .cooldown {
     display: flex;
     flex-direction: row;
+    width: 100%;
     gap: 0.5rem;
+}
+
+.cooldown > label {
+    flex: 1;
 }
 
 .templateSpacer {

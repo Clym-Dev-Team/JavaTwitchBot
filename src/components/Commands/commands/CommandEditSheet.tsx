@@ -45,8 +45,8 @@ export default function CommandEditSheet({command, children}: CommandPopupProps)
 function CommandEdit(command: Command) {
   const fullCommandId = command.id;
   const USERCOMMANDPREFIX = "userCommand.";
-  const hasPrefix = command.id.startsWith(USERCOMMANDPREFIX);
-  if (hasPrefix) {
+  const hasPrefix = false;
+  if (command.id != null && command.id.startsWith(USERCOMMANDPREFIX)) {
     command.id = command.id.slice(USERCOMMANDPREFIX.length);
   }
   const {handleSubmit, register, control, setValue, getValues} = useForm<Command>({
