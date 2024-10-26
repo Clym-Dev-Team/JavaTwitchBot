@@ -1,4 +1,4 @@
-import "./CommandPopup.css"
+import "./CommandEditSheet.css"
 import {Input} from "@shadcn/components/ui/input.tsx";
 import VLabel from "../../../common/VerticalLabel/VLabel.tsx";
 import IconCheckBox from "../../../common/IconCheckBox/IconCheckBox.tsx";
@@ -32,7 +32,7 @@ export interface CommandPopupProps {
 export default function CommandEditSheet({command, children}: CommandPopupProps) {
   return <Sheet>
     <SheetTrigger>{children}</SheetTrigger>
-    <SheetContent style={{minWidth: "40%", overflowY: "auto"}}>
+    <SheetContent style={{minWidth: "40%", overflowY: "auto"}} className="dark">
       <SheetHeader>
         <SheetTitle>Edit Command:</SheetTitle>
         <SheetDescription>Edit a command. All empty trigger will be ignored</SheetDescription>
@@ -79,7 +79,7 @@ function CommandEdit(command: Command) {
         <SelectTrigger>
           <SelectValue placeholder="Select a Permission Level"/>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="dark">
           <SelectItem value="EVERYONE">EVERYONE</SelectItem>
           <SelectItem value="VIP">VIP</SelectItem>
           <SelectItem value="MODERATOR">MODERATOR</SelectItem>

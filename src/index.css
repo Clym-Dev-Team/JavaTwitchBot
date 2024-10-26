@@ -5,7 +5,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--text-color);
   background-color: var(--default-background);
 
   font-synthesis: none;
@@ -27,6 +27,7 @@
           var(--twitchViolett) 66%,
           var(--accentColor) 100%
   );
+  --text-color: rgba(255, 255, 255, 0.87);
 }
 
 body {
@@ -42,7 +43,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--text-color);
   background-color: var(--default-background);
 }
 
