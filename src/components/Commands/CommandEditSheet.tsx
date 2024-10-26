@@ -21,7 +21,7 @@ import {
   SheetTitle,
   SheetTrigger
 } from "@shadcn/components/ui/sheet.tsx";
-import {useFieldArray, useForm} from "react-hook-form";
+import {useForm, useFieldArray, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormRegister, FieldArrayWithId} from "react-hook-form";
 import IconX from "../../assets/IconX.tsx";
 
 export interface CommandPopupProps {
@@ -43,7 +43,7 @@ export default function CommandEditSheet({command, children}: CommandPopupProps)
 }
 
 function CommandEdit(command: Command) {
-  const {handleSubmit, register,  control, setValue, getValues} = useForm<Command>({
+  const {handleSubmit, register, control, setValue, getValues} = useForm<Command>({
     defaultValues: command,
   });
   const {fields, append, update, remove} = useFieldArray({name: "trigger", control})
@@ -53,6 +53,11 @@ function CommandEdit(command: Command) {
     console.log(command)
   }
 
+  function handleDelete() {
+    const commandId = getValues().id
+    console.log("delete: " + commandId);
+  }
+
   return <div className="commandPopup">
     <VLabel name="Internal Command Name/Id:">
       <Input id="commandId" type="text" {...register("id", {required: true})} />
@@ -60,18 +65,7 @@ function CommandEdit(command: Command) {
 
     <div className="triggers">
       Trigger:
-      {fields.map((field, index) =>
-        <div className="trigger" key={index}>
-          <Button className="removeTriggerBtn" onClick={() => remove(index)}><IconX/></Button>
-          <Input type="text" placeholder="Trigger Pattern" {...register(`trigger.${index}.pattern`, {required: true})}/>
-          <CheckBox checked={field.isRegex} onChange={checked => update(index, {...field, isRegex: checked})}
-                    hoverText="Regex Trigger"/>
-          <IconCheckBox checked={field.isVisible} onChange={checked => update(index, {...field, isVisible: checked})}
-                        hoverText="Visible in Command List" checkedIcon={<IconList/>} icon={<IconHidden/>}/>
-          <IconCheckBox checked={field.isEnabled} onChange={checked => update(index, {...field, isEnabled: checked})}
-                        hoverText="Enabled" icon={<IconPowerOff/>} checkedIcon={<IconPowerOn/>}/>
-        </div>
-      )}
+      {fields.map((field, index) => TriggerInput(index, field, register, update, remove))}
       <Button variant="secondary" className="addTrigger" onClick={() => append({
         isRegex: false,
         isVisible: true,
@@ -108,8 +102,22 @@ function CommandEdit(command: Command) {
       {/*<div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>*/}
     </VLabel>
     <SheetFooter>
-      <Button variant={"destructive"}>Delete</Button>
+      <Button variant={"destructive"} onClick={handleDelete}>Delete</Button>
       <Button variant={"default"} onClick={handleSubmit(submit)}>Save</Button>
     </SheetFooter>
+  </div>
+}
+
+
+function TriggerInput(index: number, field: FieldArrayWithId<Command, "trigger">, register: UseFormRegister<Command>, update: UseFieldArrayUpdate<Command, "trigger">, remove: UseFieldArrayRemove) {
+  return <div className="trigger" key={index}>
+    <Button className="removeTriggerBtn" onClick={() => remove(index)}><IconX/></Button>
+    <Input type="text" placeholder="Trigger Pattern" {...register(`trigger.${index}.pattern`, {required: true})}/>
+    <CheckBox checked={field.isRegex} onChange={checked => update(index, {...field, isRegex: checked})}
+              hoverText="Regex Trigger"/>
+    <IconCheckBox checked={field.isVisible} onChange={checked => update(index, {...field, isVisible: checked})}
+                  hoverText="Visible in Command List" checkedIcon={<IconList/>} icon={<IconHidden/>}/>
+    <IconCheckBox checked={field.isEnabled} onChange={checked => update(index, {...field, isEnabled: checked})}
+                  hoverText="Enabled" icon={<IconPowerOff/>} checkedIcon={<IconPowerOn/>}/>
   </div>
 }
