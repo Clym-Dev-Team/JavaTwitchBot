@@ -1,3 +1,5 @@
+import {StringTemplate} from "../templates/StringTemplate.ts";
+
 export interface Trigger {
   pattern: string,
   isRegex: boolean,
@@ -27,16 +29,6 @@ export enum CooldownTypes {
 export interface CommandCooldown {
   value: number,
   type: CooldownTypes
-}
-
-export interface TemplateVar {
-  name: string,
-  type: string,
-}
-
-export interface StringTemplate {
-  vars: TemplateVar[],
-  template: string,
 }
 
 export interface Command {

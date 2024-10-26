@@ -15,7 +15,7 @@ import {TooltipProvider} from "@radix-ui/react-tooltip";
 import HealthOverview from "./components/Health/HealthOverview.tsx";
 import OauthSetup from "./components/OauthManager/OauthSetup.tsx";
 import OauthResult from "./components/OauthManager/OauthResult.tsx";
-import CommandList from "./components/Commands/CommandList.tsx";
+import CommandsPage from "./components/Commands/CommandsPage.tsx";
 
 export const BOT_BACKEND_ADDR = "http://localhost:80"
 export const HISTORY_BACKEND_ADDR = "http://localhost:8080"
@@ -30,7 +30,7 @@ const router = createBrowserRouter(
       <Route path="/history" element={<MessagePane/>}/>
       <Route path="*" element={<p>Diese seite gibt es nicht</p>}/>
       <Route path="/" element={<p>Diese seite gibt es nicht</p>}/>
-      <Route path="/commands" element={<CommandList/>}/>
+      <Route path="/commands" element={<CommandsPage/>}/>
       <Route path="/health" element={<HealthOverview/>}/>
       <Route path="/oauth" element={<OauthSetup/>}/>
       <Route path="/oauth/result" element={<OauthResult/>}/>

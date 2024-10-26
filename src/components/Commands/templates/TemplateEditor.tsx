@@ -1,5 +1,5 @@
-import {StringTemplate} from "./Command.ts";
 import {Textarea} from "@shadcn/components/ui/textarea.tsx";
+import {StringTemplate} from "./StringTemplate.ts";
 
 export interface TemplateEditorProps {
   template: StringTemplate

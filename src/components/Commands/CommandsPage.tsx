@@ -1,5 +1,5 @@
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@shadcn/components/ui/tabs.tsx";
-import CommandList from "./CommandList.tsx";
+import CommandList from "./commands/CommandList.tsx";
 import TemplateListPane from "../Templates/TemplateList/TemplateListPane.tsx";
 import "./CommandPage.css"
 

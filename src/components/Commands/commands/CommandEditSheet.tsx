@@ -1,15 +1,15 @@
 import "./CommandPopup.css"
 import {Input} from "@shadcn/components/ui/input.tsx";
-import VLabel from "../../common/VerticalLabel/VLabel.tsx";
-import IconCheckBox from "../../common/IconCheckBox/IconCheckBox.tsx";
-import IconList from "../../assets/IconList.tsx";
-import IconHidden from "../../assets/IconHidden.tsx";
+import VLabel from "../../../common/VerticalLabel/VLabel.tsx";
+import IconCheckBox from "../../../common/IconCheckBox/IconCheckBox.tsx";
+import IconList from "../../../assets/IconList.tsx";
+import IconHidden from "../../../assets/IconHidden.tsx";
 import React from "react";
-import TemplateEditor from "./TemplateEditor.tsx";
+import TemplateEditor from "../templates/TemplateEditor.tsx";
 import {Command} from "./Command.ts";
-import CheckBox from "../../common/CheckBox/CheckBox.tsx";
-import IconPowerOff from "../../assets/IconPowerOff.tsx";
-import IconPowerOn from "../../assets/IconPowerOn.tsx";
+import CheckBox from "../../../common/CheckBox/CheckBox.tsx";
+import IconPowerOff from "../../../assets/IconPowerOff.tsx";
+import IconPowerOn from "../../../assets/IconPowerOn.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@shadcn/components/ui/select.tsx";
 import {Button} from "@shadcn/components/ui/button.tsx";
 import {
@@ -22,7 +22,7 @@ import {
   SheetTrigger
 } from "@shadcn/components/ui/sheet.tsx";
 import {useForm, useFieldArray, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormRegister, FieldArrayWithId} from "react-hook-form";
-import IconX from "../../assets/IconX.tsx";
+import IconX from "../../../assets/IconX.tsx";
 
 export interface CommandPopupProps {
   command: Command;
