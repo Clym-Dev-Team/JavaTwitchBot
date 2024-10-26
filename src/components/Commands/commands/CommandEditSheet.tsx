@@ -4,7 +4,6 @@ import VLabel from "../../../common/VerticalLabel/VLabel.tsx";
 import IconCheckBox from "../../../common/IconCheckBox/IconCheckBox.tsx";
 import IconList from "../../../assets/IconList.tsx";
 import IconHidden from "../../../assets/IconHidden.tsx";
-import React from "react";
 import TemplateEditor from "../templates/TemplateEditor.tsx";
 import {Command} from "./Command.ts";
 import CheckBox from "../../../common/CheckBox/CheckBox.tsx";
@@ -12,37 +11,22 @@ import IconPowerOff from "../../../assets/IconPowerOff.tsx";
 import IconPowerOn from "../../../assets/IconPowerOn.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@shadcn/components/ui/select.tsx";
 import {Button} from "@shadcn/components/ui/button.tsx";
+import {SheetFooter} from "@shadcn/components/ui/sheet.tsx";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from "@shadcn/components/ui/sheet.tsx";
-import {useForm, useFieldArray, UseFieldArrayRemove, UseFieldArrayUpdate, UseFormRegister, FieldArrayWithId} from "react-hook-form";
+  useForm,
+  useFieldArray,
+  UseFieldArrayRemove,
+  UseFieldArrayUpdate,
+  UseFormRegister,
+  FieldArrayWithId
+} from "react-hook-form";
 import IconX from "../../../assets/IconX.tsx";
 
-export interface CommandPopupProps {
+export interface CommandFormProps {
   command: Command;
-  children: React.ReactNode;
 }
 
-export default function CommandEditSheet({command, children}: CommandPopupProps) {
-  return <Sheet>
-    <SheetTrigger>{children}</SheetTrigger>
-    <SheetContent style={{minWidth: "40%", overflowY: "auto"}} className="dark">
-      <SheetHeader>
-        <SheetTitle>Edit Command:</SheetTitle>
-        <SheetDescription>Edit a command. All empty trigger will be ignored</SheetDescription>
-      </SheetHeader>
-      {CommandEdit(command)}
-    </SheetContent>
-  </Sheet>
-}
-
-function CommandEdit(command: Command) {
+export function CommandForm({command}: CommandFormProps) {
   const fullCommandId = command.id;
   const USERCOMMANDPREFIX = "userCommand.";
   const hasPrefix = false;
