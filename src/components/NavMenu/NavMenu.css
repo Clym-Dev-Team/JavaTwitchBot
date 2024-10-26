@@ -1,9 +1,0 @@
-.navMenu {
-    display: flex;
-    flex-direction: column;
-    min-width: 10%;
-    max-width: 300px;
-    padding: .5rem;
-    gap: .3rem;
-    border-right: var(--primary-border);
-}

@@ -8,7 +8,6 @@ import {createBrowserRouter, createRoutesFromChildren, Outlet, Route, RouterProv
 import MessagePane from "./components/ChatHistory/Pane/MessagePane.tsx";
 import TemplateEditorPane from "./components/Templates/TemplateEditor/TemplateEditorPane.tsx";
 import TemplateListPane from "./components/Templates/TemplateList/TemplateListPane.tsx";
-import NavMenu from "./components/NavMenu/NavMenu.tsx";
 import AuthProvider from "./components/Login/AuthProvider.tsx";
 import {Toaster} from "@shadcn/components/ui/toaster.tsx";
 import TwitchNavMenu from "./components/NavMenuTwitch/TwitchNavMenu.tsx";
@@ -52,7 +51,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
 function Layout() {
   return <>
-    {/*<NavMenu/>*/}
     <TwitchNavMenu/>
     <div className="contentRoot dark">
       <Outlet/>
