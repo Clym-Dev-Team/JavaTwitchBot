@@ -42,7 +42,7 @@ export interface StringTemplate {
 export interface Command {
   id: string,
   trigger: Trigger[],
-  permission: CommandPermission,
+  permission: string,
   userCooldown: CommandCooldown,
   globalCooldown: CommandCooldown,
   templateVar: StringTemplate,

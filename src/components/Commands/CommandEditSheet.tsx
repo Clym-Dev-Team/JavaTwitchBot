@@ -10,22 +10,18 @@ import {Command} from "./Command.ts";
 import CheckBox from "../../common/CheckBox/CheckBox.tsx";
 import IconPowerOff from "../../assets/IconPowerOff.tsx";
 import IconPowerOn from "../../assets/IconPowerOn.tsx";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@shadcn/components/ui/select.tsx";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@shadcn/components/ui/select.tsx";
 import {Button} from "@shadcn/components/ui/button.tsx";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger
 } from "@shadcn/components/ui/sheet.tsx";
+import {useFieldArray, useForm} from "react-hook-form";
 
 export interface CommandPopupProps {
   command: Command;
@@ -46,46 +42,63 @@ export default function CommandEditSheet({command, children}: CommandPopupProps)
 }
 
 function CommandEdit(command: Command) {
-  const [triggerChecked, setTriggerChecked] = useState(false);
+  const {handleSubmit, register, reset, formState, control, setValue, getValues} = useForm<Command>({
+    defaultValues: command,
+  });
+  const {fields, append, update, remove} = useFieldArray({name: "trigger", control})
+
+  function submit(command: Command) {
+    console.log("sumbit")
+    console.log(command)
+  }
 
   return <div className="commandPopup">
     <VLabel name="Internal Command Name/Id:">
-      <Input id="commandId" type="text"/>
+      <Input id="commandId" type="text" {...register("id", {required: true})} />
     </VLabel>
 
     <div className="triggers">
       Trigger:
-      <div className="trigger">
-        <Input type="text" placeholder="Trigger Pattern"/>
-        <CheckBox checked={triggerChecked} onChange={setTriggerChecked} hoverText="Regex Trigger"/>
-        <IconCheckBox checked={triggerChecked} onChange={setTriggerChecked} checkedIcon={<IconList/>}
-                      icon={<IconHidden/>} hoverText="Visible in Command List"/>
-        <IconCheckBox checked={triggerChecked} onChange={setTriggerChecked} hoverText="Enabled"
-                      icon={<IconPowerOff/>} checkedIcon={<IconPowerOn/>}/>
-      </div>
-      <Button variant="secondary" className="addTrigger">Add a new Alias</Button>
+      {fields.map((field, index) =>
+        <div className="trigger" key={index}>
+          <Input type="text" placeholder="Trigger Pattern" {...register(`trigger.${index}.pattern`, {required: true})}/>
+          <CheckBox checked={field.isRegex} onChange={checked => update(index, {...field, isRegex: checked})}
+                    hoverText="Regex Trigger"/>
+          <IconCheckBox checked={field.isVisible} onChange={checked => update(index, {...field, isVisible: checked})}
+                        hoverText="Visible in Command List" checkedIcon={<IconList/>} icon={<IconHidden/>}/>
+          <IconCheckBox checked={field.isEnabled} onChange={checked => update(index, {...field, isEnabled: checked})}
+                        hoverText="Enabled" icon={<IconPowerOff/>} checkedIcon={<IconPowerOn/>}/>
+          <Button onClick={() => remove(index)}>R</Button>
+        </div>
+      )}
+      <Button variant="secondary" className="addTrigger" onClick={() => append({
+        isRegex: false,
+        isVisible: true,
+        isEnabled: true,
+        pattern: ""
+      })}>Add a new Alias</Button>
     </div>
 
     <VLabel name="Required Permission Level:">
-      <Select>
+      <Select defaultValue={getValues().permission} onValueChange={value => setValue("permission", value)}>
         <SelectTrigger>
           <SelectValue placeholder="Select a Permission Level"/>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={"EVERYONE"}>EVERYONE</SelectItem>
-          <SelectItem value={"VIP"}>VIP</SelectItem>
-          <SelectItem value={"MODERATOR"}>MODERATOR</SelectItem>
-          <SelectItem value={"OWNER"}>OWNER</SelectItem>
+          <SelectItem value="EVERYONE">EVERYONE</SelectItem>
+          <SelectItem value="VIP">VIP</SelectItem>
+          <SelectItem value="MODERATOR">MODERATOR</SelectItem>
+          <SelectItem value="OWNER">OWNER</SelectItem>
         </SelectContent>
       </Select>
     </VLabel>
 
     <div className="cooldown">
       <VLabel name="Global Cooldown:">
-        <Input type="text"/>
+        <Input type="number" {...register("globalCooldown.value", {required: true, min: 0, valueAsNumber: true})}/>
       </VLabel>
       <VLabel name="User Cooldown:">
-        <Input type="text"/>
+        <Input type="text" {...register("userCooldown.value", {required: true, min: 0, valueAsNumber: true})}/>
       </VLabel>
     </div>
 
@@ -93,5 +106,9 @@ function CommandEdit(command: Command) {
       <TemplateEditor template={{template: "tetst", vars: [{name: "testvar", type: "string"}]}}/>
       {/*<div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>*/}
     </VLabel>
+    <SheetFooter>
+      <Button variant={"destructive"}>Delete</Button>
+      <Button variant={"default"} onClick={handleSubmit(submit)}>Save</Button>
+    </SheetFooter>
   </div>
 }

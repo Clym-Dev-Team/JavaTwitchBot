@@ -7,7 +7,7 @@ export default function CommandList() {
     trigger: [
       {isEnabled: true, isRegex: false, isVisible: true, pattern: "!testCommand"}
     ],
-    permission: CommandPermission.EVERYONE,
+    permission: CommandPermission[CommandPermission.EVERYONE],
     globalCooldown: {type: CooldownTypes.SECONDS, value: 0},
     userCooldown: {type: CooldownTypes.MESSAGE, value: 1},
     templateVar: {vars: [{name: "testvar", type: "string"}], template: 'test command ${testvar}}'}
