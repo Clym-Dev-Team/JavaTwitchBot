@@ -21,6 +21,8 @@ import {
   FieldArrayWithId
 } from "react-hook-form";
 import IconX from "../../../assets/IconX.tsx";
+import EnabledCheckBox from "../common/EnabledCheckBox.tsx";
+import IsVisibleCheckBox from "../common/IsVisibleCheckbox.tsx";
 
 export interface CommandFormProps {
   command: Command;
@@ -107,9 +109,9 @@ function TriggerInput(index: number, field: FieldArrayWithId<Command, "trigger">
     <Input type="text" placeholder="Trigger Pattern" {...register(`trigger.${index}.pattern`, {required: true})}/>
     <CheckBox checked={field.isRegex} onChange={checked => update(index, {...field, isRegex: checked})}
               hoverText="Regex Trigger"/>
-    <IconCheckBox checked={field.isVisible} onChange={checked => update(index, {...field, isVisible: checked})}
-                  hoverText="Visible in Command List" checkedIcon={<IconList/>} icon={<IconHidden/>}/>
-    <IconCheckBox checked={field.isEnabled} onChange={checked => update(index, {...field, isEnabled: checked})}
-                  hoverText="Enabled" icon={<IconPowerOff/>} checkedIcon={<IconPowerOn/>}/>
+    <IsVisibleCheckBox checked={field.isVisible} onChange={checked => update(index, {...field, isVisible: checked})}
+                     hoverText="Visible in Command List"/>
+    <EnabledCheckBox checked={field.isEnabled} onChange={checked => update(index, {...field, isEnabled: checked})}
+                     hoverText="Enabled"/>
   </div>
 }

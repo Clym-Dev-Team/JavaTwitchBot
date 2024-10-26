@@ -3,6 +3,9 @@ import {Command, CommandPermission, CooldownTypes} from "./Command.ts";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@shadcn/components/ui/table.tsx";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@shadcn/components/ui/sheet.tsx";
 import {useState} from "react";
+import EnabledCheckBox from "../common/EnabledCheckBox.tsx";
+import IsVisibleCheckBox from "../common/IsVisibleCheckbox.tsx";
+import "./CommandList.css"
 
 export default function CommandList() {
   const [openCommand, setOpenCommand] = useState<Command | undefined>(undefined)
@@ -24,10 +27,10 @@ export default function CommandList() {
   return <div className="commandList">
     <Table>
       <TableHeader>
-        <TableHead>Enabled</TableHead>
-        <TableHead>Visible</TableHead>
+        <TableHead className="tw-w-16" >Enabled</TableHead>
+        <TableHead className="tw-w-16">Visible</TableHead>
         <TableHead>Name/Id</TableHead>
-        <TableHead>A Pattern</TableHead>
+        <TableHead>First Pattern</TableHead>
         <TableHead>Template</TableHead>
       </TableHeader>
       <TableBody>
@@ -35,10 +38,10 @@ export default function CommandList() {
           <TableRow onClick={() => {
             console.log("open Modal");
             setOpenCommand(command)}}>
-              <TableCell>{command.trigger[0].isEnabled}</TableCell>
-              <TableCell>{command.trigger[0].isVisible}</TableCell>
-              <TableCell>{command.id}</TableCell>
-              <TableCell>{command.trigger[0].pattern}</TableCell>
+              <TableCell><span className="centerInColumn"><EnabledCheckBox checked={command.trigger[0].isEnabled} onChange={checked => {}}/></span></TableCell>
+              <TableCell><span className="centerInColumn"><IsVisibleCheckBox checked={command.trigger[0].isVisible} onChange={checked => {}}/></span></TableCell>
+              <TableCell className="tw-w-96">{command.id}</TableCell>
+              <TableCell className="tw-w-96">{command.trigger[0].pattern}</TableCell>
               <TableCell>{command.templateVar.template}</TableCell>
           </TableRow>
         ))}

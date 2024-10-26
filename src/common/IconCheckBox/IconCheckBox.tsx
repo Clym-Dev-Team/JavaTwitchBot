@@ -14,7 +14,10 @@ export default function IconCheckBox(props: IconCheckBoxProps) {
   return <Tooltip>
     <TooltipContent>{props.hoverText}</TooltipContent>
     <TooltipTrigger>
-      <div className="iconCheckBox" onClick={() => props.onChange(!props.checked)}>
+      <div className="iconCheckBox" onClick={event => {
+        event.stopPropagation();
+        props.onChange(!props.checked)
+      }}>
         {props.checked ? props.checkedIcon : props.icon}
       </div>
     </TooltipTrigger>
