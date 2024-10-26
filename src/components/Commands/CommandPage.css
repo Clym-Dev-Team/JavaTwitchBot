@@ -1,0 +1,16 @@
+.commandTabList {
+    box-sizing: border-box;
+    justify-content: space-around;
+    height: max-content;
+    display: flex;
+    width: 100%;
+    border-radius: 0;
+}
+
+.commandTabList > button {
+    box-sizing: border-box;
+    flex: 1;
+    font-size: 2em;
+    height: 1.5em;
+    border-radius: .4em;
+}
