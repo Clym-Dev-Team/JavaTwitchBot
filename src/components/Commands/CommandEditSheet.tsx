@@ -4,7 +4,7 @@ import VLabel from "../../common/VerticalLabel/VLabel.tsx";
 import IconCheckBox from "../../common/IconCheckBox/IconCheckBox.tsx";
 import IconList from "../../assets/IconList.tsx";
 import IconHidden from "../../assets/IconHidden.tsx";
-import React, {useState} from "react";
+import React from "react";
 import TemplateEditor from "./TemplateEditor.tsx";
 import {Command} from "./Command.ts";
 import CheckBox from "../../common/CheckBox/CheckBox.tsx";
@@ -22,6 +22,7 @@ import {
   SheetTrigger
 } from "@shadcn/components/ui/sheet.tsx";
 import {useFieldArray, useForm} from "react-hook-form";
+import IconX from "../../assets/IconX.tsx";
 
 export interface CommandPopupProps {
   command: Command;
@@ -42,7 +43,7 @@ export default function CommandEditSheet({command, children}: CommandPopupProps)
 }
 
 function CommandEdit(command: Command) {
-  const {handleSubmit, register, reset, formState, control, setValue, getValues} = useForm<Command>({
+  const {handleSubmit, register,  control, setValue, getValues} = useForm<Command>({
     defaultValues: command,
   });
   const {fields, append, update, remove} = useFieldArray({name: "trigger", control})
@@ -61,6 +62,7 @@ function CommandEdit(command: Command) {
       Trigger:
       {fields.map((field, index) =>
         <div className="trigger" key={index}>
+          <Button className="removeTriggerBtn" onClick={() => remove(index)}><IconX/></Button>
           <Input type="text" placeholder="Trigger Pattern" {...register(`trigger.${index}.pattern`, {required: true})}/>
           <CheckBox checked={field.isRegex} onChange={checked => update(index, {...field, isRegex: checked})}
                     hoverText="Regex Trigger"/>
@@ -68,7 +70,6 @@ function CommandEdit(command: Command) {
                         hoverText="Visible in Command List" checkedIcon={<IconList/>} icon={<IconHidden/>}/>
           <IconCheckBox checked={field.isEnabled} onChange={checked => update(index, {...field, isEnabled: checked})}
                         hoverText="Enabled" icon={<IconPowerOff/>} checkedIcon={<IconPowerOn/>}/>
-          <Button onClick={() => remove(index)}>R</Button>
         </div>
       )}
       <Button variant="secondary" className="addTrigger" onClick={() => append({

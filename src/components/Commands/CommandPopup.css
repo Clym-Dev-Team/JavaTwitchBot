@@ -16,6 +16,19 @@
     flex-direction: row;
     height: 3rem;
 }
+.removeTriggerBtn {
+    aspect-ratio: 1;
+    height: 100%;
+    padding: 5px;
+    margin-right: .5rem;
+}
+
+.removeTriggerBtn > SVG {
+    height: 100%;
+    aspect-ratio: 1;
+    width: auto;
+    flex: 1;
+}
 
 .addTrigger {
     width: 100%;
