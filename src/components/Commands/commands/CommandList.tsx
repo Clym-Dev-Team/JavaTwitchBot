@@ -35,14 +35,12 @@ export default function CommandList() {
       </TableHeader>
       <TableBody>
         {commands.map((command) => (
-          <TableRow onClick={() => {
-            console.log("open Modal");
-            setOpenCommand(command)}}>
-              <TableCell><span className="centerInColumn"><EnabledCheckBox checked={command.trigger[0].isEnabled} onChange={checked => {}}/></span></TableCell>
-              <TableCell><span className="centerInColumn"><IsVisibleCheckBox checked={command.trigger[0].isVisible} onChange={checked => {}}/></span></TableCell>
-              <TableCell className="tw-w-96">{command.id}</TableCell>
-              <TableCell className="tw-w-96">{command.trigger[0].pattern}</TableCell>
-              <TableCell>{command.templateVar.template}</TableCell>
+          <TableRow onClick={() => setOpenCommand(command)}>
+            <TableCell><span className="centerInColumn"><EnabledCheckBox checked={command.trigger[0].isEnabled} onChange={checked => {}}/></span></TableCell>
+            <TableCell><span className="centerInColumn"><IsVisibleCheckBox checked={command.trigger[0].isVisible} onChange={checked => {}}/></span></TableCell>
+            <TableCell className="tw-w-96">{command.id}</TableCell>
+            <TableCell className="tw-w-96">{command.trigger[0].pattern}</TableCell>
+            <TableCell>{command.templateVar.template}</TableCell>
           </TableRow>
         ))}
       </TableBody>
