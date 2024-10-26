@@ -43,19 +43,27 @@ export default function CommandEditSheet({command, children}: CommandPopupProps)
 }
 
 function CommandEdit(command: Command) {
+  const fullCommandId = command.id;
+  const USERCOMMANDPREFIX = "userCommand.";
+  const hasPrefix = command.id.startsWith(USERCOMMANDPREFIX);
+  if (hasPrefix) {
+    command.id = command.id.slice(USERCOMMANDPREFIX.length);
+  }
   const {handleSubmit, register, control, setValue, getValues} = useForm<Command>({
     defaultValues: command,
   });
   const {fields, append, update, remove} = useFieldArray({name: "trigger", control})
 
   function submit(command: Command) {
+    if (hasPrefix) {
+      command.id = USERCOMMANDPREFIX + command.id
+    }
     console.log("sumbit")
     console.log(command)
   }
 
   function handleDelete() {
-    const commandId = getValues().id
-    console.log("delete: " + commandId);
+    console.log("delete: " + fullCommandId);
   }
 
   return <div className="commandPopup">
