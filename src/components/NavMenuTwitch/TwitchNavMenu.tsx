@@ -9,13 +9,12 @@ import NavLink from "./NavLink.tsx";
 export default function TwitchNavMenu() {
   return <div className="navMenu">
     <div className="twitchTiles">
-      <TwitchMenuTile allowChildren={false} icon={<IconTextBox/>} label="Commands" target="/"/>
+      <TwitchMenuTile allowChildren={false} icon={<IconTextBox/>} label="Commands" target="/commands"/>
       <TwitchMenuTile allowChildren={false} icon={<IconGift/>} label="Giveaways" target="/"/>
       <TwitchMenuTile allowChildren={false} icon={<IconTimer/>} label="Timer" target="/"/>
       <TwitchMenuTile allowChildren={false} icon={<IconMegaphone/>} label="Alerts" target="/"/>
     </div>
     <div className="otherOptions">
-      <NavLink target="/commands" name="Command Popup"/>
       <NavLink target="/test" name="Message History Test"/>
       <NavLink target="/health" name="Health"/>
       <NavLink target="/oauth" name="External accounts"/>
