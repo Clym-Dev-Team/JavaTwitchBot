@@ -5,5 +5,6 @@ export interface TemplateVar {
 
 export interface StringTemplate {
   vars: TemplateVar[],
+  id: string
   template: string,
 }

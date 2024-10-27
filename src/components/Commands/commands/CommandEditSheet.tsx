@@ -1,14 +1,9 @@
 import "./CommandEditSheet.css"
 import {Input} from "@shadcn/components/ui/input.tsx";
 import VLabel from "../../../common/VerticalLabel/VLabel.tsx";
-import IconCheckBox from "../../../common/IconCheckBox/IconCheckBox.tsx";
-import IconList from "../../../assets/IconList.tsx";
-import IconHidden from "../../../assets/IconHidden.tsx";
 import TemplateEditor from "../templates/TemplateEditor.tsx";
 import {Command} from "./Command.ts";
 import CheckBox from "../../../common/CheckBox/CheckBox.tsx";
-import IconPowerOff from "../../../assets/IconPowerOff.tsx";
-import IconPowerOn from "../../../assets/IconPowerOn.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@shadcn/components/ui/select.tsx";
 import {Button} from "@shadcn/components/ui/button.tsx";
 import {SheetFooter} from "@shadcn/components/ui/sheet.tsx";
@@ -25,10 +20,11 @@ import EnabledCheckBox from "../common/EnabledCheckBox.tsx";
 import IsVisibleCheckBox from "../common/IsVisibleCheckbox.tsx";
 
 export interface CommandFormProps {
-  command: Command;
+  command: Command,
+  isEdit?: boolean
 }
 
-export function CommandForm({command}: CommandFormProps) {
+export function CommandForm({command, isEdit}: CommandFormProps) {
   const fullCommandId = command.id;
   const USERCOMMANDPREFIX = "userCommand.";
   const hasPrefix = false;
@@ -38,7 +34,7 @@ export function CommandForm({command}: CommandFormProps) {
   const {handleSubmit, register, control, setValue, getValues} = useForm<Command>({
     defaultValues: command,
   });
-  const {fields, append, update, remove} = useFieldArray({name: "trigger", control})
+  const {fields, append, update, remove} = useFieldArray({name: "patterns", control})
 
   function submit(command: Command) {
     if (hasPrefix) {
@@ -54,7 +50,7 @@ export function CommandForm({command}: CommandFormProps) {
 
   return <div className="commandPopup">
     <VLabel name="Internal Command Name/Id:">
-      <Input id="commandId" type="text" {...register("id", {required: true})} />
+      <Input id="commandId" type="text" {...register("id", {required: true, disabled: isEdit})} />
     </VLabel>
 
     <div className="triggers">
@@ -103,14 +99,14 @@ export function CommandForm({command}: CommandFormProps) {
 }
 
 
-function TriggerInput(index: number, field: FieldArrayWithId<Command, "trigger">, register: UseFormRegister<Command>, update: UseFieldArrayUpdate<Command, "trigger">, remove: UseFieldArrayRemove) {
+function TriggerInput(index: number, field: FieldArrayWithId<Command, "patterns">, register: UseFormRegister<Command>, update: UseFieldArrayUpdate<Command, "patterns">, remove: UseFieldArrayRemove) {
   return <div className="trigger" key={index}>
     <Button className="removeTriggerBtn" onClick={() => remove(index)}><IconX/></Button>
-    <Input type="text" placeholder="Trigger Pattern" {...register(`trigger.${index}.pattern`, {required: true})}/>
+    <Input type="text" placeholder="Trigger Pattern" {...register(`patterns.${index}.pattern`, {required: true})}/>
     <CheckBox checked={field.isRegex} onChange={checked => update(index, {...field, isRegex: checked})}
               hoverText="Regex Trigger"/>
     <IsVisibleCheckBox checked={field.isVisible} onChange={checked => update(index, {...field, isVisible: checked})}
-                     hoverText="Visible in Command List"/>
+                       hoverText="Visible in Command List"/>
     <EnabledCheckBox checked={field.isEnabled} onChange={checked => update(index, {...field, isEnabled: checked})}
                      hoverText="Enabled"/>
   </div>
