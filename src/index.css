@@ -15,12 +15,14 @@
 
 
   /*Our Constants*/
-  --primary-border-color: #5f6368;
+  --purple-hsl: hsl(264, 22%, 18%);
+  --twitchViolett: rgb(112, 34, 226);
+  --accentColor: rgb(183, 50, 95);
+
+  --primary-border-color: var(--purple-hsl);
   --primary-border: var(--primary-border-color) 2px solid;
   --field-color: #252628;
   --default-background: #18181b;
-  --twitchViolett: rgb(112, 34, 226);
-  --accentColor: rgb(183, 50, 95);
   --gradient-diag: linear-gradient(
           130deg,
           transparent 0% 33%,
