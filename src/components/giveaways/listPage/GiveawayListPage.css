@@ -1,0 +1,109 @@
+.giveawayListView {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.giveawayList {
+    flex: 1;
+    padding: 1rem;
+}
+
+.activeList {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.archivedList {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+/* TILE */
+.tile {
+    min-height: 10rem;
+    max-height: fit-content;
+    min-width: fit-content;
+    max-width: 100%;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.tile > .firstRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.tile > .firstRow > .status {
+    font-family: "Quantico", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: right;
+}
+
+.tile > .firstRow > .title {
+    font-family: "Roboto", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 2rem;
+}
+/* TILE */
+
+.tile.CREATED {
+    background-color: #2f432b;
+}
+
+.tile.RUNNING {
+    background-color: green;
+}
+
+.tile.PAUSED {
+    background-color: darkorange;
+}
+
+.tile.AWAITING_CONFIRMATION {
+    background-color: teal;
+}
+
+.tile.ARCHIVED {
+    background-color: gray;
+}
+
+.coloumn2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-left: var(--primary-border);
+}
+
+
+.spacer {
+    height: 20rem;
+    width: 100%;
+    background: repeating-linear-gradient(
+            45deg,
+            #606dbc,
+            #606dbc 10px,
+            #465298 10px,
+            #465298 20px
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Bahnschrift;
+    font-size: 2rem;
+    flex: 1;
+    border-top: var(--primary-border);
+    padding: 1rem;
+}

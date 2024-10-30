@@ -10,7 +10,7 @@ export default function TwitchNavMenu() {
   return <div className="navMenu">
     <div className="twitchTiles">
       <TwitchMenuTile allowChildren={false} icon={<IconTextBox/>} label="Commands" target="/commands"/>
-      <TwitchMenuTile allowChildren={false} icon={<IconGift/>} label="Giveaways" target="/"/>
+      <TwitchMenuTile allowChildren={false} icon={<IconGift/>} label="Giveaways" target="/giveaways"/>
       <TwitchMenuTile allowChildren={false} icon={<IconTimer/>} label="Timer" target="/"/>
       <TwitchMenuTile allowChildren={false} icon={<IconMegaphone/>} label="Alerts" target="/"/>
     </div>
