@@ -22,30 +22,28 @@ import IsVisibleCheckBox from "../common/IsVisibleCheckbox.tsx";
 export interface CommandFormProps {
   command: Command,
   isEdit?: boolean
+  onSubmit: (command: Command) => void
+  onDelete: (commandId: string) => void
 }
 
-export function CommandForm({command, isEdit}: CommandFormProps) {
-  const fullCommandId = command.id;
+export function CommandForm({command, isEdit, onSubmit, onDelete}: CommandFormProps) {
   const USERCOMMANDPREFIX = "userCommand.";
   const hasPrefix = false;
   if (command.id != null && command.id.startsWith(USERCOMMANDPREFIX)) {
     command.id = command.id.slice(USERCOMMANDPREFIX.length);
   }
+
   const {handleSubmit, register, control, setValue, getValues} = useForm<Command>({
     defaultValues: command,
   });
   const {fields, append, update, remove} = useFieldArray({name: "patterns", control})
 
   function submit(command: Command) {
-    if (hasPrefix) {
+    if (hasPrefix || !isEdit) {
       command.id = USERCOMMANDPREFIX + command.id
+      command.template.id = command.id;
     }
-    console.log("sumbit")
-    console.log(command)
-  }
-
-  function handleDelete() {
-    console.log("delete: " + fullCommandId);
+    onSubmit(command);
   }
 
   return <div className="commandPopup">
@@ -92,7 +90,7 @@ export function CommandForm({command, isEdit}: CommandFormProps) {
       {/*<div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>*/}
     </VLabel>
     <SheetFooter>
-      <Button variant={"destructive"} onClick={handleDelete}>Delete</Button>
+      <Button variant={"destructive"} onClick={() => onDelete(command.id)}>Delete</Button>
       <Button variant={"default"} onClick={handleSubmit(submit)}>Save</Button>
     </SheetFooter>
   </div>

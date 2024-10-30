@@ -24,7 +24,7 @@ const emptyCommand: Command = {
 }
 
 export default function CommandList() {
-  const {data, loading, post} = useData<Command[]>("/commands/all", "Commands")
+  const {data, loading, sendData} = useData<Command[]>("/commands/all", "Commands")
   const [openCommand, setOpenCommand] = useState<Command | undefined>(undefined)
   const [isEdit, setIsEdit] = useState(true)
 
@@ -80,7 +80,11 @@ export default function CommandList() {
           <SheetTitle>Edit Command:</SheetTitle>
           <SheetDescription>Edit a command. All empty trigger will be ignored</SheetDescription>
         </SheetHeader>
-        {openCommand ? <CommandForm command={openCommand} isEdit={isEdit}/> : ""}
+        {openCommand ? <CommandForm command={openCommand} isEdit={isEdit}
+                                    onSubmit={command => sendData("/commands/save", "Command saved successfully!", {
+                                      method: "POST",
+                                      body: JSON.stringify(command)
+                                    })} onDelete={() => {}}/> : ""}
       </SheetContent>
     </Sheet>
   </div>
