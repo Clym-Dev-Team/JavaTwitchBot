@@ -17,6 +17,7 @@ import OauthSetup from "./components/OauthManager/OauthSetup.tsx";
 import OauthResult from "./components/OauthManager/OauthResult.tsx";
 import CommandsPage from "./components/Commands/CommandsPage.tsx";
 import GiveawayListPage from "./components/giveaways/listPage/GiveawayListPage.tsx";
+import GiveawayEditPage from "./components/giveaways/editPage/GiveawayEditPage.tsx";
 
 export const BOT_BACKEND_ADDR = "http://localhost:80"
 export const HISTORY_BACKEND_ADDR = "http://localhost:8080"
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
       <Route path="/oauth" element={<OauthSetup/>}/>
       <Route path="/oauth/result" element={<OauthResult/>}/>
       <Route path="/giveaways" element={<GiveawayListPage/>}/>
+      <Route path="/giveawayEdit" element={<GiveawayEditPage/>}/>
     </Route>
   )
 );
