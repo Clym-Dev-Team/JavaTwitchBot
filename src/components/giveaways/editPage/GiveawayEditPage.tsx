@@ -12,6 +12,9 @@ import {Switch} from "@shadcn/components/ui/switch.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger} from "@shadcn/components/ui/select.tsx";
 import TemplateEditor from "../../Commands/templates/TemplateEditor.tsx";
 import TemplateEditorPane from "../../Templates/TemplateEditor/TemplateEditorPane.tsx";
+import {ButtonIcon} from "@radix-ui/react-icons";
+import IconChecked from "../../../assets/IconChecked.tsx";
+import IconX from "../../../assets/IconX.tsx";
 
 export interface GiveawayEditViewProps {
 
@@ -70,8 +73,25 @@ export default function GiveawayEditPage(props: GiveawayEditViewProps) {
           <VLabel name="Public Description"><Textarea/></VLabel>
         </div>
         <div className="column">
-          <div className="winnersList">
+          <div className="winnersListCard">
             <h1>Winner List</h1>
+            <ScrollArea className="winnersListScrollArea">
+              <div className="winnersList">
+                <div className="potentialWinner">
+                  <div className="username">h28hadi982</div>
+                  <div className="potentialWinnerActionBtns">
+                    <Button><IconChecked/></Button>
+                    <Button><IconX/></Button> {/* nicht da, offene tür als icon oder so, in rot*/}
+                    <Button>SWORD</Button> {/* als moderationsgründen abgelehnt, in rot*/}
+                  </div>
+                </div>
+                <hr/>
+                <div className="winner">USERNAME dwahdakud</div>
+                <div className="winner">dahjkdajkd h</div>
+                <div className="winner">u28dha</div>
+                <div className="winner">h28hda</div>
+              </div>
+            </ScrollArea>
           </div>
           <div className="logs">
             <h1>Logs</h1>

@@ -45,8 +45,45 @@
     border-bottom: 0;
 }
 
-.winnersList {
+.winnersListCard {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.winnersListScrollArea {
+    flex: 1;
+    border: var(--primary-border);
+}
+
+.winnersList {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+}
+
+.potentialWinner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.potentialWinnerActionBtns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .2em;
+}
+
+.potentialWinnerActionBtns > button {
+    aspect-ratio: 1;
+    padding: 0;
+}
+
+.potentialWinnerActionBtns > button > svg {
+    stroke: red;
 }
 
 .logs {
