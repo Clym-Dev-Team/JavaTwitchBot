@@ -36,6 +36,7 @@
     flex: 1;
     height: 100%;
     padding: 2rem;
+    gap: 1rem;
 }
 
 .column:nth-of-type(2) {
@@ -50,4 +51,11 @@
 
 .logs {
     flex: 1;
+}
+
+.dangerArea {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1em;
 }
