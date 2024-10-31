@@ -24,9 +24,30 @@
 
 .formContent {
     border-radius: .5em;
-    padding: 2rem;
     height: 100%;
     background-color: var(--default-background);
     display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
     flex-direction: column;
+    flex: 1;
+    height: 100%;
+    padding: 2rem;
+}
+
+.column:nth-of-type(2) {
+    border: var(--primary-border);
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.winnersList {
+    flex: 1;
+}
+
+.logs {
+    flex: 1;
 }
