@@ -1,0 +1,17 @@
+.inputUnitWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    border: var(--primary-border-color) 1px solid;
+    align-items: center;
+    border-radius: 4.5px;
+}
+
+.inputUnitValue {
+    border: none;
+}
+
+.inputUnitUnit {
+    width: fit-content;
+    border: none;
+}

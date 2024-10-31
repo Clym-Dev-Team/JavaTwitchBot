@@ -2,7 +2,7 @@ import "./CommandEditSheet.css"
 import {Input} from "@shadcn/components/ui/input.tsx";
 import VLabel from "../../../common/VerticalLabel/VLabel.tsx";
 import TemplateEditor from "../templates/TemplateEditor.tsx";
-import {Command} from "./Command.ts";
+import {Command, CooldownTypes} from "./Command.ts";
 import CheckBox from "../../../common/CheckBox/CheckBox.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@shadcn/components/ui/select.tsx";
 import {Button} from "@shadcn/components/ui/button.tsx";
@@ -18,6 +18,7 @@ import {
 import IconX from "../../../assets/IconX.tsx";
 import EnabledCheckBox from "../common/EnabledCheckBox.tsx";
 import IsVisibleCheckBox from "../common/IsVisibleCheckbox.tsx";
+import InputUnit from "../../../common/InputUnit/InputUnit.tsx";
 
 export interface CommandFormProps {
   command: Command,
@@ -78,10 +79,10 @@ export function CommandForm({command, isEdit, onSubmit, onDelete}: CommandFormPr
 
     <div className="cooldown">
       <VLabel name="Global Cooldown:">
-        <Input type="number" {...register("globalCooldown.value", {required: true, min: 0, valueAsNumber: true})}/>
+        <InputUnit unitType={CooldownTypes} unitFieldValue={getValues("globalCooldown.type")} onUnitChange={unitType => setValue("globalCooldown.type", unitType)} registerValue={register("globalCooldown.value", {required: true, min: 0, valueAsNumber: true})}/>
       </VLabel>
       <VLabel name="User Cooldown:">
-        <Input type="text" {...register("userCooldown.value", {required: true, min: 0, valueAsNumber: true})}/>
+        <InputUnit unitType={CooldownTypes} unitFieldValue={getValues("userCooldown.type")} onUnitChange={unitType => setValue("userCooldown.type", unitType)} registerValue={register("userCooldown.value", {required: true, min: 0, valueAsNumber: true})}/>
       </VLabel>
     </div>
 

@@ -28,7 +28,7 @@ export enum CooldownTypes {
 
 export interface CommandCooldown {
   value: number,
-  type: CooldownTypes
+  type: string
 }
 
 export interface Command {
