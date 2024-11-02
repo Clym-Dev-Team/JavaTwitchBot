@@ -3,10 +3,10 @@ import {useCallback, useEffect, useState} from "react";
 import {useToast} from "@shadcn/components/ui/use-toast.ts";
 import {BOT_BACKEND_ADDR} from "../main.tsx";
 
-export default function useData<T>(urlPath: string, objectName: string, init?: RequestInit) {
+export default function useData<T>(urlPath: string, objectName: string, initialValue: T, init?: RequestInit) {
   const {toast} = useToast();
   const authContext = useAuth();
-  const [data, setData] = useState<T>();
+  const [data, setData] = useState<T>(initialValue);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false)
 

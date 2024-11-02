@@ -74,12 +74,14 @@ export async function fetchWithAuth(context: AuthContext, input: RequestInfo | U
   }
 
   const res = await fetch(input, init);
-  if (res.status == 401) {
+  if (res.ok) {
+    return res;
+  } else if (res.status == 401) {
     setAccessToken(undefined);
     return Promise.reject(new Error("Token invalid or Timed out. New Login required!"));
-  }
-  if (res.status == 403) {
+  } else if (res.status == 403) {
     return Promise.reject(new Error("No Permission to execute this action"));
+  } else {
+    return Promise.reject(new Error(`${res.status} ${res.statusText}`));
   }
-  return res;
 }
