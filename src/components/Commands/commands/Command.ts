@@ -22,12 +22,12 @@ export enum CommandPermission {
 }
 
 export enum CooldownTypes {
-  MESSAGE,
+  MESSAGES,
   SECONDS
 }
 
 export interface CommandCooldown {
-  value: number,
+  amount: number,
   type: string
 }
 

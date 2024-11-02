@@ -79,10 +79,10 @@ export function CommandForm({command, isEdit, onSubmit, onDelete}: CommandFormPr
 
     <div className="cooldown">
       <VLabel name="Global Cooldown:">
-        <InputUnit unitType={CooldownTypes} unitFieldValue={getValues("globalCooldown.type")} onUnitChange={unitType => setValue("globalCooldown.type", unitType)} registerValue={register("globalCooldown.value", {required: true, min: 0, valueAsNumber: true})}/>
+        <InputUnit unitType={CooldownTypes} unitFieldValue={getValues("globalCooldown.type")} onUnitChange={unitType => setValue("globalCooldown.type", unitType)} registerValue={register("globalCooldown.amount", {required: true, min: 0, valueAsNumber: true})}/>
       </VLabel>
       <VLabel name="User Cooldown:">
-        <InputUnit unitType={CooldownTypes} unitFieldValue={getValues("userCooldown.type")} onUnitChange={unitType => setValue("userCooldown.type", unitType)} registerValue={register("userCooldown.value", {required: true, min: 0, valueAsNumber: true})}/>
+        <InputUnit unitType={CooldownTypes} unitFieldValue={getValues("userCooldown.type")} onUnitChange={unitType => setValue("userCooldown.type", unitType)} registerValue={register("userCooldown.amount", {required: true, min: 0, valueAsNumber: true})}/>
       </VLabel>
     </div>
 
