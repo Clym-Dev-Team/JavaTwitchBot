@@ -26,7 +26,7 @@ const emptyCommand: Command = {
 export default function CommandList() {
   const {data, loading, sendData} = useData<Command[]>("/commands/all", "Commands")
   const [openCommand, setOpenCommand] = useState<Command | undefined>(undefined)
-  const [isEdit, setIsEdit] = useState(true)
+  const [isNew, setIsNew] = useState(false)
 
   if (loading) {
     return <Loader/>
@@ -35,7 +35,7 @@ export default function CommandList() {
   return <div className="commandList">
     <div className="actionBar">
       <Button className="addCommand" onClick={() => {
-        setIsEdit(false);
+        setIsNew(true);
         setOpenCommand(emptyCommand)
       }}>Create a new Command</Button>
       <div className="searchBox">
@@ -54,16 +54,22 @@ export default function CommandList() {
       <TableBody>
         {data.map((command) => (
           <TableRow key={command.id} onClick={() => {
-            setIsEdit(true);
+            setIsNew(false);
             setOpenCommand(command)
           }}>
             <TableCell><span className="centerInColumn">
-              <EnabledCheckBox checked={command.patterns[0].isEnabled} onChange={checked => {
-              }}/>
+              <EnabledCheckBox checked={command.patterns[0].isEnabled}
+                               onChange={checked => sendData(`/commands/id/${command.id}/set/enabled`, `Set all Patterns to ${checked ? "enabled" : "disabled"}`, {
+                                 method: "POST",
+                                 body: `${checked}`
+                               })}/>
             </span></TableCell>
             <TableCell><span className="centerInColumn">
-              <IsVisibleCheckBox checked={command.patterns[0].isVisible} onChange={checked => {
-              }}/>
+              <IsVisibleCheckBox checked={command.patterns[0].isVisible}
+                                 onChange={checked => sendData(`/commands/id/${command.id}/set/visible`, `Set all Patterns to ${checked ? "visible" : "hidden"}`, {
+                                   method: "POST",
+                                   body: `${checked}`
+                                 })}/>
             </span></TableCell>
             <TableCell className="tw-w-96">{command.id}</TableCell>
             <TableCell className="tw-w-96">{command.patterns[0].pattern}</TableCell>
@@ -80,11 +86,12 @@ export default function CommandList() {
           <SheetTitle>Edit Command:</SheetTitle>
           <SheetDescription>Edit a command. All empty trigger will be ignored</SheetDescription>
         </SheetHeader>
-        {openCommand ? <CommandForm command={openCommand} isEdit={isEdit}
+        {openCommand ? <CommandForm command={openCommand} isNew={isNew}
+                                    onDelete={(id) => sendData("/commands/delete/" + id, "Deleted Command successfully!", {method: "DELETE"})}
                                     onSubmit={command => sendData("/commands/save", "Command saved successfully!", {
                                       method: "POST",
                                       body: JSON.stringify(command)
-                                    })} onDelete={() => {}}/> : ""}
+                                    })}/> : ""}
       </SheetContent>
     </Sheet>
   </div>

@@ -22,34 +22,33 @@ import InputUnit from "../../../common/InputUnit/InputUnit.tsx";
 
 export interface CommandFormProps {
   command: Command,
-  isEdit?: boolean
+  isNew?: boolean
   onSubmit: (command: Command) => void
   onDelete: (commandId: string) => void
 }
 
-export function CommandForm({command, isEdit, onSubmit, onDelete}: CommandFormProps) {
+export function CommandForm({command, isNew, onSubmit, onDelete}: CommandFormProps) {
   const USERCOMMANDPREFIX = "userCommand.";
-  const hasPrefix = false;
-  if (command.id != null && command.id.startsWith(USERCOMMANDPREFIX)) {
-    command.id = command.id.slice(USERCOMMANDPREFIX.length);
-  }
 
   const {handleSubmit, register, control, setValue, getValues} = useForm<Command>({
     defaultValues: command,
   });
   const {fields, append, update, remove} = useFieldArray({name: "patterns", control})
 
-  function submit(command: Command) {
-    if (hasPrefix || !isEdit) {
-      command.id = USERCOMMANDPREFIX + command.id
-      command.template.id = command.id;
+  function submit(formCommand: Command) {
+    if (isNew) {
+      formCommand.id = USERCOMMANDPREFIX + formCommand.id
+      formCommand.template.id = formCommand.id;
+    } else {
+      // if form field is disabled the value will not exist in the command object from the form
+      formCommand.id = command.id
     }
-    onSubmit(command);
+    onSubmit(formCommand);
   }
 
   return <div className="commandPopup">
     <VLabel name="Internal Command Name/Id:">
-      <Input id="commandId" type="text" {...register("id", {required: true, disabled: isEdit})} />
+      <Input id="commandId" type="text" {...register("id", {required: true, disabled: !isNew})} />
     </VLabel>
 
     <div className="triggers">
