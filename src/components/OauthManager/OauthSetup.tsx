@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {useAuth} from "../Login/AuthProvider.tsx";
 import {useToast} from "@shadcn/components/ui/use-toast.ts";
 import {getOauth} from "./GetOauth.ts";
 import AuthTile from "./AuthTile.tsx";
@@ -14,12 +13,11 @@ export interface Oauth {
 
 export default function OauthSetup() {
   const toast = useToast();
-  const context = useAuth();
   const [loading, setLoading] = useState(true);
   const [oauth, setOauth] = useState<Oauth[]>([])
 
   useEffect(() => {
-    getOauth(context)
+    getOauth()
       .then(r => setOauth(r))
       .then(() => setLoading(false))
       .catch(reason => toast.toast(

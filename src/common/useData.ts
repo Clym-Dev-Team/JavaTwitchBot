@@ -1,11 +1,10 @@
-import {fetchWithAuth, useAuth} from "../components/Login/AuthProvider.tsx";
+import {fetchWithAuth} from "../components/Login/LoginPage.tsx";
 import {useCallback, useEffect, useState} from "react";
 import {useToast} from "@shadcn/components/ui/use-toast.ts";
 import {BOT_BACKEND_ADDR} from "../main.tsx";
 
 export default function useData<T>(urlPath: string, objectName: string, initialValue: T, init?: RequestInit) {
   const {toast} = useToast();
-  const authContext = useAuth();
   const [data, setData] = useState<T>(initialValue);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false)
@@ -15,7 +14,7 @@ export default function useData<T>(urlPath: string, objectName: string, initialV
       return;
     }
     let ignore = false;
-    fetchWithAuth(authContext, BOT_BACKEND_ADDR + urlPath, init).then()
+    fetchWithAuth(BOT_BACKEND_ADDR + urlPath, init).then()
       .then(response => response.json())
       .then(json => {
         if (!ignore) {
@@ -34,14 +33,14 @@ export default function useData<T>(urlPath: string, objectName: string, initialV
       ignore = true;
     };
 
-  }, [authContext, error, init, objectName, toast, urlPath]);
+  }, [error, init, objectName, toast, urlPath]);
 
   useEffect(() => {
     get()
   }, [get]);
 
   const sendData = useCallback((urlPath: string, successToast: string, init?: RequestInit) => {
-    fetchWithAuth(authContext, BOT_BACKEND_ADDR + urlPath, init).then()
+    fetchWithAuth(BOT_BACKEND_ADDR + urlPath, init).then()
       .then(() => toast({className: "toast toast-success", title: successToast}))
       .then(get)
       .catch(reason => toast({
@@ -49,7 +48,7 @@ export default function useData<T>(urlPath: string, objectName: string, initialV
         title: "ERROR saving " + objectName,
         description: reason.toString()
       }))
-  }, [authContext, objectName, toast]);
+  }, [objectName, toast]);
 
   return {data, loading, sendData};
 }

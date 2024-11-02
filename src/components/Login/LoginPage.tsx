@@ -1,24 +1,9 @@
-import {createContext, PropsWithChildren, useContext, useState} from "react";
+import {PropsWithChildren, useState} from "react";
 import LoginPane, {Login} from "./LoginPane.tsx"
 import {sha3_512} from "js-sha3";
 import {BOT_BACKEND_ADDR} from "../../main.tsx";
 
-export interface AuthContext {
-  accessToken?: string;
-  setAccessToken: (accessToken: string | undefined) => void;
-}
-
-const AuthContext = createContext<AuthContext>({
-  accessToken: getAuthFromCookies(),
-  setAccessToken: (accessToken: string | undefined) => {
-  }
-});
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-}
-
-export function getAuthFromCookies(): string | undefined {
+function getAuthFromCookies(): string | undefined {
   const token = localStorage.getItem("accessToken");
   if (token == null) {
     return undefined;
@@ -26,9 +11,8 @@ export function getAuthFromCookies(): string | undefined {
   return token;
 }
 
-
-export default function AuthProvider(props: PropsWithChildren<Record<never, never>>) {
-  const [accessToken, setAccessToken] = useState<string | undefined>(getAuthFromCookies);
+export default function LoginPage(props: PropsWithChildren<Record<never, never>>) {
+  const [accessToken, setAccessToken] = useState<string | undefined>(getAuthFromCookies());
 
   interface LoginRequest {
     username: string,
@@ -51,16 +35,17 @@ export default function AuthProvider(props: PropsWithChildren<Record<never, neve
       .catch(err => console.log(err));
   }
 
-  return <AuthContext.Provider value={{accessToken, setAccessToken: setAccessToken}}>
-    {accessToken == undefined ? <LoginPane onSubmit={handleSubmit}/> : props.children}
-  </AuthContext.Provider>
+  if (accessToken == undefined) {
+    return <LoginPane onSubmit={handleSubmit}/>;
+  }
+  return props.children;
 }
 
-export async function fetchWithAuth(context: AuthContext, input: RequestInfo | URL, init?: RequestInit,): Promise<Response> {
-  const {accessToken, setAccessToken} = context;
+export async function fetchWithAuth(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const accessToken = getAuthFromCookies();
 
   if (accessToken == undefined) {
-    return Promise.reject(new Error("Token invalid or Timed out. New Login required!"));
+    return Promise.reject(new Error("Token invalid or Timed out. Reload the page and login again!"));
   }
 
   if (init === undefined) {
@@ -77,7 +62,7 @@ export async function fetchWithAuth(context: AuthContext, input: RequestInfo | U
   if (res.ok) {
     return res;
   } else if (res.status == 401) {
-    setAccessToken(undefined);
+    localStorage.removeItem("accessToken");
     return Promise.reject(new Error("Token invalid or Timed out. New Login required!"));
   } else if (res.status == 403) {
     return Promise.reject(new Error("No Permission to execute this action"));

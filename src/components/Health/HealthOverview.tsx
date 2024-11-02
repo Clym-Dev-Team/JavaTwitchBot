@@ -1,4 +1,3 @@
-import {useAuth} from "../Login/AuthProvider.tsx";
 import {useEffect, useState} from "react";
 import {useToast} from "@shadcn/components/ui/use-toast.ts";
 import {InputHealth} from "./InputHealth.ts";
@@ -8,13 +7,12 @@ import Loader from "../../common/LoadingSpinner/Loader.tsx";
 import "./HealthOverview.css"
 
 export default function HealthOverview() {
-  const context = useAuth();
   const [loading, setLoading] = useState(true);
   const [health, setHealth] = useState<InputHealth[]>([])
   const toast = useToast();
 
   useEffect(() => {
-    getAllHealthStatuses(context)
+    getAllHealthStatuses()
       .then(r => setHealth(r))
       .then(() => setLoading(false))
       .catch(reason => toast.toast(

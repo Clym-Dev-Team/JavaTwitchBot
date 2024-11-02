@@ -5,20 +5,18 @@ import {getGoal, saveGoal} from "./GoalClient.ts";
 import Loader from "../../common/LoadingSpinner/Loader.tsx";
 import {useForm} from "react-hook-form";
 import TitleBar from "../TitleBar/TitleBar.tsx";
-import {useAuth} from "../Login/AuthProvider.tsx";
 import {useBlocker} from "react-router-dom";
 import {useToast} from "@shadcn/components/ui/use-toast.ts";
 import "./GoalEditor.css"
 
 export function GoalEditorPane() {
-  const context = useAuth();
   const [loading, setLoading] = useState(true);
   const {handleSubmit, register, reset, formState} = useForm<Goal>();
   const blocker = useBlocker(formState.isDirty);
   const toast = useToast();
 
   useEffect(() => {
-    getGoal(context)
+    getGoal()
       .then(r => reset(r))
       .catch(reason => toast.toast(
         {className: "toast toast-failure", title: "ERROR Loading Goal", description: reason.toString()}))
@@ -27,7 +25,7 @@ export function GoalEditorPane() {
 
   function submit(goal: Goal) {
     reset(goal);
-    saveGoal(context, goal)
+    saveGoal(goal)
       .then(() => toast.toast(
         {className: "toast toast-success", title: "Goal saved Successfully!"}))
       .catch(reason => toast.toast(

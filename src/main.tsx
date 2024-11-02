@@ -8,7 +8,7 @@ import {createBrowserRouter, createRoutesFromChildren, Outlet, Route, RouterProv
 import MessagePane from "./components/ChatHistory/Pane/MessagePane.tsx";
 import TemplateEditorPane from "./components/Templates/TemplateEditor/TemplateEditorPane.tsx";
 import TemplateListPane from "./components/Templates/TemplateList/TemplateListPane.tsx";
-import AuthProvider from "./components/Login/AuthProvider.tsx";
+import LoginPage from "./components/Login/LoginPage.tsx";
 import {Toaster} from "@shadcn/components/ui/toaster.tsx";
 import TwitchNavMenu from "./components/NavMenuTwitch/TwitchNavMenu.tsx";
 import {TooltipProvider} from "@radix-ui/react-tooltip";
@@ -44,12 +44,12 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthProvider>
+    <LoginPage>
       <TooltipProvider>
-      <RouterProvider router={router}>
-      </RouterProvider>
+        <RouterProvider router={router}>
+        </RouterProvider>
       </TooltipProvider>
-    </AuthProvider>
+    </LoginPage>
   </React.StrictMode>,
 )
 
