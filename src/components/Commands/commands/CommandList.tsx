@@ -24,12 +24,19 @@ const emptyCommand: Command = {
 }
 
 export default function CommandList() {
-  const {data, loading, sendData} = useData<Command[]>("/commands/all", "Commands")
+  const [searchBox, setSearchBox] = useState<string>("")
+  const {data, loading, sendData} = useData<Command[]>("/commands/all?search=" + encodeURIComponent(searchBox), "Commands", [])
   const [openCommand, setOpenCommand] = useState<Command | undefined>(undefined)
   const [isNew, setIsNew] = useState(false)
 
+  function handleSearch() {}
+
   if (loading) {
     return <Loader/>
+  }
+
+  if (data == undefined) {
+    return "ERROR" //TODO
   }
 
   return <div className="commandList">
@@ -39,8 +46,8 @@ export default function CommandList() {
         setOpenCommand(emptyCommand)
       }}>Create a new Command</Button>
       <div className="searchBox">
-        <Input placeholder="Search for a Command"/>
-        <Button><Search/></Button>
+        <Input placeholder="Search for a Command" value={searchBox} onChange={event => setSearchBox(event.target.value)}/>
+        <Button onClick={() => handleSearch()}><Search/></Button>
       </div>
     </div>
     <Table>
