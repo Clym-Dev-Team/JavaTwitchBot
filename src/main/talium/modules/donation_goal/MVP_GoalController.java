@@ -30,7 +30,7 @@ public class MVP_GoalController {
         Optional<Template> template = templateService.getTemplateById("alerts.tipeee.donation");
         if (template.isEmpty() || goal.isEmpty()) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found"
+                    HttpStatus.NOT_FOUND, "donation goal not found"
             );
             //TODO
         }
