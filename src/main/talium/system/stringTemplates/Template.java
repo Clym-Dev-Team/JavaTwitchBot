@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 @Entity
 public class Template {
     public @Id String id;
+    @Column(length = 500)
     public String template;
     public @Nullable String messageColor;
 
@@ -16,7 +17,17 @@ public class Template {
         this.messageColor = messageColor;
     }
 
+    public Template(TemplateDTO templateDTO) {
+        this.id = templateDTO.id();
+        this.template = templateDTO.template();
+        this.messageColor = templateDTO.messageColor();
+    }
+
     protected Template() {
 
+    }
+
+    public TemplateDTO toTemplateDTO() {
+        return new TemplateDTO(this);
     }
 }

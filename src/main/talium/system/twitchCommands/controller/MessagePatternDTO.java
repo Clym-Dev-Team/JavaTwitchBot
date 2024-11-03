@@ -11,4 +11,8 @@ public record MessagePatternDTO(
     public MessagePatternDTO(MessagePattern pattern) {
         this(pattern.pattern, pattern.isRegex, pattern.isVisible, pattern.isEnabled);
     }
+
+    public MessagePattern toMessagePattern() {
+        return new MessagePattern(this);
+    }
 }
