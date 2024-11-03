@@ -48,6 +48,14 @@ public class MessagePattern {
         this.isEnabled = isEnabled;
     }
 
+    public MessagePattern(MessagePatternDTO dto) {
+        this.parentTrigger = null;
+        this.pattern = dto.pattern();
+        this.isRegex = dto.isRegex();
+        this.isVisible = dto.isVisible();
+        this.isEnabled = dto.isEnabled();
+    }
+
     protected MessagePattern() {
 
     }
