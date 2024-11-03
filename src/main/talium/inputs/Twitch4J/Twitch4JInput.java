@@ -119,7 +119,6 @@ public class Twitch4JInput implements BotInput {
         return health;
     }
 
-
     @Override
     public void shutdown() {
         if (oAuth2Credential != null) {

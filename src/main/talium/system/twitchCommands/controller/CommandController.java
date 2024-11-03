@@ -1,58 +1,79 @@
 package talium.system.twitchCommands.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-import talium.inputs.Twitch4J.TwitchUserPermission;
-import talium.system.twitchCommands.cooldown.ChatCooldown;
-import talium.system.twitchCommands.cooldown.CooldownType;
-import talium.system.twitchCommands.persistence.MessagePattern;
 import talium.system.twitchCommands.persistence.TriggerEntity;
 import talium.system.twitchCommands.persistence.TriggerService;
-import talium.system.stringTemplates.Template;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/commands", produces = "application/json")
 public class CommandController {
+    private final Gson gson = new GsonBuilder().serializeNulls().create();
     TriggerService triggerService;
 
     @Autowired
     public CommandController(TriggerService triggerService) {
         this.triggerService = triggerService;
-        var pat = new MessagePattern("!test", false, true, true);
-        var tem = new Template("bsp.template", "templateString", null);
-        var tr = new TriggerEntity(
-                "bsp.trigger",
-                "",
-                List.of(pat),
-                TwitchUserPermission.EVERYONE,
-                new ChatCooldown(CooldownType.MESSAGES, 0),
-                new ChatCooldown(CooldownType.MESSAGES, 0),
-                true,
-                tem
-        );
-        triggerService.save(tr);
-        System.out.println("saved!");
     }
 
     @GetMapping("/all")
-    String getAllCommands() {
-        var gson = new Gson();
-        var list = triggerService.getAllTriggers().stream().map(TriggerEntity::toTriggerDTO).toList();
+    String getAllCommands(@RequestParam @Nullable String search) {
+        if (search == null || search.isEmpty()) {
+            var list = triggerService.getAllTriggers().stream().map(TriggerEntity::toTriggerDTO).toList();
+            return gson.toJson(list);
+        }
+        var list = triggerService.searchBy(search).stream().map(TriggerEntity::toTriggerDTO).toList();
         return gson.toJson(list);
     }
 
     @GetMapping("/id/{triggerId}")
     ResponseEntity<String> getByTriggerId(@PathVariable String triggerId) {
-        var gson = new Gson();
         var command = triggerService.getTriggersId(triggerId);
         if (command.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(gson.toJson(command.get().toTriggerDTO()));
+        return ResponseEntity.ok(gson.toJson(command.get().toTriggerDTO(), TriggerDTO.class));
     }
 
+    @PostMapping("/id/{triggerId}/set/enabled")
+    HttpStatus setEnabled(@PathVariable String triggerId, @RequestBody String enabled) {
+        var trigger = triggerService.getTriggersId(triggerId);
+        if (trigger.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        triggerService.setEnabled(trigger.get(), Boolean.parseBoolean(enabled));
+        return HttpStatus.OK;
+    }
+
+    @PostMapping("/id/{triggerId}/set/visible")
+    HttpStatus setVisible(@PathVariable String triggerId, @RequestBody String visible) {
+        var trigger = triggerService.getTriggersId(triggerId);
+        if (trigger.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        triggerService.setVisible(trigger.get(), Boolean.parseBoolean(visible));
+        return HttpStatus.OK;
+    }
+
+    @PostMapping("/save")
+    HttpStatus saveCommand(@RequestBody String body) {
+        TriggerDTO command = gson.fromJson(body, TriggerDTO.class);
+        TriggerEntity entity = new TriggerEntity(command);
+        triggerService.save(entity);
+        return HttpStatus.OK;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    HttpStatus deleteCommand(@PathVariable String id) {
+        if (triggerService.getTriggersId(id).isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        triggerService.delete(id);
+        return HttpStatus.OK;
+    }
 }

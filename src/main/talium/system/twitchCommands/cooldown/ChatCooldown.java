@@ -1,5 +1,6 @@
 package talium.system.twitchCommands.cooldown;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Embeddable;
 
 /**
@@ -18,7 +19,7 @@ public class ChatCooldown {
      * @param amount       amount of the unit CooldownType
      */
     public ChatCooldown(
-            CooldownType type,
+            @Nonnull CooldownType type,
             int amount
     ) {
         this.type = type;
@@ -27,5 +28,10 @@ public class ChatCooldown {
 
     protected ChatCooldown() {
 
+    }
+
+    @Override
+    public String toString() {
+        return STR."ChatCooldown{type=\{type}, amount=\{amount}\{'}'}";
     }
 }
