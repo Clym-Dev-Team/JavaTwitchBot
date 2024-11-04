@@ -48,8 +48,8 @@ public class AuthService {
 
     @Transactional
     public String login(LoginRequest loginRequest, String userAgent) throws IncompatibleHashFunctions, InvalidAuthenticationException {
-        String password = Hashing.sha512().hashString(loginRequest.hashed(), StandardCharsets.UTF_8).toString();
-        Optional<BotLogin> login = botLoginRepo.findByUsernameAndHashedPassword(loginRequest.username(), loginRequest.hashed());
+        String password = Hashing.sha512().hashString(loginRequest.hash(), StandardCharsets.UTF_8).toString();
+        Optional<BotLogin> login = botLoginRepo.findByUsernameAndHashedPassword(loginRequest.username(), loginRequest.hash());
         if (login.isEmpty()) {
             throw new InvalidAuthenticationException("Invalid username or password");
         }
