@@ -15,7 +15,7 @@ export default function TwitchNavMenu() {
       <TwitchMenuTile allowChildren={false} icon={<IconMegaphone/>} label="Alerts" target="/"/>
     </div>
     <div className="otherOptions">
-      <NavLink target="/test" name="Message History Test"/>
+      <NavLink target="/history" name="Message History Test"/>
       <NavLink target="/health" name="Health"/>
       <NavLink target="/oauth" name="External accounts"/>
       <NavLink target="/goal" name="Goals"/>

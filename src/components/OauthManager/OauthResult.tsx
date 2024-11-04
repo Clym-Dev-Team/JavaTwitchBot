@@ -5,7 +5,7 @@ import "./OauthResult.css"
 
 export default function OauthResult() {
   const query = useQuery();
-  const success: boolean | null = query.get("success")
+  const success: boolean | null = query.get("success") === "true"
   const error: string | null= query.get("error");
 
   return <div className="oauthResult">

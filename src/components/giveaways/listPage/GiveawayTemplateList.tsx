@@ -1,5 +1,4 @@
 import "./GiveawayTemplateList.css"
-import {Giveaway} from "../Giveaway.ts";
 import {Button} from "@shadcn/components/ui/button.tsx";
 import IconGear from "../../../assets/IconGear.tsx";
 
@@ -35,20 +34,4 @@ export default function GiveawayTemplateList({}: GiveawayTemplateListProps) {
       <Button className="templateEditBtn" variant="outline"><IconGear/></Button>
     </Button>)}
   </div>
-}
-
-
-function dummyActive(): Giveaway[] {
-  return [];
-  // return [{
-  //   title: "testGW",
-  //   id: "2024-10-29_testGW",
-  //   commandPattern: "!test",
-  //   startTime: Date.now(),
-  //   status: GiveawayStatus.CREATED,
-  //   ticketCost: 10,
-  //   maxTickets: 50,
-  //
-  //
-  // }]
 }

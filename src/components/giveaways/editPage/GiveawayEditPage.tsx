@@ -1,8 +1,5 @@
 import "./GiveawayEditPage.css"
-import Placeholder from "../../Placeholder/Placeholder.tsx";
 import {Button} from "@shadcn/components/ui/button.tsx";
-import {Accordion, AccordionItem, AccordionTrigger} from "@shadcn/components/ui/accordion.tsx";
-import {AccordionContent} from "@radix-ui/react-accordion";
 import {ScrollArea} from "../../ui/scroll-area.tsx";
 import {Label} from "@shadcn/components/ui/label.tsx";
 import VLabel from "../../../common/VerticalLabel/VLabel.tsx";
@@ -11,16 +8,10 @@ import {Textarea} from "@shadcn/components/ui/textarea.tsx";
 import {Switch} from "@shadcn/components/ui/switch.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger} from "@shadcn/components/ui/select.tsx";
 import TemplateEditor from "../../Commands/templates/TemplateEditor.tsx";
-import TemplateEditorPane from "../../Templates/TemplateEditor/TemplateEditorPane.tsx";
-import {ButtonIcon} from "@radix-ui/react-icons";
 import IconChecked from "../../../assets/IconChecked.tsx";
 import IconX from "../../../assets/IconX.tsx";
 
-export interface GiveawayEditViewProps {
-
-}
-
-export default function GiveawayEditPage(props: GiveawayEditViewProps) {
+export default function GiveawayEditPage() {
   return <div className="giveawayEditPage">
     <div className="tileBar">
       <Button variant="default">Save</Button>
@@ -67,7 +58,9 @@ export default function GiveawayEditPage(props: GiveawayEditViewProps) {
             </SelectContent>
           </Select></VLabel>
           <VLabel name="Timer Template"><TemplateEditor
-            template={{template: "tetst", vars: [{name: "testvar", type: "string"}]}}/></VLabel>
+            template={{id: "", template: "tetst", vars: [{name: "testvar", type: "string"}]}}/>
+          </VLabel>
+          {/* TODO add template color field*/}
           <h1>Public Website</h1>
           <VLabel name="Image Url"><Input type="url"/></VLabel>
           <VLabel name="Public Description"><Textarea/></VLabel>

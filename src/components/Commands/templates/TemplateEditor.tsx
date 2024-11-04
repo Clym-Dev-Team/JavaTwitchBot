@@ -6,6 +6,10 @@ export interface TemplateEditorProps {
 }
 
 export default function TemplateEditor({template}: TemplateEditorProps) {
+  if (template.vars === undefined) {
+    template.vars = [];
+  }
+
   return <div className="templateEditor">
     <div className="templateVars">
       {template.vars.map((tVar) => <span>{tVar.name}: {tVar.type}</span>)}

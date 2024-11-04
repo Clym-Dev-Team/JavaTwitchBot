@@ -2,11 +2,7 @@ import {ScrollArea} from "../../ui/scroll-area.tsx";
 import GiveawayTile from "./GiveawayTile.tsx";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@shadcn/components/ui/accordion.tsx";
 
-export interface GiveawayListProps {
-
-}
-
-export default function GiveawayList(props: GiveawayListProps) {
+export default function GiveawayList() {
   return <ScrollArea className="giveawayList">
     <div className="activeList">
       <GiveawayTile/>

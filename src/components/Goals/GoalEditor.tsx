@@ -5,14 +5,14 @@ import {getGoal, saveGoal} from "./GoalClient.ts";
 import Loader from "../../common/LoadingSpinner/Loader.tsx";
 import {useForm} from "react-hook-form";
 import TitleBar from "../TitleBar/TitleBar.tsx";
-import {useBlocker} from "react-router-dom";
+// import {useBlocker} from "react-router-dom";
 import {useToast} from "@shadcn/components/ui/use-toast.ts";
 import "./GoalEditor.css"
 
 export function GoalEditorPane() {
   const [loading, setLoading] = useState(true);
   const {handleSubmit, register, reset, formState} = useForm<Goal>();
-  const blocker = useBlocker(formState.isDirty);
+  // const blocker = useBlocker(formState.isDirty);
   const toast = useToast();
 
   useEffect(() => {

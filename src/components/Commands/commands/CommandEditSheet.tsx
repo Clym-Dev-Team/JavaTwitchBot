@@ -86,7 +86,7 @@ export function CommandForm({command, isNew, onSubmit, onDelete}: CommandFormPro
     </div>
 
     <VLabel name="Template:">
-      <TemplateEditor template={{template: "tetst", vars: [{name: "testvar", type: "string"}]}}/>
+      <TemplateEditor template={{id: "", template: "tetst", vars: [{name: "testvar", type: "string"}]}}/>
       {/*<div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>*/}
     </VLabel>
     <SheetFooter>
