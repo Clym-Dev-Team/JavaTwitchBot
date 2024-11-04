@@ -59,6 +59,6 @@ public class UserAuthenticationToken implements Authentication {
 
     @Override
     public String getName() {
-        return botUser.isEmpty() ? accessToken : botUser.get().username;
+        return botUser.isEmpty() ? accessToken : botUser.get().twitchUserId;
     }
 }

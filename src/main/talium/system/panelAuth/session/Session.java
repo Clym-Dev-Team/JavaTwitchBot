@@ -12,7 +12,6 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "sys-botuser-sessions")
-@IdClass(SessionId.class)
 public class Session {
     @Id
     String accessToken;
@@ -21,7 +20,7 @@ public class Session {
 
     Instant lastRefreshedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY) @NotNull @Id
+    @ManyToOne(fetch = FetchType.LAZY) @NotNull
     private BotUser botUser;
 
     public Session() {

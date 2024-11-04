@@ -11,26 +11,19 @@ import java.time.Instant;
 @Table(name = "sys-botuser")
 public class BotUser {
     @Id
-    public String username;
-
+    public String twitchUserId;
     public Instant accountCreationTime;
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "username")
-//    List<Session> sessions;
 
     public BotUser() {
     }
 
-    public BotUser(String username) {
-        this.username = username;
+    public BotUser(String twitchUserId) {
+        this.twitchUserId = twitchUserId;
         this.accountCreationTime = Instant.now();
     }
 
     @Override
     public String toString() {
-        return "BotUser{" +
-                "username='" + username + '\'' +
-                ", accountCreationTime=" + accountCreationTime +
-                '}';
+        return STR."BotUser{twitchUserId='\{twitchUserId}', creationTime=\{accountCreationTime}";
     }
 }
