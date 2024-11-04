@@ -1,5 +1,6 @@
 package talium.system.panelAuth;
 
+import org.springframework.http.ResponseEntity;
 import talium.system.panelAuth.panelUser.PanelUser;
 import talium.system.panelAuth.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,27 +8,39 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import talium.system.panelAuth.session.Session;
+import talium.system.panelAuth.session.SessionRepo;
+
+import java.util.Optional;
 
 @RestController
 public class AuthController {
-    private final AuthService authService;
+    private final SessionRepo sessionRepo;
 
     @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public AuthController(SessionRepo sessionRepo) {
+        this.sessionRepo = sessionRepo;
     }
 
     @PostMapping("/forceLogout")
-    void sessionReset(Authentication authentication) {
+    ResponseEntity<String> sessionReset(Authentication authentication) {
         PanelUser panelUser = (PanelUser) authentication.getDetails();
         if (panelUser != null) {
-            authService.forceLogout(panelUser);
-            return;
+            sessionRepo.deleteByPanelUser(panelUser);
+            return ResponseEntity.ok().build();
         }
-        try {
-            authService.proxyForceLogout((String) authentication.getPrincipal());
-        } catch (SessionCouldNotBeFound e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Authenticated, but User could not be found!");
+        // delete all session with the user that owns this session
+        Optional<Session> currentSession = sessionRepo.findByAccessToken((String) authentication.getPrincipal());
+        if (currentSession.isEmpty()) {
+            return new ResponseEntity<>("Authenticated, but User of this session could not be found!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        sessionRepo.deleteByPanelUser(currentSession.get().botUser());
+        return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/logoutAll")
+    void logoutAllUsers() {
+        sessionRepo.deleteAll();
+    }
+
 }

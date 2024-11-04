@@ -20,6 +20,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,12 +30,17 @@ public class AuthService {
     private final SessionRepo sessionRepo;
     private final PanelUserRepo panelUserRepo;
     public static boolean byPassAllAuth;
+    private final List<String> configAllowedUsernames;
+    private final boolean overwritePanelUsers;
 
     @Autowired
-    public AuthService(SessionRepo sessionRepo, PanelUserRepo panelUserRepo, @Value("${disableAllAuth}") String disableAllAuth) {
+    public AuthService(SessionRepo sessionRepo, PanelUserRepo panelUserRepo, @Value("${disableAllAuth}") String disableAllAuth, @Value("${allowedPanelUsers}") List<String> configAllowedUsernames, @Value("${overwritePanelUsers:false}") boolean overwritePanelUsers) {
         this.sessionRepo = sessionRepo;
         this.panelUserRepo = panelUserRepo;
         byPassAllAuth = disableAllAuth.equals("true");
+        this.configAllowedUsernames = configAllowedUsernames;
+        this.overwritePanelUsers = overwritePanelUsers;
+        //TODO on startup, cleanup all timed out sessions (to prevent infinite growth)
     }
 
     public boolean authenticate(String accessToken, String userAgent) {
@@ -60,7 +66,17 @@ public class AuthService {
             return false;
         }
 
-        //TODO check if userId has access to the panel
+        if (overwritePanelUsers) {
+            if (!configAllowedUsernames.contains(validation.get().component1())) {
+                //TODO return error that not allowed to access panel
+                return false;
+            }
+        } else {
+            if (!panelUserRepo.existsById(validation.get().component2())) {
+                //TODO return error that not allowed to access panel
+                return false;
+            }
+        }
 
         var butUser = panelUserRepo.findById(validation.get().component2());
         if (butUser.isEmpty()) {
@@ -96,19 +112,5 @@ public class AuthService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-    }
-
-    @Transactional
-    public void forceLogout(PanelUser panelUser) {
-        sessionRepo.deleteByPanelUser(panelUser);
-    }
-
-    @Transactional
-    public void proxyForceLogout(String accessToken) throws SessionCouldNotBeFound {
-        Optional<Session> currentSession = sessionRepo.findByAccessToken(accessToken);
-        if (currentSession.isEmpty()) {
-            throw new SessionCouldNotBeFound();
-        }
-        sessionRepo.deleteByPanelUser(currentSession.get().botUser());
     }
 }
