@@ -2,6 +2,7 @@ package talium.system.twitchCommands.persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import talium.system.twitchCommands.triggerEngine.RuntimeTrigger;
 import talium.inputs.Twitch4J.ChatMessage;
 import talium.system.stringTemplates.TemplateService;
@@ -16,11 +17,13 @@ import static talium.system.twitchCommands.triggerEngine.TriggerProvider.transfo
 public class TriggerService {
     private final TriggerRepo repo;
     private final TemplateService templateService;
+    private final MessagePatternRepo messagePatternRepo;
 
     @Autowired
-    public TriggerService(TriggerRepo triggerRepo, TemplateService templateService) {
+    public TriggerService(TriggerRepo triggerRepo, TemplateService templateService, MessagePatternRepo messagePatternRepo) {
         this.repo = triggerRepo;
         this.templateService = templateService;
+        this.messagePatternRepo = messagePatternRepo;
     }
 
     public long count() {
@@ -49,8 +52,10 @@ public class TriggerService {
         repo.deleteById(id);
     }
 
+    @Transactional
     public void save(TriggerEntity entity) {
-        // TODO delete all patterns that are not in this list
+        var oldEntity = repo.findById(entity.id);
+
         for (MessagePattern pattern : entity.patterns) {
             pattern.parentTrigger = entity;
         }
@@ -60,6 +65,7 @@ public class TriggerService {
         }
         templateService.save(entity.template);
         repo.save(entity);
+        oldEntity.ifPresent(messagePatternRepo::deleteAllByParentTrigger);
     }
 
     public List<TriggerEntity> getAllTriggers() {
