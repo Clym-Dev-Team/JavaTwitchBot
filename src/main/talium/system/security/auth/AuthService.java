@@ -1,14 +1,14 @@
-package talium.system.panelAuth;
+package talium.system.security.auth;
 
 import kotlin.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import talium.system.panelAuth.persistence.PanelUser;
-import talium.system.panelAuth.persistence.PanelUserRepo;
-import talium.system.panelAuth.persistence.Session;
-import talium.system.panelAuth.persistence.SessionRepo;
+import talium.system.security.auth.persistence.PanelUser;
+import talium.system.security.auth.persistence.PanelUserRepo;
+import talium.system.security.auth.persistence.Session;
+import talium.system.security.auth.persistence.SessionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

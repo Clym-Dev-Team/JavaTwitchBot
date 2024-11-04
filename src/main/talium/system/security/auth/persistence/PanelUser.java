@@ -1,4 +1,4 @@
-package talium.system.panelAuth.persistence;
+package talium.system.security.auth.persistence;
 
 import jakarta.persistence.*;
 

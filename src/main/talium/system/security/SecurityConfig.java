@@ -1,4 +1,4 @@
-package talium.system.springSecurity;
+package talium.system.security;
 
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import talium.system.panelAuth.AuthService;
+import talium.system.security.auth.AuthService;
 
 import java.util.Collections;
 
