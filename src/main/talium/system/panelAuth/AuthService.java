@@ -26,12 +26,14 @@ public class AuthService {
     private final SessionRepo sessionRepo;
     private final BotUserRepo botUserRepo;
     private final BotLoginRepo botLoginRepo;
+    public static boolean byPassAllAuth;
 
     @Autowired
-    public AuthService(SessionRepo sessionRepo, BotUserRepo botUserRepo, BotLoginRepo botLoginRepo) {
+    public AuthService(SessionRepo sessionRepo, BotUserRepo botUserRepo, BotLoginRepo botLoginRepo, @Value("${disableAllAuth}") String disableAllAuth) {
         this.sessionRepo = sessionRepo;
         this.botUserRepo = botUserRepo;
         this.botLoginRepo = botLoginRepo;
+        byPassAllAuth = disableAllAuth.equals("true");
     }
 
     @Transactional
@@ -48,6 +50,10 @@ public class AuthService {
 
     @Transactional
     public String login(LoginRequest loginRequest, String userAgent) throws IncompatibleHashFunctions, InvalidAuthenticationException {
+        if (byPassAllAuth) {
+            return "BYPASSEDAUTHTOKEN";
+        }
+
         String password = Hashing.sha512().hashString(loginRequest.hash(), StandardCharsets.UTF_8).toString();
         Optional<BotLogin> login = botLoginRepo.findByUsernameAndHashedPassword(loginRequest.username(), loginRequest.hash());
         if (login.isEmpty()) {
