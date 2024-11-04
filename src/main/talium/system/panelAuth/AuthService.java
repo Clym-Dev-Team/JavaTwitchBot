@@ -4,8 +4,8 @@ import kotlin.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import talium.system.panelAuth.botUser.BotUser;
-import talium.system.panelAuth.botUser.BotUserRepo;
+import talium.system.panelAuth.panelUser.PanelUser;
+import talium.system.panelAuth.panelUser.PanelUserRepo;
 import talium.system.panelAuth.exceptions.*;
 import talium.system.panelAuth.session.Session;
 import talium.system.panelAuth.session.SessionRepo;
@@ -27,13 +27,13 @@ public class AuthService {
 
     private final Duration sessionTimeout = Duration.ofMinutes(15);
     private final SessionRepo sessionRepo;
-    private final BotUserRepo botUserRepo;
+    private final PanelUserRepo panelUserRepo;
     public static boolean byPassAllAuth;
 
     @Autowired
-    public AuthService(SessionRepo sessionRepo, BotUserRepo botUserRepo, @Value("${disableAllAuth}") String disableAllAuth) {
+    public AuthService(SessionRepo sessionRepo, PanelUserRepo panelUserRepo, @Value("${disableAllAuth}") String disableAllAuth) {
         this.sessionRepo = sessionRepo;
-        this.botUserRepo = botUserRepo;
+        this.panelUserRepo = panelUserRepo;
         byPassAllAuth = disableAllAuth.equals("true");
     }
 
@@ -62,10 +62,10 @@ public class AuthService {
 
         //TODO check if userId has access to the panel
 
-        var butUser = botUserRepo.findById(validation.get().component2());
+        var butUser = panelUserRepo.findById(validation.get().component2());
         if (butUser.isEmpty()) {
-            BotUser entity = new BotUser(validation.get().component2());
-            botUserRepo.save(entity);
+            PanelUser entity = new PanelUser(validation.get().component2());
+            panelUserRepo.save(entity);
             butUser = Optional.of(entity);
         }
 
@@ -99,8 +99,8 @@ public class AuthService {
     }
 
     @Transactional
-    public void forceLogout(BotUser botUser) {
-        sessionRepo.deleteByBotUser(botUser);
+    public void forceLogout(PanelUser panelUser) {
+        sessionRepo.deleteByPanelUser(panelUser);
     }
 
     @Transactional
@@ -109,6 +109,6 @@ public class AuthService {
         if (currentSession.isEmpty()) {
             throw new SessionCouldNotBeFound();
         }
-        sessionRepo.deleteByBotUser(currentSession.get().botUser());
+        sessionRepo.deleteByPanelUser(currentSession.get().botUser());
     }
 }

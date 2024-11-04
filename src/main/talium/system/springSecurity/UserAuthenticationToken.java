@@ -1,6 +1,6 @@
 package talium.system.springSecurity;
 
-import talium.system.panelAuth.botUser.BotUser;
+import talium.system.panelAuth.panelUser.PanelUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,13 +10,13 @@ import java.util.*;
 public class UserAuthenticationToken implements Authentication {
     String accessToken;
     boolean isAuthenticated;
-    Optional<BotUser> botUser;
+    Optional<PanelUser> botUser;
     List<SimpleGrantedAuthority> grantedAuthorities;
 
-    public UserAuthenticationToken(String accessToken, boolean isAuthenticated, BotUser botUser, SimpleGrantedAuthority ...authority) {
+    public UserAuthenticationToken(String accessToken, boolean isAuthenticated, PanelUser panelUser, SimpleGrantedAuthority ...authority) {
         this.accessToken = accessToken;
         this.isAuthenticated = isAuthenticated;
-        this.botUser = Optional.ofNullable(botUser);
+        this.botUser = Optional.ofNullable(panelUser);
         this.grantedAuthorities = Arrays.stream(authority).toList();
     }
 
