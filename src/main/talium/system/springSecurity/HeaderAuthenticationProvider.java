@@ -2,7 +2,6 @@ package talium.system.springSecurity;
 
 import talium.system.panelAuth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -28,7 +27,7 @@ public class HeaderAuthenticationProvider implements AuthenticationProvider {
         String userAgent = (String) authentication.getPrincipal();
 
         String accessToken = (String) authentication.getCredentials();
-        boolean authenticated = authService.authenticateTwitch(accessToken, userAgent);
+        boolean authenticated = authService.authenticate(accessToken, userAgent);
 
         return new UserAuthenticationToken(accessToken, authenticated);
     }

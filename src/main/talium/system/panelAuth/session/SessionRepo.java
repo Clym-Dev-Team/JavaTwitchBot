@@ -5,11 +5,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface SessionRepo extends CrudRepository<Session, SessionId> {
+public interface SessionRepo extends CrudRepository<Session, String> {
 
     long deleteByAccessToken(String accessToken);
 
-    long deleteByBotUser(BotUser botUser);
+    void deleteByBotUser(BotUser botUser);
 
     Optional<Session> findByAccessToken(String accessToken);
 }
