@@ -13,21 +13,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class HeaderAuthenticationProvider implements AuthenticationProvider {
 
-    boolean byPassAuthentication;
     AuthService authService;
 
     @Autowired
-    public HeaderAuthenticationProvider(AuthService authService, @Value(value = "${disableAllAuth:false}") boolean byPassAuthentication) {
-        this.byPassAuthentication = byPassAuthentication;
+    public HeaderAuthenticationProvider(AuthService authService) {
         this.authService = authService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (authentication.getCredentials() == null) {
-            if (byPassAuthentication) {
-                return new UserAuthenticationToken("TESTUSER", true, null);
-            }
             throw new AuthenticationCredentialsNotFoundException("Token header does not exist");
         }
         String userAgent = (String) authentication.getPrincipal();
@@ -35,12 +30,7 @@ public class HeaderAuthenticationProvider implements AuthenticationProvider {
         String accessToken = (String) authentication.getCredentials();
         boolean authenticated = authService.authenticate(accessToken, userAgent);
 
-
-        if (byPassAuthentication) {
-            authenticated = true;
-        }
-
-        return new UserAuthenticationToken(accessToken, authenticated, authService.getBotUser(accessToken));
+        return new UserAuthenticationToken(accessToken, authenticated);
     }
 
     @Override

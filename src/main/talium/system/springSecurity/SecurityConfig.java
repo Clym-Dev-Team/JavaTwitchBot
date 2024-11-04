@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import talium.system.panelAuth.AuthService;
 
 import java.util.Collections;
 
@@ -45,11 +46,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers("/login", "/error").permitAll()
-                        .anyRequest().authenticated()
                 )
                 .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new HeaderAuthProcessingFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+        if (AuthService.byPassAllAuth) {
+            http.authorizeHttpRequests(r -> r.anyRequest().permitAll());
+        } else {
+            http.authorizeHttpRequests(r -> r.anyRequest().authenticated());
+        }
         return http.build();
     }
 

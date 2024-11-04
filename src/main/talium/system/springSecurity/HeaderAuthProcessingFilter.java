@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import talium.system.panelAuth.AuthService;
 import talium.system.panelAuth.exceptions.AuthenticationRejected;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,9 @@ public class HeaderAuthProcessingFilter extends AbstractAuthenticationProcessing
         var token = request.getHeader("token");
         var userAgent = request.getHeader("User-Agent");
         var auth = new PreAuthenticatedAuthenticationToken(userAgent, token);
+        if (AuthService.byPassAllAuth) {
+            return auth;
+        }
         // Not trying to auth /login and /error Solution 2
         //if (request.getRequestURI().equals("/login") || request.getRequestURI().equals("/error")) {
         //    return auth;
