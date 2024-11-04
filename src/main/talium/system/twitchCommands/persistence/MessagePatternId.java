@@ -6,6 +6,14 @@ public class MessagePatternId implements Serializable {
     String pattern;
     TriggerEntity parentTrigger;
 
+    public MessagePatternId(String pattern, TriggerEntity parentTrigger) {
+        this.pattern = pattern;
+        this.parentTrigger = parentTrigger;
+    }
+
+    public MessagePatternId() {
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
