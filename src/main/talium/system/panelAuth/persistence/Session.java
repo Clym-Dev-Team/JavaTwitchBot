@@ -1,7 +1,6 @@
-package talium.system.panelAuth.session;
+package talium.system.panelAuth.persistence;
 
 import jakarta.persistence.*;
-import talium.system.panelAuth.panelUser.PanelUser;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;

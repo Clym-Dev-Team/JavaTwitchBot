@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import talium.system.panelAuth.AuthService;
-import talium.system.panelAuth.exceptions.AuthenticationRejected;
+import talium.system.panelAuth.AuthenticationRejected;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

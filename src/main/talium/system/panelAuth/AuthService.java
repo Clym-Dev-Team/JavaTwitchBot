@@ -5,14 +5,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import talium.system.panelAuth.panelUser.PanelUser;
-import talium.system.panelAuth.panelUser.PanelUserRepo;
-import talium.system.panelAuth.exceptions.*;
-import talium.system.panelAuth.session.Session;
-import talium.system.panelAuth.session.SessionRepo;
+import talium.system.panelAuth.persistence.PanelUser;
+import talium.system.panelAuth.persistence.PanelUserRepo;
+import talium.system.panelAuth.persistence.Session;
+import talium.system.panelAuth.persistence.SessionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.net.URI;
