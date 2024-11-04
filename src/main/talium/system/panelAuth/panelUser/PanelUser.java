@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 /**
- * Primary user object, holds User Preferences and other User specific, but not necessarily Security critical Account Information
+ * Primary user object, holds User Preferences and other User specific, but not security critical Account Information
  */
 @Entity
-@Table(name = "sys-botuser")
+@Table(name = "sys_paneluser")
 public class PanelUser {
     @Id
     public String twitchUserId;
