@@ -1,50 +1,17 @@
-import {PropsWithChildren, useState} from "react";
-import LoginPane, {Login} from "./LoginPane.tsx"
-import {sha3_512} from "js-sha3";
-import {BOT_BACKEND_ADDR} from "../../main.tsx";
-
-function getAuthFromCookies(): string | undefined {
-  const token = localStorage.getItem("accessToken");
-  if (token == null) {
-    return undefined;
-  }
-  return token;
-}
+import {PropsWithChildren} from "react";
+import LoginPane from "./LoginPane.tsx"
 
 export default function LoginPage(props: PropsWithChildren<Record<never, never>>) {
-  const [accessToken, setAccessToken] = useState<string | undefined>(getAuthFromCookies());
-
-  interface LoginRequest {
-    username: string,
-    hash: string,
-    alg: string
-  }
-
-  function handleSubmit(login: Login) {
-    const request: LoginRequest = {
-      username: login.username,
-      hash: sha3_512(login.password),
-      alg: "SHA3-512"
-    }
-    fetch(`${BOT_BACKEND_ADDR}/login`, {method: "POST", body: JSON.stringify(request)}).then()
-      .then(res => res.text()
-        .then(value => {
-          setAccessToken(value);
-          localStorage.setItem("accessToken", value);
-        }))
-      .catch(err => console.log(err));
-  }
-
-  if (accessToken == undefined) {
-    return <LoginPane onSubmit={handleSubmit}/>;
+  if (localStorage.getItem("accessToken") == null) {
+    return <LoginPane/>;
   }
   return props.children;
 }
 
 export async function fetchWithAuth(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-  const accessToken = getAuthFromCookies();
+  const accessToken = localStorage.getItem("accessToken");
 
-  if (accessToken == undefined) {
+  if (accessToken == null) {
     return Promise.reject(new Error("Token invalid or Timed out. Reload the page and login again!"));
   }
 
