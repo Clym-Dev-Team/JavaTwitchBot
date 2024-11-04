@@ -28,7 +28,7 @@ public class HeaderAuthenticationProvider implements AuthenticationProvider {
         String userAgent = (String) authentication.getPrincipal();
 
         String accessToken = (String) authentication.getCredentials();
-        boolean authenticated = authService.authenticate(accessToken, userAgent);
+        boolean authenticated = authService.authenticateTwitch(accessToken, userAgent);
 
         return new UserAuthenticationToken(accessToken, authenticated);
     }
