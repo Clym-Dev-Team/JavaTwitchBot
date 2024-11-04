@@ -1,22 +1,17 @@
 package talium.system.panelAuth.exceptions;
 
-public class AuthenticationRejected extends RuntimeException{
-    public AuthenticationRejected() {
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
+
+public class AuthenticationRejected extends AuthenticationException {
+    HttpStatus status;
+
+    public AuthenticationRejected(HttpStatus status, String body) {
+        super(body);
+        this.status = status;
     }
 
-    public AuthenticationRejected(String message) {
-        super(message);
-    }
-
-    public AuthenticationRejected(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public AuthenticationRejected(Throwable cause) {
-        super(cause);
-    }
-
-    public AuthenticationRejected(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public HttpStatus status() {
+        return status;
     }
 }

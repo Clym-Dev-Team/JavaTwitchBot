@@ -4,6 +4,7 @@ import kotlin.Pair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import talium.system.panelAuth.panelUser.PanelUser;
 import talium.system.panelAuth.panelUser.PanelUserRepo;
 import talium.system.panelAuth.exceptions.*;
@@ -43,15 +44,14 @@ public class AuthService {
         //TODO on startup, cleanup all timed out sessions (to prevent infinite growth)
     }
 
-    public boolean authenticate(String accessToken, String userAgent) {
+    public boolean authenticate(String accessToken, String userAgent) throws AuthenticationRejected {
         Optional<Session> optSession = sessionRepo.findByAccessToken(accessToken);
         if (optSession.isPresent()) {
             // if session is not timed out, and the userAgent is the same, we shortcircuit accepting the token and granting access
             Session session = optSession.get();
             if (!session.userAgent().equals(userAgent)) {
-                // TODO more specific errors (http codes) since we are now using twitch as the authorisation server
                 // TODO this should maybe be a setting for testing, instead of disabling all auth all together, just allow the token taken from the browser, to be used in curl/postman
-                throw new AuthenticationRejected();
+                throw new AuthenticationRejected(HttpStatus.UNAUTHORIZED, "Reauthenticate with access token");
             }
             if (!session.lastRefreshedAt().plusSeconds(sessionTimeout.toSeconds()).isBefore(Instant.now())) {
                 return true;
@@ -62,19 +62,16 @@ public class AuthService {
         var validation = validateToken(accessToken);
         // no validation means token invalid
         if (validation.isEmpty()) {
-            // TODO return error that authentication with twitch has failed (and not that the authentication was successfully, but no auth is granted to the panel
-            return false;
+            throw new AuthenticationRejected(HttpStatus.UNAUTHORIZED, "Invalid access token, Reauthenticate!");
         }
 
         if (overwritePanelUsers) {
             if (!configAllowedUsernames.contains(validation.get().component1())) {
-                //TODO return error that not allowed to access panel
-                return false;
+                throw new AuthenticationRejected(HttpStatus.FORBIDDEN, STR."User: \{validation.get().component1()} not allowed to access this ressource");
             }
         } else {
             if (!panelUserRepo.existsById(validation.get().component2())) {
-                //TODO return error that not allowed to access panel
-                return false;
+                throw new AuthenticationRejected(HttpStatus.FORBIDDEN, STR."User: \{validation.get().component1()} not allowed to access this ressource");
             }
         }
 
