@@ -41,16 +41,21 @@ public class AuthService {
         byPassAllAuth = disableAllAuth.equals("true");
         this.configAllowedUsernames = configAllowedUsernames;
         this.overwritePanelUsers = overwritePanelUsers;
-        //TODO on startup, cleanup all timed out sessions (to prevent infinite growth)
+
+        var sessions = sessionRepo.findAll();
+        for (var session : sessions) {
+            if (session.lastRefreshedAt().plusSeconds(sessionTimeout.toSeconds()).isBefore(Instant.now())) {
+                sessionRepo.delete(session);
+            }
+        }
     }
 
     public boolean authenticate(String accessToken, String userAgent) throws AuthenticationRejected {
         Optional<Session> optSession = sessionRepo.findByAccessToken(accessToken);
         if (optSession.isPresent()) {
-            // if session is not timed out, and the userAgent is the same, we shortcircuit accepting the token and granting access
+            // if session is not timed out, and the userAgent is the same, we short circuit accepting the token and granting access
             Session session = optSession.get();
             if (!session.userAgent().equals(userAgent)) {
-                // TODO this should maybe be a setting for testing, instead of disabling all auth all together, just allow the token taken from the browser, to be used in curl/postman
                 throw new AuthenticationRejected(HttpStatus.UNAUTHORIZED, "Reauthenticate with access token");
             }
             if (!session.lastRefreshedAt().plusSeconds(sessionTimeout.toSeconds()).isBefore(Instant.now())) {
@@ -58,7 +63,7 @@ public class AuthService {
             }
         }
         // if there is no session, or session is timed out, or not valid for this userAgent we try to check if the accessToken is still valid for twitch
-        // if the accesstoken is valid, we create a new session, if it is not valid anymore, we reject the request
+        // if the access token is valid, we create a new session, if it is not valid anymore, we reject the request
         var validation = validateToken(accessToken);
         // no validation means token invalid
         if (validation.isEmpty()) {
