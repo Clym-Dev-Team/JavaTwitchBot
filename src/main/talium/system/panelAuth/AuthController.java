@@ -1,15 +1,13 @@
 package talium.system.panelAuth;
 
 import org.springframework.http.ResponseEntity;
-import talium.system.panelAuth.panelUser.PanelUser;
-import talium.system.panelAuth.exceptions.*;
+import talium.system.panelAuth.persistence.PanelUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import talium.system.panelAuth.session.Session;
-import talium.system.panelAuth.session.SessionRepo;
+import talium.system.panelAuth.persistence.Session;
+import talium.system.panelAuth.persistence.SessionRepo;
 
 import java.util.Optional;
 

@@ -1,6 +1,5 @@
-package talium.system.panelAuth.session;
+package talium.system.panelAuth.persistence;
 
-import talium.system.panelAuth.panelUser.PanelUser;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
