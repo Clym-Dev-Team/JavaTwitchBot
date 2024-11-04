@@ -1,79 +1,67 @@
-import {useEffect, useRef, useState} from "react";
+import {useState, useRef, useEffect} from 'react';
 import {Message} from "./Message.ts";
 import {loadMore} from "./getMessages.ts";
-import Loader from "../../../common/LoadingSpinner/Loader.tsx";
 import ChatLine from "../ChatLine/ChatLine.tsx";
 import ChatHistoryQuery from "../Query/ChatHistoryQuery.tsx";
 import "./MessagePane.css"
-import VisibilityCallback from "../../../common/VisibilityCallback/VisibilityCallback.tsx";
 
 
-export default function MessagePane() {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [isLoading, setLoading] = useState(true);
-
-  const [earliestTimeStamp, setEarliestTimeStamp] = useState(0)
-  const containerRef = useRef(null);
-  const previousScrollPosition = useRef(0);
+function InfiniteScroll() {
+  const [items] = useState<Message[]>([]);
+  const [earliestTimeStamp, setEarliestTimeStamp] = useState(6406316591700)
   const [query, setQuery] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const previousScrollPosition = useRef(0);
 
-  // useEffect(() => {
-  //   getEarlier(6406316591700);
-  // }, [])
-  //
-  // function getEarlier(timeStamp: number) {
-  //   console.log("loaded!")
-  //   const promise = loadMore(timeStamp);
-  //   promise.then(value => {
-  //     setLoading(false)
-  //     // messages.push(...value);
-  //     setMessages(value)
-  //     setEarliestTimeStamp(value[value.length - 1].timeStamp)
-  //     containerRef.current.scrollTop = previousScrollPosition.current
-  //   })
-  //   promise.catch(reason => console.log(reason))
-  // }
-  //
-  //
-  // function handleLoadMore() {
-  //   getEarlier(earliestTimeStamp)
-  // }
+  function getEarlier(timeStamp: number) {
+    console.log("loaded!")
+    const promise = loadMore(timeStamp);
+    promise.then(value => {
+      items.push(...value);
+      // setItems(value)
+      setEarliestTimeStamp(value[value.length - 1].timeStamp)
+      if (containerRef.current != null) {
+        containerRef.current.scrollTop = previousScrollPosition.current
+      }
+    })
+    promise.catch(reason => console.log(reason))
+  }
 
   function handleQuery(s: string) {
-
+    setQuery(s);
   }
-
 
   useEffect(() => {
-    function handleScroll(event: any)  {
-      console.log("event")
-      console.log(event)
-      const scrollTop = event.currentTarget.scrollTop
-      const scrollHeight = event.currentTarget.scrollHeight
-      const clientHeight = event.currentTarget.clientHeight
+    console.log('Container Ref:', containerRef.current);
+
+    const handleScroll = () => {
+      if (containerRef.current == null) {
+        return;
+      }
       // Save the current scroll position
-      previousScrollPosition.current = scrollTop;
+      previousScrollPosition.current = containerRef.current.scrollTop;
 
       // Check if user has scrolled to the bottom
-      if (
-        scrollTop + clientHeight >=
-        scrollHeight
-      ) {
-        // handleLoadMore();
+      if (containerRef.current.scrollTop + containerRef.current.clientHeight >= containerRef.current.scrollHeight) {
+        getEarlier(earliestTimeStamp);
       }
-    }
-
-    containerRef.current.addEventListener('scroll', handleScroll);
-    return () => {
-      containerRef.current.removeEventListener('scroll', handleScroll);
     };
-  }, [messages]); // Re-run effect when items change
 
+    if (containerRef.current != null) {
+      containerRef.current.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      // if (containerRef.current != null) {
+        // containerRef.current.removeEventListener('scroll', handleScroll);
+      // }
+    };
+  }, [items]); // Re-run effect when items change
 
-// Render
-  if (isLoading) {
-    return <Loader/>
-  }
+  useEffect(() => {
+    if (items.length == 0) {
+      getEarlier(earliestTimeStamp);
+    }
+  }, []);
 
   return (
     <div className="message-pane">
@@ -81,19 +69,14 @@ export default function MessagePane() {
         <ChatHistoryQuery value={query} onChange={handleQuery}/>
         <span>CHAT-HISTORY</span>
       </div>
-      {/*onScroll={event => handleScroll(event)}*/}
-      <div ref={containerRef} className="message-scroll-container">
-        {/*<div className="message-list">*/}
-          {messages.map((message , index)=> <ChatLine key={index} message={message}/>)}
-          {/*{(query.length == 0) ?*/}
-          {/*  <VisibilityCallback onInView={() => {*/}
-          {/*    console.log("change!!!!!");*/}
-          {/*    handleLoadMore();*/}
-          {/*  }}/>*/}
-          {/*  : <></>*/}
-          {/*}*/}
-        {/*</div>*/}
+      <div ref={containerRef} style={{height: '400px', overflowY: 'scroll'}}>
+        {/*{items.map((item, index) => (*/}
+        {/*  <div key={index}>/!* Render item content here *!/</div>*/}
+        {/*))}*/}
+        {items.map((message, index) => <ChatLine key={index} message={message}/>)}
       </div>
     </div>
-  )
+  );
 }
+
+export default InfiniteScroll;
