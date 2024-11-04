@@ -1,7 +1,7 @@
 package talium.system.panelAuth.session;
 
 import jakarta.persistence.*;
-import talium.system.panelAuth.botUser.BotUser;
+import talium.system.panelAuth.panelUser.PanelUser;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -11,7 +11,7 @@ import java.time.Instant;
  * Is used to authenticate incoming requests
  */
 @Entity
-@Table(name = "sys-botuser-sessions")
+@Table(name = "sys_paneluser_sessions")
 public class Session {
     @Id
     String accessToken;
@@ -21,16 +21,16 @@ public class Session {
     Instant lastRefreshedAt;
 
     @ManyToOne(fetch = FetchType.LAZY) @NotNull
-    private BotUser botUser;
+    private PanelUser panelUser;
 
     public Session() {
     }
 
-    public Session(String accessToken, String userAgent, Instant lastRefreshedAt, @NotNull BotUser botUser) {
+    public Session(String accessToken, String userAgent, Instant lastRefreshedAt, @NotNull PanelUser panelUser) {
         this.accessToken = accessToken;
         this.userAgent = userAgent;
         this.lastRefreshedAt = lastRefreshedAt;
-        this.botUser = botUser;
+        this.panelUser = panelUser;
     }
 
     public String accessToken() {
@@ -45,8 +45,8 @@ public class Session {
         return lastRefreshedAt;
     }
 
-    public @NotNull BotUser botUser() {
-        return botUser;
+    public @NotNull PanelUser botUser() {
+        return panelUser;
     }
 
     public Session setLastRefreshedAt(Instant lastRefreshedAt) {

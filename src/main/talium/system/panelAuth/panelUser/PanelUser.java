@@ -1,4 +1,4 @@
-package talium.system.panelAuth.botUser;
+package talium.system.panelAuth.panelUser;
 
 import jakarta.persistence.*;
 
@@ -9,15 +9,15 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "sys-botuser")
-public class BotUser {
+public class PanelUser {
     @Id
     public String twitchUserId;
     public Instant accountCreationTime;
 
-    public BotUser() {
+    public PanelUser() {
     }
 
-    public BotUser(String twitchUserId) {
+    public PanelUser(String twitchUserId) {
         this.twitchUserId = twitchUserId;
         this.accountCreationTime = Instant.now();
     }

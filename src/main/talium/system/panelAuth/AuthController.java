@@ -1,17 +1,12 @@
 package talium.system.panelAuth;
 
-import com.google.gson.Gson;
-import talium.system.panelAuth.botUser.BotUser;
+import talium.system.panelAuth.panelUser.PanelUser;
 import talium.system.panelAuth.exceptions.*;
-import net.datafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Locale;
 
 @RestController
 public class AuthController {
@@ -24,9 +19,9 @@ public class AuthController {
 
     @PostMapping("/forceLogout")
     void sessionReset(Authentication authentication) {
-        BotUser botUser = (BotUser) authentication.getDetails();
-        if (botUser != null) {
-            authService.forceLogout(botUser);
+        PanelUser panelUser = (PanelUser) authentication.getDetails();
+        if (panelUser != null) {
+            authService.forceLogout(panelUser);
             return;
         }
         try {
