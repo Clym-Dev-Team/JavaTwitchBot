@@ -27,10 +27,9 @@ import java.util.Collections;
 @EnableWebSecurity
 public class SecurityConfig {
     HeaderAuthenticationProvider headerAuthenticationProvider;
-
     String cors;
 
-    public SecurityConfig(@Autowired HeaderAuthenticationProvider headerAuthenticationProvider, @Value( value = "${cors}") String cors) {
+    public SecurityConfig(@Autowired HeaderAuthenticationProvider headerAuthenticationProvider, @Value(value = "${cors}") String cors) {
         this.headerAuthenticationProvider = headerAuthenticationProvider;
         this.cors = cors;
     }
@@ -43,7 +42,7 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(r -> r
-                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers("/login", "/error").permitAll()
                 )

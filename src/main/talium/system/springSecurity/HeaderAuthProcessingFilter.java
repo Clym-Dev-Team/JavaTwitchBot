@@ -20,10 +20,8 @@ import java.io.IOException;
 public class HeaderAuthProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
     public HeaderAuthProcessingFilter(AuthenticationManager authenticationManager) {
-        // Not trying to auth /login and /error Solution 1 (preferred)
         super(new NegatedRequestMatcher(
                 new OrRequestMatcher(
-                        new AntPathRequestMatcher("/login"),
                         new AntPathRequestMatcher("/error")
                 )
         ), authenticationManager);
@@ -37,14 +35,10 @@ public class HeaderAuthProcessingFilter extends AbstractAuthenticationProcessing
         if (AuthService.byPassAllAuth) {
             return auth;
         }
-        // Not trying to auth /login and /error Solution 2
-        //if (request.getRequestURI().equals("/login") || request.getRequestURI().equals("/error")) {
-        //    return auth;
-        //}
         try {
             return this.getAuthenticationManager().authenticate(auth);
         } catch (AuthenticationRejected e) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication rejected or expired");
+            response.sendError(e.status().value(), STR."Authentication failed: \{e.getMessage()}");
             return null;
         }
     }
