@@ -1,14 +1,14 @@
-package talium.system.springSecurity;
+package talium.system.security;
 
 import org.springframework.http.HttpStatus;
-import talium.system.panelAuth.AuthService;
+import talium.system.security.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
-import talium.system.panelAuth.AuthenticationRejected;
+import talium.system.security.auth.AuthenticationRejected;
 
 @Service
 public class HeaderAuthenticationProvider implements AuthenticationProvider {

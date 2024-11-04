@@ -1,6 +1,6 @@
-package talium.system.springSecurity;
+package talium.system.security;
 
-import talium.system.panelAuth.persistence.PanelUser;
+import talium.system.security.auth.persistence.PanelUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package talium.system.panelAuth;
+package talium.system.security.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
