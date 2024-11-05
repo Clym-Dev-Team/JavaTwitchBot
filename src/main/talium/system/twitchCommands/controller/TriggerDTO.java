@@ -1,7 +1,6 @@
 package talium.system.twitchCommands.controller;
 
 import talium.inputs.Twitch4J.TwitchUserPermission;
-import talium.system.stringTemplates.Template;
 import talium.system.stringTemplates.TemplateDTO;
 import talium.system.twitchCommands.cooldown.ChatCooldown;
 import talium.system.twitchCommands.persistence.MessagePattern;
@@ -12,7 +11,7 @@ import java.util.List;
 public record TriggerDTO(
         String id,
         String description,
-        List<MessagePatternDTO> patterns,
+        MessagePatternDTO[] patterns,
         TwitchUserPermission permission,
         ChatCooldown userCooldown,
         ChatCooldown globalCooldown,
@@ -23,7 +22,7 @@ public record TriggerDTO(
         this(
                 trigger.id,
                 trigger.description,
-                trigger.patterns.stream().map(MessagePattern::toMessagePatternDTO).toList(),
+                trigger.patterns.stream().map(MessagePattern::toMessagePatternDTO).toArray(MessagePatternDTO[]::new),
                 trigger.permission,
                 trigger.userCooldown,
                 trigger.globalCooldown,
