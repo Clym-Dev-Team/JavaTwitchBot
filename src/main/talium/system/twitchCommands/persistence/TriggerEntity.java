@@ -10,6 +10,7 @@ import talium.inputs.Twitch4J.TwitchUserPermission;
 import talium.system.stringTemplates.Template;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //TODO reference triggerId guidelines
@@ -68,7 +69,7 @@ public class TriggerEntity {
     public TriggerEntity(TriggerDTO triggerDTO) {
         this.id = triggerDTO.id();
         this.description = triggerDTO.description();
-        this.patterns = triggerDTO.patterns().stream().map(MessagePatternDTO::toMessagePattern).toList();
+        this.patterns = Arrays.stream(triggerDTO.patterns()).map(MessagePatternDTO::toMessagePattern).toList();
         this.permission = triggerDTO.permission();
         this.userCooldown = triggerDTO.userCooldown();
         this.globalCooldown = triggerDTO.globalCooldown();
