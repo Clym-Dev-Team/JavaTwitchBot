@@ -7,10 +7,6 @@ import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import com.github.twitch4j.chat.TwitchChat;
 import com.github.twitch4j.chat.events.TwitchEvent;
-import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
-import com.github.twitch4j.eventsub.socket.conduit.TwitchConduitSocketPool;
-import com.github.twitch4j.eventsub.socket.conduit.exceptions.*;
-import com.github.twitch4j.eventsub.subscriptions.SubscriptionTypes;
 import com.github.twitch4j.helix.TwitchHelix;
 import talium.inputs.shared.oauth.OAuthEndpoint;
 import talium.inputs.shared.oauth.OauthAccount;
@@ -22,8 +18,10 @@ import talium.system.inputSystem.InputStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import com.github.twitch4j.helix.domain.User;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Input
@@ -62,10 +60,10 @@ public class Twitch4JInput implements BotInput {
     private static final Logger logger = LoggerFactory.getLogger(Twitch4JInput.class);
 
     private static volatile TwitchChat chat;
+    private static volatile TwitchHelix helix;
     private TwitchIdentityProvider iProvider;
     private OAuth2Credential oAuth2Credential;
     private TwitchClient twitchClient;
-    private TwitchHelix broadCasterHelix;
     private InputStatus health;
 
     @Override
@@ -110,7 +108,7 @@ public class Twitch4JInput implements BotInput {
 
         this.twitchClient = twitchClient;
         chat = twitchClient.getChat();
-        broadCasterHelix = twitchClient.getHelix();
+        helix = twitchClient.getHelix();
 
         logger.debug("Start successful!");
         report(InputStatus.HEALTHY);
@@ -172,4 +170,17 @@ public class Twitch4JInput implements BotInput {
         chat.sendMessage(sendTo, message);
     }
 
+    public static Optional<User> getUserById(String userId) {
+        if (helix == null) return Optional.empty();
+        var user = helix.getUsers(null, List.of(userId), null).execute().getUsers();
+        if (user.isEmpty()) return Optional.empty();
+        return Optional.ofNullable(user.getFirst());
+    }
+
+    public static Optional<User> getUserByName(String userId) {
+        if (helix == null) return Optional.empty();
+        var user = helix.getUsers(null, null, List.of(userId)).execute().getUsers();
+        if (user.isEmpty()) return Optional.empty();
+        return Optional.ofNullable(user.getFirst());
+    }
 }

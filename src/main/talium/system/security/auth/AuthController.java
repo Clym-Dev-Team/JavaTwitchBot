@@ -1,23 +1,55 @@
 package talium.system.security.auth;
 
+import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
-import talium.system.security.auth.persistence.PanelUser;
+import talium.inputs.Twitch4J.Twitch4JInput;
+import talium.system.security.auth.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import talium.system.security.auth.persistence.Session;
-import talium.system.security.auth.persistence.SessionRepo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class AuthController {
     private final SessionRepo sessionRepo;
+    private final PanelUserRepo panelUserRepo;
+    private final Gson gson = new Gson();
 
     @Autowired
-    public AuthController(SessionRepo sessionRepo) {
+    public AuthController(SessionRepo sessionRepo, PanelUserRepo panelUserRepo) {
         this.sessionRepo = sessionRepo;
+        this.panelUserRepo = panelUserRepo;
+    }
+
+    @GetMapping("/panelAccounts")
+    String getAllPanelAccounts() {
+        List<PanelUserDTO> list = new ArrayList<>();
+        for (PanelUser p : panelUserRepo.findAll()) {
+            var user = Twitch4JInput.getUserById(p.twitchUserId);
+            String userName = null;
+            if (user.isPresent()) {
+                userName = user.get().getDisplayName();
+            }
+            list.add(new PanelUserDTO(userName, p.twitchUserId, p.accountCreationTime.toEpochMilli()));
+        }
+        return gson.toJson(list);
+    }
+
+    @PostMapping("/panelAccounts")
+    HttpStatus addNewPanelAccount(@RequestBody String userName) {
+        var userId = Twitch4JInput.getUserByName(userName);
+        if (userId.isEmpty()) return HttpStatus.NOT_FOUND;
+        panelUserRepo.save(new PanelUser(userId.get().getId()));
+        return HttpStatus.CREATED;
+    }
+
+    @DeleteMapping("/panelAccounts")
+    void removePanelAccount(@RequestBody String userId) {
+        panelUserRepo.deleteById(userId);
     }
 
     @PostMapping("/forceLogout")
