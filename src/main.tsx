@@ -18,11 +18,12 @@ import GiveawayListPage from "./components/giveaways/listPage/GiveawayListPage.t
 import GiveawayEditPage from "./components/giveaways/editPage/GiveawayEditPage.tsx";
 import {TooltipProvider} from "@shadcn/components/ui/tooltip.tsx";
 import TokenRemover from "./components/Login/TokenRemover.tsx";
+import AccountsPage from "./components/panelAccounts/AccountsPage.tsx";
 
-// export const BOT_BACKEND_ADDR = "https://joint-urgently-grubworm.ngrok-free.app"
-// export const HISTORY_BACKEND_ADDR = "https://8a53-81-14-180-74.ngrok-free.app"
-export const BOT_BACKEND_ADDR = "http://localhost:80"
-export const HISTORY_BACKEND_ADDR = "http://localhost:8080"
+export const PANEL_BASE_URL = import.meta.env.VITE_PANEL_BASE_URL;
+export const BOT_BACKEND_ADDR = import.meta.env.VITE_BOT_BACKEND_ADDR
+export const HISTORY_BACKEND_ADDR = import.meta.env.VITE_HISTORY_BACKEND_ADDR
+export const TWITCH_CLIENT_ID = import.meta.env.VITE_TWITCH_CLIENT_ID
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
         <Route path="/oauth/result" element={<OauthResult/>}/>
         <Route path="/giveaways" element={<GiveawayListPage/>}/>
         <Route path="/giveawayEdit" element={<GiveawayEditPage/>}/>
+        <Route path="/accounts" element={<AccountsPage/>}/>
       </Route>
       <Route path="/twitchToken" element={<TokenRemover/>}/>
     </>
