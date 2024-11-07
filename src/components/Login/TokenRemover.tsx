@@ -1,10 +1,6 @@
 import {useNavigate} from "react-router-dom";
 
-export interface TokenRemoverProps {
-
-}
-
-export default function TokenRemover(props: TokenRemoverProps) {
+export default function TokenRemover() {
   const nav = useNavigate()
   const query  = new URLSearchParams(document.location.hash.substring(1))
   const state = query.get("state")

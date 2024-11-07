@@ -20,6 +20,7 @@ export default function TwitchNavMenu() {
       <NavLink target="/oauth" name="External accounts"/>
       <NavLink target="/goal" name="Goals"/>
       <NavLink target="/templates" name="Templates"/>
+      <NavLink target="/accounts" name="Panel Accounts"/>
       <NavLink target="/" name="WebConsole" allowChildren={false}/>
     </div>
     <div className="account">
