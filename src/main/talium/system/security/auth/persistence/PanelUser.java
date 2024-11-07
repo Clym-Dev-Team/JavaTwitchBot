@@ -24,6 +24,6 @@ public class PanelUser {
 
     @Override
     public String toString() {
-        return STR."BotUser{twitchUserId='\{twitchUserId}', creationTime=\{accountCreationTime}";
+        return STR."PanelUser{twitchUserId='\{twitchUserId}', creationTime=\{accountCreationTime}";
     }
 }
