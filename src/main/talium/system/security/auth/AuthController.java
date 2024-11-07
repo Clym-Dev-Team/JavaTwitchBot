@@ -52,7 +52,7 @@ public class AuthController {
         panelUserRepo.deleteById(userId);
     }
 
-    @PostMapping("/forceLogout")
+    @PostMapping("/deleteUserSessions")
     ResponseEntity<String> sessionReset(Authentication authentication) {
         PanelUser panelUser = (PanelUser) authentication.getDetails();
         if (panelUser != null) {
@@ -68,7 +68,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/logoutAll")
+    @PostMapping("/deleteAllSessions")
     void logoutAllUsers() {
         sessionRepo.deleteAll();
     }

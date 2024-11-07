@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(r -> r
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/login", "/error").permitAll()
+                        .requestMatchers("/error").permitAll()
                 )
                 .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
