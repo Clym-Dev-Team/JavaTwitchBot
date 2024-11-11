@@ -29,15 +29,13 @@ const router = createBrowserRouter(
   createRoutesFromChildren(
     <>
       <Route element={
-        <>
-          <LoginPage>
-            <TwitchNavMenu/>
-            <div className="contentRoot dark">
-              <Outlet/>
-              <Toaster/>
-            </div>
-          </LoginPage>
-        </>
+        <LoginPage>
+          <TwitchNavMenu/>
+          <div className="contentRoot dark">
+            <Outlet/>
+            <Toaster/>
+          </div>
+        </LoginPage>
       }>
         <Route path="/goal" element={<GoalEditorPane/>}/>
         <Route path="/templates" element={<TemplateListPane/>}/>
@@ -61,8 +59,7 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <TooltipProvider>
-      <RouterProvider router={router}>
-      </RouterProvider>
+      <RouterProvider router={router}/>
     </TooltipProvider>
   </React.StrictMode>,
 )

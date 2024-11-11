@@ -86,8 +86,7 @@ export function CommandForm({command, isNew, onSubmit, onDelete}: CommandFormPro
     </div>
 
     <VLabel name="Template:">
-      <TemplateEditor template={{id: "", template: "tetst", vars: [{name: "testvar", type: "string"}]}}/>
-      {/*<div className="templateSpacer">TEMPLATE EDIT PLACEHOLDER</div>*/}
+      <TemplateEditor template={getValues("template")}/>
     </VLabel>
     <SheetFooter>
       <Button variant={"destructive"} onClick={() => onDelete(command.id)}>Delete</Button>

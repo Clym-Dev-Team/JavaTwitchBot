@@ -7,4 +7,5 @@ export interface StringTemplate {
   vars?: TemplateVar[],
   id: string
   template: string,
+  varJsonSchema: string
 }
