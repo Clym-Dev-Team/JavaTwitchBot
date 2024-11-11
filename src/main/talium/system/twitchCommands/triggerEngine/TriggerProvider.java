@@ -23,6 +23,7 @@ public class TriggerProvider {
      */
     private static List<RuntimeTrigger> triggers;
     private static TriggerService triggerService;
+    private static final HashMap<String, RuntimeTrigger> codeTriggerMap = new HashMap<>();
 
     @Autowired
     public TriggerProvider(TriggerService triggerService) {
@@ -38,7 +39,7 @@ public class TriggerProvider {
     /**
      * Rebuilds the cache of triggers
      */
-    public static void rebuildTriggers() {
+    public static void rebuildTriggerCache() {
         triggers = buildTrigger();
     }
 
@@ -50,17 +51,15 @@ public class TriggerProvider {
      */
     public static List<RuntimeTrigger> buildTrigger() {
         // get list of DB triggers (user commands, and system triggers from last starts)
-        HashMap<String, TriggerEntity> dbCodeTriggers = getCodeTriggerDB();
-        // get list of system triggers from code definitions
-        HashMap<String, RuntimeTrigger> codeTriggers = getCodeTrigger();
+        HashMap<String, TriggerEntity> dbCodeTriggers = triggerService.getCodeTriggers();
 
-        HashMap<String, RuntimeTrigger> resultMap = getUserTriggerDB();
+        HashMap<String, RuntimeTrigger> resultMap = triggerService.getUserTriggers();
 
         // get overlap between sets
         // if triggerId is on both sets, the values from the db are preferred, bot the callback is taken from the code
         // if an triggerId is only in the code not in the db, the full trigger from the code is used
         // if a trigger is only in the db and not in the code the triggerId is removed from the DB, because it is not used anymore
-        for (var trigger : codeTriggers.values()) {
+        for (var trigger : codeTriggerMap.values()) {
             if (dbCodeTriggers.containsKey(trigger.id())) {
                 // triggerId is in both maps, use DB instance with code callback
                 TriggerEntity triggerEntity = dbCodeTriggers.get(trigger.id());
@@ -111,7 +110,7 @@ public class TriggerProvider {
             if (pattern.isRegex) {
                 regexes.add(Pattern.compile(pattern.pattern));
             } else {
-                regexes.add(Pattern.compile(STR."^\{pattern.pattern}( |.).*$", Pattern.CASE_INSENSITIVE));
+                regexes.add(Pattern.compile(STR."^\{pattern.pattern}\\b", Pattern.CASE_INSENSITIVE));
             }
         }
         return new RuntimeTrigger(
@@ -124,12 +123,15 @@ public class TriggerProvider {
         );
     }
 
-    private static HashMap<String, TriggerEntity> getCodeTriggerDB() {
-        return triggerService.getCodeTriggers();
-    }
-
-    private static HashMap<String, RuntimeTrigger> getUserTriggerDB() {
-        return triggerService.getUserTriggers();
+    /**
+     * Add the commands are specified in the InputConfiguration to an internal list to use while building the final cache of commands.
+     * @param commands list of commands to add
+     * @implNote Only to be used by the InputManager
+     */
+    public static void addCommandsFromCodeConfig(List<RuntimeTrigger> commands) {
+        for (RuntimeTrigger command : commands) {
+            codeTriggerMap.put(command.id(), command);
+        }
     }
 
     private static HashMap<String, RuntimeTrigger> getCodeTrigger() {

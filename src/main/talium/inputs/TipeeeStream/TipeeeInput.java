@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import talium.system.inputSystem.configuration.InputConfiguration;
 
 import java.io.IOException;
 import java.net.URI;
@@ -144,6 +145,11 @@ public class TipeeeInput implements BotInput {
     @Override
     public InputStatus getHealth() {
         return health;
+    }
+
+    @Override
+    public InputConfiguration getConfiguration() {
+        return null;
     }
 
     @Override

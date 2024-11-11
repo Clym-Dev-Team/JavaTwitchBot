@@ -10,6 +10,7 @@ import com.github.twitch4j.chat.events.TwitchEvent;
 import com.github.twitch4j.helix.TwitchHelix;
 import talium.inputs.shared.oauth.OAuthEndpoint;
 import talium.inputs.shared.oauth.OauthAccount;
+import talium.system.Out;
 import talium.system.eventSystem.EventDispatcher;
 import talium.system.inputSystem.BotInput;
 import talium.system.inputSystem.HealthManager;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import com.github.twitch4j.helix.domain.User;
+import talium.system.inputSystem.configuration.InputConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,6 +131,17 @@ public class Twitch4JInput implements BotInput {
             twitchClient.close();
         }
         logger.debug("Shutdown successful!");
+    }
+
+    @Override
+    public InputConfiguration getConfiguration() {
+        return new InputConfiguration.Builder()
+                .addCallbackCommand("twitchInput.test", "!twitchTest", Twitch4JInput::twitchTest)
+                .build();
+    }
+
+    public static void twitchTest(String triggerId, ChatMessage message) {
+        Out.Twitch.sendRawMessage("raw test message");
     }
 
     @Override
