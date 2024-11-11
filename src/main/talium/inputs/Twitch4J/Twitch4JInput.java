@@ -135,13 +135,7 @@ public class Twitch4JInput implements BotInput {
 
     @Override
     public InputConfiguration getConfiguration() {
-        return new InputConfiguration.Builder()
-                .addCallbackCommand("twitchInput.test", "!twitchTest", Twitch4JInput::twitchTest)
-                .build();
-    }
-
-    public static void twitchTest(String triggerId, ChatMessage message) {
-        Out.Twitch.sendRawMessage("raw test message");
+        return null;
     }
 
     @Override
