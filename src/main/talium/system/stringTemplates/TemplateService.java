@@ -2,17 +2,21 @@ package talium.system.stringTemplates;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import talium.system.twitchCommands.persistence.TriggerRepo;
+import talium.system.twitchCommands.persistence.TriggerService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TemplateService {
+    private final TriggerRepo triggerRepo;
     TemplateRepo repo;
 
     @Autowired
-    public TemplateService(TemplateRepo repo) {
+    public TemplateService(TemplateRepo repo, TriggerRepo triggerRepo) {
         this.repo = repo;
+        this.triggerRepo = triggerRepo;
     }
 
     public void updateTemplateStringById(String id, String template) {
@@ -28,6 +32,14 @@ public class TemplateService {
 
     public Optional<Template> getTemplateById(String id) {
         return repo.findById(id);
+    }
+
+    public Optional<Template> getTemplateByCommandId(String commandId) {
+        var command = triggerRepo.findById(commandId);
+        if (command.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(command.get().template);
     }
 
     public List<Template> getAllTemplates() {

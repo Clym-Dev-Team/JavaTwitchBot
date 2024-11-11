@@ -1,8 +1,14 @@
 package talium.system.twitchCommands.triggerEngine;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import talium.inputs.Twitch4J.ChatMessage;
 import talium.system.Out;
 import talium.system.eventSystem.Subscriber;
+import talium.system.stringTemplates.TemplateService;
+import talium.system.twitchCommands.cooldown.CooldownService;
 
 import static talium.system.twitchCommands.triggerEngine.TriggerProvider.triggers;
 import static talium.system.twitchCommands.cooldown.CooldownService.*;
@@ -13,9 +19,17 @@ import static talium.system.twitchCommands.cooldown.CooldownService.*;
  * Evaluates if a message satisfies all the conditions of a trigger.
  * If a message matches, a callback function is called with this message.
  */
+@Component
 public class TriggerEngine {
 
     public static final TriggerCallback TEXT_COMMAND_CALLBACK = TriggerEngine::executeTextCommand;
+    private static TemplateService templateService;
+    private static final Logger logger = LoggerFactory.getLogger(TriggerEngine.class);
+
+    @Autowired
+    public TriggerEngine(TemplateService templateService) {
+        TriggerEngine.templateService = templateService;
+    }
 
     /**
      * Consumes {@link ChatMessage}s from the Twitch Input and checks if any triggers match this message.
@@ -60,11 +74,13 @@ public class TriggerEngine {
         trigger.callback().triggerCallback(trigger.id(), message);
     }
 
-    public static void executeTextCommand(String triggerId, ChatMessage message) {
-        Out.Twitch.sendRawMessage(STR."TRIGGER: \{triggerId}");
-        System.out.println("executeTextCommand " + triggerId + ": " + message);
-        //TODO get template by command trigger id
-//        Out.Twitch.sendRawTemplate()
+    public static void executeTextCommand(String commandId, ChatMessage message) {
+        var template = templateService.getTemplateByCommandId(commandId);
+        if (template.isEmpty()) {
+            logger.error("Could not find template id for command id {}", commandId);
+            return;
+        }
+        Out.Twitch.sendRawTemplate(template.get().template, null);
     }
 
 }
