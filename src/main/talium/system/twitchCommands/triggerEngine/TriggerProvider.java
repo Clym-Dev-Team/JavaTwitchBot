@@ -133,22 +133,4 @@ public class TriggerProvider {
             codeTriggerMap.put(command.id(), command);
         }
     }
-
-    private static HashMap<String, RuntimeTrigger> getCodeTrigger() {
-        //TODO get triggers from code
-        var map = new HashMap<String, RuntimeTrigger>();
-
-        // TODO:REMOVE tests
-        Pattern pattern1 = Pattern.compile("!test");
-        ChatCooldown defaultCooldown = new ChatCooldown(CooldownType.MESSAGES, 2);
-        RuntimeTrigger testTrigger = new RuntimeTrigger("test.testID", List.of(pattern1), TwitchUserPermission.EVERYONE, defaultCooldown, defaultCooldown, TriggerProvider::testFunction);
-
-        map.put(testTrigger.id(), testTrigger);
-
-        return map;
-    }
-
-    public static void testFunction(String triggerId, ChatMessage messageEvent) {
-        System.out.println(STR."TESTFUNCTION \{triggerId}: \{messageEvent.message()}");
-    }
 }
