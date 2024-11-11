@@ -1,6 +1,7 @@
 package talium.system.twitchCommands.triggerEngine;
 
 import talium.inputs.Twitch4J.ChatMessage;
+import talium.system.Out;
 import talium.system.eventSystem.Subscriber;
 
 import static talium.system.twitchCommands.triggerEngine.TriggerProvider.triggers;
@@ -14,6 +15,7 @@ import static talium.system.twitchCommands.cooldown.CooldownService.*;
  */
 public class TriggerEngine {
 
+    public static final TriggerCallback TEXT_COMMAND_CALLBACK = TriggerEngine::executeTextCommand;
 
     /**
      * Consumes {@link ChatMessage}s from the Twitch Input and checks if any triggers match this message.
@@ -56,6 +58,13 @@ public class TriggerEngine {
         updateCooldownState(message, trigger.id(), trigger.globalCooldown(), trigger.userCooldown());
 
         trigger.callback().triggerCallback(trigger.id(), message);
+    }
+
+    public static void executeTextCommand(String triggerId, ChatMessage message) {
+        Out.Twitch.sendRawMessage(STR."TRIGGER: \{triggerId}");
+        System.out.println("executeTextCommand " + triggerId + ": " + message);
+        //TODO get template by command trigger id
+//        Out.Twitch.sendRawTemplate()
     }
 
 }

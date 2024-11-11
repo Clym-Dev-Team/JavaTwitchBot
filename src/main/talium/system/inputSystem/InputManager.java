@@ -6,6 +6,8 @@ import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import talium.system.stringTemplates.TemplateService;
+import talium.system.twitchCommands.triggerEngine.TriggerProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -14,6 +16,7 @@ public class InputManager {
 
     private static final Logger logger = LoggerFactory.getLogger(InputManager.class);
     private static final List<BotInput> inputs = new ArrayList<>();
+    private static boolean startupFinished = false;
 
     public static void startAllInputs() {
         var scannedInputs = scanForInputs().stream().toList();
@@ -21,6 +24,8 @@ public class InputManager {
         for (BotInput input : scannedInputs) {
             startInput(input);
         }
+        TriggerProvider.rebuildTriggerCache();
+        startupFinished = true;
     }
 
     public static void startInput(BotInput input) {
@@ -30,6 +35,17 @@ public class InputManager {
         } catch (RuntimeException e) {
             logger.error("Exception starting Input: {} because: {}", input.getClass().getName(), e.getMessage());
             HealthManager.reportStatus(input, InputStatus.DEAD);
+        }
+        try {
+            var conf = input.getConfiguration();
+            if (conf == null) {
+                return;
+            }
+            TriggerProvider.addCommandsFromCodeConfig(conf.commands());
+            //TODO add templates
+        } catch (RuntimeException e) {
+            logger.error("Exception while setting Input Configuration: {} because: {}", input.getClass().getName(), e.getMessage());
+            HealthManager.reportStatus(input, InputStatus.INJURED);
         }
     }
 
