@@ -1,13 +1,17 @@
 package talium.system.inputSystem.configuration;
 
+import javassist.bytecode.CodeIterator;
+import org.checkerframework.checker.units.qual.N;
 import talium.inputs.Twitch4J.TwitchUserPermission;
 import talium.system.stringTemplates.Template;
 import talium.system.twitchCommands.cooldown.ChatCooldown;
 import talium.system.twitchCommands.cooldown.CooldownType;
 import talium.system.twitchCommands.triggerEngine.RuntimeTrigger;
 import talium.system.twitchCommands.triggerEngine.TriggerCallback;
+import talium.system.twitchCommands.triggerEngine.TriggerEngine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -32,49 +36,32 @@ public record InputConfiguration(List<RuntimeTrigger> commands, List<Template> t
             return this;
         }
 
-        public Builder addCallbackCommand(String commandId, String pattern, TwitchUserPermission permission, TriggerCallback callback) {
-            commands.add(new RuntimeTrigger(commandId, List.of(Pattern.compile(pattern)), permission, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, callback));
-            return this;
-        }
-
         public Builder addCallbackCommand(String commandId, List<String> pattern, TriggerCallback callback) {
             commands.add(new RuntimeTrigger(commandId, pattern.stream().map(Pattern::compile).toList(), TwitchUserPermission.EVERYONE, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, callback));
             return this;
         }
 
-        public Builder addCallbackCommand(String commandId, List<String> pattern, TwitchUserPermission permission, TriggerCallback callback) {
-            commands.add(new RuntimeTrigger(commandId, pattern.stream().map(Pattern::compile).toList(), permission, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, callback));
-            return this;
-        }
-
-
         public Builder addTextCommand(String commandId, String pattern, String template) {
-            var stringTemplate = new Template(commandId, template, null);
-//            commands.add(new RuntimeTrigger(commandId, List.of(Pattern.compile(pattern)), TwitchUserPermission.EVERYONE, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, stringTemplate));
-            return this;
-        }
-
-        public Builder addTextCommand(String commandId, String pattern, TwitchUserPermission permission, String template) {
-            var stringTemplate = new Template(commandId, template, null);
-//            commands.add(new RuntimeTrigger(commandId, List.of(Pattern.compile(pattern)), permission, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, stringTemplate));
+            templates.add(new Template(commandId, template, null));
+            commands.add(new RuntimeTrigger(commandId, List.of(Pattern.compile(pattern)), TwitchUserPermission.EVERYONE, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, TriggerEngine.TEXT_COMMAND_CALLBACK));
             return this;
         }
 
         public Builder addTextCommand(String commandId, List<String> pattern, String template) {
-            var stringTemplate = new Template(commandId, template, null);
-//            commands.add(new RuntimeTrigger(commandId, pattern.stream().map(Pattern::compile).toList(), TwitchUserPermission.EVERYONE, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, stringTemplate));
+            templates.add(new Template(commandId, template, null));
+            commands.add(new RuntimeTrigger(commandId, pattern.stream().map(Pattern::compile).toList(), TwitchUserPermission.EVERYONE, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, TriggerEngine.TEXT_COMMAND_CALLBACK));
             return this;
         }
 
         public Builder addTextCommand(String commandId, List<String> pattern, TwitchUserPermission permission, String template) {
-            var stringTemplate = new Template(commandId, template, null);
-//            commands.add(new RuntimeTrigger(commandId, pattern.stream().map(Pattern::compile).toList(), permission, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, stringTemplate));
+            templates.add(new Template(commandId, template, null));
+            commands.add(new RuntimeTrigger(commandId, pattern.stream().map(Pattern::compile).toList(), permission, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, TriggerEngine.TEXT_COMMAND_CALLBACK));
             return this;
         }
 
         public Builder addTextCommand(String commandId, List<String> pattern, TwitchUserPermission permission, String template, String messageColor) {
-            var stringTemplate = new Template(commandId, template, messageColor);
-//            commands.add(new RuntimeTrigger(commandId, pattern.stream().map(Pattern::compile).toList(), permission, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, stringTemplate));
+            templates.add(new Template(commandId, template, messageColor));
+            commands.add(new RuntimeTrigger(commandId, pattern.stream().map(Pattern::compile).toList(), permission, DEFAULT_COOLDOWN, DEFAULT_COOLDOWN, TriggerEngine.TEXT_COMMAND_CALLBACK));
             return this;
         }
 
