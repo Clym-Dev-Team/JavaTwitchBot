@@ -18,18 +18,6 @@ public record TemplateDTO(
         String messageColor,
         String varJsonSchema
 ) {
-    static String schema;
-
-    static {
-        var vars1 = new HashMap<String, Class>();
-        vars1.put("varJsonSchema", String.class);
-        vars1.put("gols", GoalTemplateContext.class);
-        vars1.put("num", Integer.class);
-        vars1.put("com", TriggerDTO.class);
-        var vars2 = new ArrayList<Field>();
-        schema = buildJsonSchema(vars1);
-    }
-
     public TemplateDTO(String id, String template, String messageColor, String varJsonSchema) {
         this.id = id;
         this.template = template;
@@ -38,7 +26,7 @@ public record TemplateDTO(
     }
 
     public TemplateDTO(Template template) {
-        this(template.id, template.template, template.messageColor, schema);
+        this(template.id, template.template, template.messageColor, "");
     }
 
     private static String buildJsonSchema(HashMap<String, Class> vars) {
@@ -66,8 +54,6 @@ public record TemplateDTO(
         ) {
             return STR."\"\{clazz.getSimpleName()}\"";
         }
-
-        //TODO record
 
         if (clazz.isArray()) {
             return STR."[\{generateSchema(clazz.componentType())}]";
@@ -97,19 +83,6 @@ public record TemplateDTO(
             schema.deleteCharAt(schema.length() - 1);
         }
         return schema.append("}").toString();
-    }
-
-    public static void main(String[] args) {
-        var vars1 = new HashMap<String, Class>();
-        vars1.put("varJsonSchema", String.class);
-        vars1.put("gols", GoalTemplateContext.class);
-        vars1.put("num", Integer.class);
-        vars1.put("com", TriggerDTO.class);
-        var vars2 = new ArrayList<Field>();
-        System.out.println(buildJsonSchema(vars1));
-
-        System.out.println(generateSchema(TriggerDTO.class));
-        System.out.println(generateSchema(String[].class));
     }
 
     public Template toTemplate() {

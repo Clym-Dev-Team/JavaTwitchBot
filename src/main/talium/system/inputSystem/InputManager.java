@@ -1,5 +1,7 @@
 package talium.system.inputSystem;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import talium.system.ASCIIProgressbar;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -12,11 +14,18 @@ import talium.system.twitchCommands.triggerEngine.TriggerProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+@Component
 public class InputManager {
 
     private static final Logger logger = LoggerFactory.getLogger(InputManager.class);
     private static final List<BotInput> inputs = new ArrayList<>();
     private static boolean startupFinished = false;
+    private static TemplateService templateService;
+
+    @Autowired
+    public InputManager(TemplateService templateService) {
+        InputManager.templateService = templateService;
+    }
 
     public static void startAllInputs() {
         var scannedInputs = scanForInputs().stream().toList();
@@ -42,7 +51,7 @@ public class InputManager {
                 return;
             }
             TriggerProvider.addCommandsFromCodeConfig(conf.commands());
-            //TODO add templates
+            templateService.saveIfAbsent(conf.templates());
         } catch (RuntimeException e) {
             logger.error("Exception while setting Input Configuration: {} because: {}", input.getClass().getName(), e.getMessage());
             HealthManager.reportStatus(input, InputStatus.INJURED);

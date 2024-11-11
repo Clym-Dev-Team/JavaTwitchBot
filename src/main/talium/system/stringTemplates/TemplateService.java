@@ -37,4 +37,13 @@ public class TemplateService {
     public void save(Template template) {
         repo.save(template);
     }
+
+    public void saveIfAbsent(List<Template> templates) {
+        for (Template template : templates) {
+            if (repo.existsById(template.id)) {
+                return;
+            }
+            save(template);
+        }
+    }
 }
