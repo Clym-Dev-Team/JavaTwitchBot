@@ -32,7 +32,6 @@ import java.util.Arrays;
 
 @Input
 public class TipeeeInput implements BotInput {
-    // we can get the tipeeeSocketUrl from this
     private static final String tipeeeSocketInfoUrl = "https://api.tipeeestream.com/v2.0/site/socket";
 
     // we can set this manually as a backup if the response of the tipeeeSocketInfoUrl isn't updated
@@ -70,6 +69,11 @@ public class TipeeeInput implements BotInput {
 
     @Override
     public void run() {
+        if (tipeeeSocketUrl == null && apiKey == null && channelName == null) {
+            LOGGER.warn("TipeeeStream Module is disabled");
+            report(InputStatus.STOPPED);
+            return;
+        }
         report(InputStatus.STARTING);
         LOGGER.info("Stating TipeeeInput for Channel {}", channelName);
         if (tipeeeSocketUrl == null || tipeeeSocketUrl.isEmpty()) {
@@ -101,11 +105,12 @@ public class TipeeeInput implements BotInput {
                     ((EngineIOException) objects[0]).printStackTrace();
                 }
             } else {
+                LOGGER.error("Failed to connect to tipeeeStream Websocket: {}", Arrays.toString(objects));
                 throw new RuntimeException(Arrays.toString(objects));
             }
         });
 
-        socket.on(Socket.EVENT_CONNECT, objects -> {
+        socket.on(Socket.EVENT_CONNECT, _ -> {
             socket.emit("join-room", STR."{ room: '\{apiKey}', username: '\{channelName}'}");
             report(InputStatus.HEALTHY);
         });
@@ -117,10 +122,6 @@ public class TipeeeInput implements BotInput {
         // so will otherwise not be done by the time we check if the starting has worked
         Instant end = Instant.now().plusSeconds(10);
         while (!socket.connected() || end.isBefore(Instant.now()) && !TwitchBot.requestedShutdown) Thread.onSpinWait();
-
-        if (TwitchBot.requestedShutdown) {
-            throw new UnexpectedShutdownException();
-        }
 
         LOGGER.info("Tipeee socket connected");
     }
