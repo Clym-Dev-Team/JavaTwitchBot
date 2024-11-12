@@ -38,13 +38,13 @@ public class IfParser {
         }
 
         if (tokens[0].kind() == IfTokenKind.COMPARISON) {
-            throw new TemplateSyntaxException(STR."Expected IfToken of type other than a comparison operator as the first token of a comparison!");
+            throw new TemplateSyntaxException("Expected IfToken of type other than a comparison operator as the first token of a comparison!");
         }
         if (tokens[1].kind() != IfTokenKind.COMPARISON) {
-            throw new TemplateSyntaxException(STR."Expected IfToken of type comparison operator as the second token of a comparison!");
+            throw new TemplateSyntaxException("Expected IfToken of type comparison operator as the second token of a comparison!");
         }
         if (tokens[2].kind() == IfTokenKind.COMPARISON) {
-            throw new TemplateSyntaxException(STR."Expected IfToken of type other than a comparison operator as the third token of a comparison!");
+            throw new TemplateSyntaxException("Expected IfToken of type other than a comparison operator as the third token of a comparison!");
         }
 
         Equals equals = switch (tokens[1].value()) {
@@ -54,7 +54,7 @@ public class IfParser {
             case "<=" -> Equals.LESS_THAN_OR_EQUALS;
             case ">" -> Equals.GREATER_THAN;
             case ">=" -> Equals.GREATER_THAN_OR_EQUALS;
-            default -> throw new UnsupportedComparisonOperator(STR."Not a valid Comparison Operator: \{tokens[1].value()}");
+            default -> throw new UnsupportedComparisonOperator("Not a valid Comparison Operator: " + tokens[1].value());
         };
         return new Comparison(tokenToObject(tokens[0]), equals, tokenToObject(tokens[2]));
     }
@@ -117,7 +117,7 @@ public class IfParser {
             }
             case DOUBLE -> Double.parseDouble(token.value());
             case BOOLEAN -> Boolean.parseBoolean(token.value());
-            case COMPARISON -> throw new RuntimeException(STR."Another Comparison not a valid Object for an comparison comparand");
+            case COMPARISON -> throw new RuntimeException("Another Comparison not a valid Object for an comparison comparand");
         };
     }
 }
