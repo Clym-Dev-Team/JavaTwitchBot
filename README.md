@@ -58,5 +58,9 @@ This bot is not designed as a standalone system, instead it is to be integrated 
   > The Twitch Chatlogs, reimplemented for the whole chat. _Infinite_ history of the entire chat, with searching of the entire history.
 
 # Installation
+## Passing configuration values
+[Reference](https://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/html/boot-features-external-config.html)
+
+A application.properties file can be placed next to the bot jar file (or in /config in the same dir) for any needed (or to be overwritten) config values
 
 # [Developing](/wiki/Dev-Setup)

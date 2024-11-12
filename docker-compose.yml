@@ -1,0 +1,15 @@
+# Dependencies for running the bot in development
+# Passwords like this should never be used in a real production environment with real and important data
+name: talium-dev
+services:
+  mariaDB:
+    image: mariadb:11.1.2
+    environment:
+      MYSQL_DATABASE: 'talium'
+      MYSQL_USER: 'taliumBot'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - "4770:3306"
+    expose:
+      - 3306
