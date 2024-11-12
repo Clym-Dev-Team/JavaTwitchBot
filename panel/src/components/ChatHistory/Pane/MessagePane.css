@@ -1,0 +1,67 @@
+:root {
+    --base-background: #18181b;
+    --muted-text: #adadb8;
+    --twitchViolett: rgb(112, 34, 226);
+    --accentColor: rgb(250, 50, 95);
+    --select-grey: #3d3d40;
+    --color-border-base: #53535f7a;
+    --gradient-standard: linear-gradient(
+            45deg,
+            var(--twitchViolett) 0%,
+            var(--accentColor) 100%
+    );
+
+}
+
+:root,
+.std-font {
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: normal;
+    font-family: Inter, Roobert, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #efeff1;
+}
+
+.message-pane {
+    background-color: var(--base-background);
+    height: 100%;
+
+}
+
+.chat_history_header {
+    color: #dedee3;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 2px solid var(--color-border-base);
+    text-transform: uppercase;
+    font-weight: 600;
+    box-sizing: border-box;
+    height: min-content;
+}
+
+.message-scroll-container {
+    height: 94%;
+    width: 100%;
+    overflow-x: clip;
+    overflow-y: scroll;
+}
+
+.message-list {
+    /*flex-direction: column-reverse;*/
+    /*display: flex;*/
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track-piece {
+    /*background-color: var(--color-border-base);*/
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-standard);
+    border-radius: 10px;
+    /*border: 2px solid black;*/
+}

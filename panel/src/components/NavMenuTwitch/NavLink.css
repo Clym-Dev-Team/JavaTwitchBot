@@ -1,0 +1,19 @@
+/*Default (unselected) links*/
+.navLink{
+    padding: .5rem;
+    box-sizing: border-box;
+    color: white;
+}
+
+/*Hovered Links*/
+.navLink:hover {
+    border-radius: 1rem;
+    background-color: #3d3d40;
+}
+
+/*Selected links, both classes to be more specific and overwrite*/
+.navLink.navLinkHighlight {
+    border-radius: 1rem;
+    background-color: var(--twitchViolett);
+    color: hotpink;
+}

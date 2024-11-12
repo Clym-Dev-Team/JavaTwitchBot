@@ -1,0 +1,20 @@
+.titleBar {
+    /*height: 10rem;*/
+    height: 4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+    padding: 10px;
+    border-bottom: 2px solid var(--primary-border-color);
+    overflow: hidden;
+}
+
+.titleBar-returnBtn {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.titleBar-title {
+    font-size: xx-large;
+}

@@ -1,0 +1,33 @@
+.centerInColumn {
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.actionBar {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    gap: 10px;
+}
+
+.actionBar > button {
+    height: auto;
+}
+
+.searchBox {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+.searchBox > input {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.searchBox > button {
+    height: auto;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}

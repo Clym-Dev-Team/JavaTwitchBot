@@ -1,0 +1,22 @@
+.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.loginForm-login {
+    width: 100%;
+    padding: 10px;
+    border-radius: 1rem;
+    background-color: green;
+}
+
+.loginForm-login:hover {
+    background-color: seagreen;
+}

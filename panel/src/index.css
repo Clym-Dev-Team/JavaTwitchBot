@@ -1,0 +1,77 @@
+:root {
+  /*Auto generated defaults*/
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--text-color);
+  background-color: var(--default-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+
+  /*Our Constants*/
+  --purple-hsl: hsl(264, 22%, 18%);
+  --twitchViolett: rgb(112, 34, 226);
+  --accentColor: rgb(183, 50, 95);
+
+  --primary-border-color: var(--purple-hsl);
+  --primary-border: var(--primary-border-color) 2px solid;
+  --field-color: #252628;
+  --default-background: #18181b;
+  --gradient-diag: linear-gradient(
+          130deg,
+          transparent 0% 33%,
+          var(--twitchViolett) 66%,
+          var(--accentColor) 100%
+  );
+  --text-color: rgba(255, 255, 255, 0.87);
+}
+
+body {
+  margin: 0;
+  width: -webkit-fill-available;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+#root {
+  /*Style so our nav bar works*/
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: var(--text-color);
+  background-color: var(--default-background);
+}
+
+.contentRoot {
+  width: -webkit-fill-available;
+  width: -moz-available;
+}
+
+/* Disable arrows in input type="number" */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+li.toast {
+  color: white;
+}
+
+li.toast-success {
+  background-color: var(--field-color);
+}

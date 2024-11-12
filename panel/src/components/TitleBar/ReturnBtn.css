@@ -1,0 +1,22 @@
+.returnBtn {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    gap: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 1rem;
+    border: var(--primary-border);
+    /*background-color: hotpink;*/
+    font-size: x-large;
+    color: white;
+}
+
+.returnBtn-icon {
+    height: 100%;
+}
+
+.returnBtn-text {
+    padding: 0 4px;
+}

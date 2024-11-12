@@ -1,0 +1,63 @@
+.commandPopup {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+.triggers {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.trigger {
+    display: flex;
+    flex-direction: row;
+    height: 3rem;
+}
+.removeTriggerBtn {
+    aspect-ratio: 1;
+    height: 100%;
+    padding: 5px;
+    margin-right: .5rem;
+}
+
+.removeTriggerBtn > SVG {
+    height: 100%;
+    aspect-ratio: 1;
+    width: auto;
+    flex: 1;
+}
+
+.addTrigger {
+    width: 100%;
+}
+
+.cooldown {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 0.5rem;
+}
+
+.cooldown > label {
+    flex: 1;
+}
+
+.templateSpacer {
+    height: 20rem;
+    width: 100%;
+    background: repeating-linear-gradient(
+            45deg,
+            #606dbc,
+            #606dbc 10px,
+            #465298 10px,
+            #465298 20px
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Bahnschrift;
+    font-size: 2rem;
+}

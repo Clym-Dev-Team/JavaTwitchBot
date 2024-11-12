@@ -1,0 +1,21 @@
+.giveawayTemplateList {
+    flex: 1;
+    border-bottom: var(--primary-border);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.templateItem {
+    display: flex;
+    justify-content: space-between;
+    font-size: larger;
+    padding: .5em 1em;
+    height: fit-content;
+}
+
+.templateEditBtn {
+    aspect-ratio: 1;
+    height: 3em;
+}

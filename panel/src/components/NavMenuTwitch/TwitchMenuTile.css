@@ -1,0 +1,25 @@
+.twitchMenuTile {
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--twitchViolett);
+    border-radius: 4px;
+    font-size: xx-large;
+    font-weight: bold;
+    aspect-ratio: 1.4;
+}
+
+.twitchMenuTile.highlight {
+    background-color: var(--accentColor);
+}
+
+.twitchMenuTile > svg {
+    width: 100%;
+    height: 100%;
+}
+
+.tooltipContent {
+    font-size: large;
+}

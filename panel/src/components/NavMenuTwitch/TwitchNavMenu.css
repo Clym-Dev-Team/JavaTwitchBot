@@ -1,0 +1,21 @@
+.navMenu {
+    display: flex;
+    flex-direction: column;
+    width: 7.5%;
+    min-width: 160px;
+    gap: 1rem;
+    padding: 1rem;
+    border-right: var(--primary-border);
+}
+
+.twitchTiles {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.otherOptions {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}

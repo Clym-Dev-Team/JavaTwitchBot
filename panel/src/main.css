@@ -1,0 +1,82 @@
+@tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  @layer base {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: var(--purple-muted-hsl);
+
+      --card: 0 0% 100%;
+      --card-foreground: var(--purple-muted-hsl);
+
+      --popover: 0 0% 100%;
+      --popover-foreground: var(--purple-muted-hsl);
+
+      --primary: 222.2 47.4% 11.2%;
+      --primary-foreground: 210 40% 98%;
+
+      --secondary: 210 40% 96.1%;
+      --secondary-foreground: 222.2 47.4% 11.2%;
+
+      --muted: 210 40% 96.1%;
+      --muted-foreground: 215.4 16.3% 46.9%;
+
+      --accent: 210 40% 96.1%;
+      --accent-foreground: 222.2 47.4% 11.2%;
+
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 40% 98%;
+
+      --border: 214.3 31.8% 91.4%;
+      --input: 214.3 31.8% 91.4%;
+      --ring: 222.2 84% 4.9%;
+
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      /*OUR EDITS*/
+      --purple-hsl: 264, 22%, 18%;
+      --purple-muted-hsl: 264, 10%, 6.5%;
+      --text-hsl: 210 40% 98%;
+      /*VAR END*/
+
+      --background: 240 5.88% 5%;
+      --foreground: 210 40% 98%;
+
+      --card: var(--purple-muted-hsl);
+      --card-foreground: 210 40% 98%;
+
+      --popover: var(--purple-muted-hsl);
+      --popover-foreground: 210 40% 98%;
+
+      --primary: var(--purple-hsl);
+      --primary-foreground: var(--text-hsl);
+
+      --secondary: var(--purple-hsl);
+      --secondary-foreground: 210 40% 98%;
+
+      --muted: var(--purple-hsl);
+      --muted-foreground: 215 20.2% 65.1%;
+
+      --accent: var(--purple-hsl);
+      --accent-foreground: var(--text-hsl);
+
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: var(--text-hsl);
+
+      --border: var(--purple-hsl);
+      --input: var(--purple-hsl);
+      --ring: var(--purple-hsl);
+    }
+  }
+
+  @layer base {
+    * {
+      @apply tw-border-border;
+    }
+    body {
+      @apply tw-bg-background tw-text-foreground;
+    }
+  }
