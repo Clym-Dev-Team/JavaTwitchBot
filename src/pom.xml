@@ -2,16 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <modules>
-    </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.1.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>de.orciument</groupId>
-    <artifactId>JavaTwitchBot</artifactId>
+    <artifactId>Talium-Bot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Talium</name>
     <description>Talium, a Java Twitch Bot</description>
@@ -131,21 +128,13 @@
                 </configuration>
             </plugin>
         </plugins>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>main</sourceDirectory>
+        <outputDirectory>out</outputDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
         <resources>
             <resource>
-                <directory>src/resources</directory>
+                <directory>resources</directory>
             </resource>
-            <resource>
-                <directory>src/main/talium/modules/</directory>
-            </resource>
-<!--            <resource>-->
-<!--                <directory>src/main/modules/testModule/resources</directory>-->
-<!--            </resource>-->
-<!--            <resource>-->
-<!--                <directory>src/main/modules/testModule2/resources</directory>-->
-<!--            </resource>-->
         </resources>
     </build>
-
 </project>
