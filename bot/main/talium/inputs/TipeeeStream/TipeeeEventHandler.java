@@ -26,12 +26,11 @@ public class TipeeeEventHandler {
             }
 
             DonationEvent donationEvent = parseToInstance(event);
-            LOGGER.debug("Collected + Parsed DonationEvent: \n" + donationEvent);
+            LOGGER.debug("Collected + Parsed DonationEvent: \n{}", donationEvent);
             EventDispatcher.dispatch(donationEvent);
         } catch (Exception e) {
+            LOGGER.error("Parsing of Event Failed! Original: {}", eventString);
             e.printStackTrace();
-            LOGGER.error("Parsing of Event Failed! Original EventString: " + eventString);
-            throw new RuntimeException(e);
         }
     }
 
