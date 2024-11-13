@@ -2,6 +2,8 @@ package talium.inputs.shared.oauth;
 
 import com.github.philippheuer.credentialmanager.identityprovider.OAuth2IdentityProvider;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import talium.TwitchBot;
 import talium.system.UnexpectedShutdownException;
@@ -16,6 +18,15 @@ import java.util.Optional;
 
 @Controller
 public class OAuthEndpoint {
+
+    private static String BOT_BASE_URL;
+    private static String PANEL_BASE_URL;
+
+    @Autowired
+    public OAuthEndpoint(@Value("${serverBaseUrl}") String botBaseUrl, @Value("${panelBaseUrl}") String panelBaseUrl) {
+        OAuthEndpoint.BOT_BASE_URL = botBaseUrl;
+        OAuthEndpoint.PANEL_BASE_URL = panelBaseUrl;
+    }
 
     public static class OauthRequest {
         public String state;
@@ -43,16 +54,12 @@ public class OAuthEndpoint {
 
     public static ArrayList<OauthRequest> requests = new ArrayList<>();
 
-    //TODO Muss in Globale Config
-    //    @Value("panelURL") funktioniert nicht
-    private static final String BACKEND_URL = "http://localhost";
-
     public static String getRedirectUrl(String service) {
-        return BACKEND_URL + "/auth/" + service;
+        return BOT_BASE_URL + "/auth/" + service;
     }
 
     public static String getOauthSetupUrl() {
-        return "http://localhost:5173/auth";
+        return PANEL_BASE_URL + "/auth";
     }
 
     public static Optional<String> newOAuthGrantFlow(String accName, String service, OAuth2IdentityProvider iProvider, ArrayList<Object> scopes) {
@@ -77,21 +84,18 @@ public class OAuthEndpoint {
         return Optional.of(code);
     }
 
-    // TODO this should be /twitch, but dev.twitch.tv is broken for me
     @RequestMapping("/auth/{service}")
     public String oAuthEndpoint(@PathVariable String service, @RequestParam(required = false) String code, @RequestParam(required = false) String scope, @RequestParam String state, @RequestParam(required = false) String error, @RequestParam(required = false) String error_description, Model model) {
-        String PANEL_UI_PAGE = "http://localhost:5173/oauth";
-
         //If the state is not equal to the state of our request, the response is not ours
         var s = requests.stream().filter(r -> r.state.equals(state)).findFirst();
         if (s.isEmpty()) {
-            return STR."redirect:\{PANEL_UI_PAGE}?success=false&error=" + URLEncoder.encode("This oauth was never requested from the app", StandardCharsets.UTF_8);
+            return STR."redirect:\{PANEL_BASE_URL}?success=false&error=" + URLEncoder.encode("This oauth was never requested from the app", StandardCharsets.UTF_8);
         } else if (error != null) {
-            return STR."redirect:\{PANEL_UI_PAGE}?success=false&error=" + URLEncoder.encode(error_description, StandardCharsets.UTF_8);
+            return STR."redirect:\{PANEL_BASE_URL}?success=false&error=" + URLEncoder.encode(error_description, StandardCharsets.UTF_8);
         }
 
         s.get().code = Optional.of(code);
-        return STR."redirect:\{PANEL_UI_PAGE}?success=true";
+        return STR."redirect:\{PANEL_BASE_URL}?success=true";
     }
 
     @GetMapping("/setup/auth/list")

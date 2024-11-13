@@ -58,7 +58,7 @@ export default function GiveawayEditPage() {
             </SelectContent>
           </Select></VLabel>
           <VLabel name="Timer Template"><TemplateEditor
-            template={{id: "", template: "tetst", vars: [{name: "testvar", type: "string"}]}}/>
+            template={{id: "", template: "tetst", varJsonSchema: "", vars: [{name: "testvar", type: "string"}]}}/>
           </VLabel>
           {/* TODO add template color field*/}
           <h1>Public Website</h1>
