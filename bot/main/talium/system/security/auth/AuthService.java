@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import talium.system.security.auth.persistence.PanelUser;
 import talium.system.security.auth.persistence.PanelUserRepo;
 import talium.system.security.auth.persistence.Session;
-import talium.system.security.auth.persistence.SessionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,41 +21,35 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import static talium.system.security.auth.SessionService.*;
+
 @Service
 public class AuthService {
 
     private final Duration sessionTimeout = Duration.ofMinutes(15);
-    private final SessionRepo sessionRepo;
     private final PanelUserRepo panelUserRepo;
     public static boolean byPassAllAuth;
     private final List<String> configAllowedUsernames;
     private final boolean overwritePanelUsers;
 
     @Autowired
-    public AuthService(SessionRepo sessionRepo, PanelUserRepo panelUserRepo, @Value("${disableAllAuth}") String disableAllAuth, @Value("${allowedPanelUsers}") List<String> configAllowedUsernames, @Value("${overwritePanelUsers:false}") boolean overwritePanelUsers) {
-        this.sessionRepo = sessionRepo;
+    public AuthService(PanelUserRepo panelUserRepo, @Value("${disableAllAuth}") String disableAllAuth, @Value("${allowedPanelUsers}") List<String> configAllowedUsernames, @Value("${overwritePanelUsers:false}") boolean overwritePanelUsers) {
         this.panelUserRepo = panelUserRepo;
         byPassAllAuth = disableAllAuth.equals("true");
         this.configAllowedUsernames = configAllowedUsernames;
         this.overwritePanelUsers = overwritePanelUsers;
-
-        var sessions = sessionRepo.findAll();
-        for (var session : sessions) {
-            if (session.lastRefreshedAt().plusSeconds(sessionTimeout.toSeconds()).isBefore(Instant.now())) {
-                sessionRepo.delete(session);
-            }
-        }
     }
 
     public boolean authenticate(String accessToken, String userAgent) throws AuthenticationRejected {
-        Optional<Session> optSession = sessionRepo.findByAccessToken(accessToken);
+        Optional<Session> optSession = getByAccessToken(accessToken);
         if (optSession.isPresent()) {
             // if session is not timed out, and the userAgent is the same, we short circuit accepting the token and granting access
             Session session = optSession.get();
-            if (!session.userAgent().equals(userAgent)) {
+            if (!session.userAgent.equals(userAgent)) {
                 throw new AuthenticationRejected(HttpStatus.UNAUTHORIZED, "Reauthenticate with access token");
             }
-            if (!session.lastRefreshedAt().plusSeconds(sessionTimeout.toSeconds()).isBefore(Instant.now())) {
+            if (!session.lastRefreshedAt.plusSeconds(sessionTimeout.toSeconds()).isBefore(Instant.now())) {
+                deleteSession(session);
                 return true;
             }
         }
@@ -85,8 +78,7 @@ public class AuthService {
             butUser = Optional.of(entity);
         }
 
-        Session s = new Session(accessToken, userAgent, Instant.now(), butUser.get());
-        sessionRepo.save(s);
+        createSession(new Session(accessToken, userAgent, Instant.now(), butUser.get()));
         return true;
     }
 

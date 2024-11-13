@@ -15,13 +15,11 @@ import java.util.Optional;
 
 @RestController
 public class AuthController {
-    private final SessionRepo sessionRepo;
     private final PanelUserRepo panelUserRepo;
     private final Gson gson = new Gson();
 
     @Autowired
-    public AuthController(SessionRepo sessionRepo, PanelUserRepo panelUserRepo) {
-        this.sessionRepo = sessionRepo;
+    public AuthController(PanelUserRepo panelUserRepo) {
         this.panelUserRepo = panelUserRepo;
     }
 
@@ -56,21 +54,23 @@ public class AuthController {
     ResponseEntity<String> sessionReset(Authentication authentication) {
         PanelUser panelUser = (PanelUser) authentication.getDetails();
         if (panelUser != null) {
-            sessionRepo.deleteByPanelUser(panelUser);
+            Optional<Session> byPanelUser = SessionService.getByPanelUser(panelUser);
+            byPanelUser.ifPresent(SessionService::deleteSession);
             return ResponseEntity.ok().build();
         }
         // delete all session with the user that owns this session
-        Optional<Session> currentSession = sessionRepo.findByAccessToken((String) authentication.getPrincipal());
+        Optional<Session> currentSession = SessionService.getByAccessToken((String) authentication.getPrincipal());
         if (currentSession.isEmpty()) {
             return new ResponseEntity<>("Authenticated, but User of this session could not be found!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        sessionRepo.deleteByPanelUser(currentSession.get().botUser());
+        Optional<Session> byPanelUser = SessionService.getByPanelUser(panelUser);
+        byPanelUser.ifPresent(SessionService::deleteSession);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/deleteAllSessions")
     void logoutAllUsers() {
-        sessionRepo.deleteAll();
+        SessionService.deleteAllSessions();
     }
 
 }
