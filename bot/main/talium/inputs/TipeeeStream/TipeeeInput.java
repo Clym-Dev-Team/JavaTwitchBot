@@ -62,7 +62,9 @@ public class TipeeeInput implements BotInput {
 
     @Override
     public void shutdown() {
-        socket.close();
+        if (socket != null) {
+            socket.close();
+        }
         LOGGER.info("Shut down Tipeee input");
         report(InputStatus.STOPPED);
     }

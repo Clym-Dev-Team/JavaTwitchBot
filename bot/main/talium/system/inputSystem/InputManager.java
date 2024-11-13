@@ -66,18 +66,16 @@ public class InputManager {
     }
 
     public static void stopInput(BotInput input) {
-        //TODO kill any Inputs if they do not shut down after a certain time
-        try {
-            new Thread(() -> {
+        new Thread(() -> {
+            try {
                 input.shutdown();
-                inputs.remove(input);
-            }, "CLOSER-" + input.threadName()).start();
-//            inputs.remove(input);
-            HealthManager.reportStatus(input, InputStatus.STOPPED);
-        } catch (Exception e) {
-            logger.error("Exception stopping Input: {} because: {}", input.getClass().getName(), e.getMessage());
-            HealthManager.reportStatus(input, InputStatus.DEAD);
-        }
+                HealthManager.reportStatus(input, InputStatus.STOPPED);
+            } catch (Exception e) {
+                logger.error("Exception stopping Input: {} because: {}", input.getClass().getName(), e.getMessage());
+                HealthManager.reportStatus(input, InputStatus.DEAD);
+            }
+            inputs.remove(input);
+        }, "CLOSER-" + input.threadName()).start();
     }
 
     public static boolean finishedShutdown() {
@@ -85,7 +83,6 @@ public class InputManager {
     }
 
     private static HashSet<BotInput> scanForInputs() {
-//        Reflections reflections = new Reflections("main.inputs", Scanners.TypesAnnotated);
         Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages("talium.inputs").addScanners(Scanners.TypesAnnotated));
         Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(Input.class);
         HashSet<BotInput> inputSet = new HashSet<>();
