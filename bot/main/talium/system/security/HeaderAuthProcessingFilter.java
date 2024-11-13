@@ -22,7 +22,8 @@ public class HeaderAuthProcessingFilter extends AbstractAuthenticationProcessing
     public HeaderAuthProcessingFilter(AuthenticationManager authenticationManager) {
         super(new NegatedRequestMatcher(
                 new OrRequestMatcher(
-                        new AntPathRequestMatcher("/error")
+                        new AntPathRequestMatcher("/error"),
+                        new AntPathRequestMatcher("/auth/**")
                 )
         ), authenticationManager);
     }

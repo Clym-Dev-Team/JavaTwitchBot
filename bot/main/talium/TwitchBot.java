@@ -33,14 +33,13 @@ public class TwitchBot {
         System.out.println("DDD-HH:mm:ss.SSS |LEVEL| [THREAD]        LOGGER (Source Class)               - MSG");
         System.out.println("-----------------|-----|-[-------------]---------------------------------------------------------------------------------------------------------------------------------------------");
         InputManager.startAllInputs();
-        HealthManager.subscribeNextChange(status -> time.close(), InputStatus.HEALTHY);
+        HealthManager.subscribeNextChange(_ -> time.close(), InputStatus.HEALTHY);
     }
 
     @PreDestroy
     @PreRemove
     public static void shutdown() {
         try {
-            Instant start = Instant.now();
             StopWatch time = new StopWatch(StopWatch.TYPE.SHUTDOWN);
             requestedShutdown = true;
             InputManager.stopAllInputs();
