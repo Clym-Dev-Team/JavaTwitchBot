@@ -9,13 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HealthUi {
 
-    @GetMapping("/health")
-    public String health(Model model) {
-        model.addAttribute("inputsSum", HealthManager.inputStatus());
-        model.addAttribute("inputsAll", HealthManager.allStatuses());
-        return "health";
-    }
-
     @GetMapping("/health/json")
     @ResponseBody
     public String healthJson() {
