@@ -1,4 +1,4 @@
-Talium is a Twitch Bot made primarily for [Clym](https//:clym.tv) with a focus on relability and designed with our goals and needs in mind. 
+Talium is a Twitch Bot made primarily for [Clym](https://clym.tv) with a focus on relability and designed with our goals and needs in mind. 
 This bot is not designed as a standalone system, instead it is to be integrated with a variety of different and supporting system unsing docker.
 
 ![img.png](img.png)
