@@ -1,5 +1,10 @@
 Talium is a Twitch Bot made primarily for [Clym](https//:clym.tv) with a focus on relability and designed with our goals and needs in mind. 
-This bot is not designed as a standalone system, instead it is to be integrated with a variety of different and supporting system unsing docker. 
+This bot is not designed as a standalone system, instead it is to be integrated with a variety of different and supporting system unsing docker.
+
+![img.png](img.png)
+
+# [Setting up local developing environment](https://github.com/Clym-Dev-Team/Talium/wiki/Dev‐Setup)
+
 # Goals
 - reliability
 - concise logging and alerting
@@ -28,8 +33,7 @@ This bot is not designed as a standalone system, instead it is to be integrated 
 - Reverse Proxy, NginX
   > This is recommended if you want to use a single domain to access all these services
 
-
-## Features
+# Features
 - Commands
   - Aliases
   - Regex Command Patterns
@@ -51,9 +55,10 @@ This bot is not designed as a standalone system, instead it is to be integrated 
 - TipeeeStream
   - Alerts
 - Coins & Watchtime
-- OAuth Managment UI
+- OAuth Management UI
 - Detailed Status Pages
 - Login via Twitch
+- Shadow Testing
 - ChatHistory
   > The Twitch Chatlogs, reimplemented for the whole chat. _Infinite_ history of the entire chat, with searching of the entire history.
 
@@ -63,4 +68,3 @@ This bot is not designed as a standalone system, instead it is to be integrated 
 
 A application.properties file can be placed next to the bot jar file (or in /config in the same dir) for any needed (or to be overwritten) config values
 
-# [Developing](/wiki/Dev-Setup)
