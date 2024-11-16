@@ -10,7 +10,6 @@ import com.github.twitch4j.chat.events.TwitchEvent;
 import com.github.twitch4j.helix.TwitchHelix;
 import talium.inputs.shared.oauth.OAuthEndpoint;
 import talium.inputs.shared.oauth.OauthAccount;
-import talium.system.Out;
 import talium.system.eventSystem.EventDispatcher;
 import talium.system.inputSystem.BotInput;
 import talium.system.inputSystem.HealthManager;
@@ -153,10 +152,10 @@ public class Twitch4JInput implements BotInput {
     }
 
     private Optional<OAuth2Credential> createNewOauth() {
-        var scopes = new ArrayList<>();
+        var scopes = new ArrayList<String>();
         scopes.add("chat:edit");
         scopes.add("chat:read");
-        Optional<String> code = OAuthEndpoint.newOAuthGrantFlow(chatAccountName, "twitch", iProvider, scopes);
+        Optional<String> code = OAuthEndpoint.newAuthRequest(chatAccountName, "twitch", iProvider, scopes);
         return code.map(s -> iProvider.getCredentialByCode(s));
     }
 
