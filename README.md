@@ -3,7 +3,7 @@ This bot is not designed as a standalone system, instead it is to be integrated 
 
 ![img.png](img.png)
 
-# [Setting up local developing environment](https://github.com/Clym-Dev-Team/Talium/wiki/Dev‐Setup)
+# [Setting up local developing environment](https://github.com/Clym-Dev-Team/Talium/wiki/meta.dev‐setup)
 
 # Goals
 - reliability
