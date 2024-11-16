@@ -13,9 +13,11 @@ import org.springframework.ui.Model;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
+/**
+ * Abstracts displaying the authorization url to the user, and receiving the redirect with the token.
+ */
 @Controller
 public class OAuthEndpoint {
 
@@ -28,7 +30,7 @@ public class OAuthEndpoint {
         OAuthEndpoint.PANEL_BASE_URL = panelBaseUrl;
     }
 
-    public static class OauthRequest {
+    private static class OauthRequest {
         public String state;
         public String url;
         public String accName;
@@ -42,34 +44,40 @@ public class OAuthEndpoint {
             this.service = service;
             this.code = Optional.empty();
         }
-
-        public OauthRequest(String state, String url, String accName, String service, Optional<String> code) {
-            this.state = state;
-            this.url = url;
-            this.accName = accName;
-            this.service = service;
-            this.code = code;
-        }
     }
 
-    public static ArrayList<OauthRequest> requests = new ArrayList<>();
+    private static final ArrayList<OauthRequest> requests = new ArrayList<>();
 
+    /**
+     * Get redirect url for a particular service. The url is fully formed and points to the real public host of the bot
+     * @param service name of the service
+     * @return the full url
+     */
     public static String getRedirectUrl(String service) {
         return BOT_BASE_URL + "/auth/" + service;
     }
 
+    /**
+     * Get the public url to the panel oauth setup page.
+     * @return the full url to the panel page
+     */
     public static String getOauthSetupUrl() {
         return PANEL_BASE_URL + "/auth";
     }
 
-    public static Optional<String> newOAuthGrantFlow(String accName, String service, OAuth2IdentityProvider iProvider, ArrayList<Object> scopes) {
-        // create
-        String state = RandomStringUtils.randomAlphanumeric(30);
-        String auth_url = iProvider.getAuthenticationUrl(scopes, state);
-        OauthRequest request = new OauthRequest(state, auth_url, accName, service);
+    /**
+     * Create a new Oauth Request by manually constructing the authorization url
+     * @param accName name of the account to authorize
+     * @param service name of the service the accounts lives on
+     * @param authorizationUrl url to authorize the connection
+     * @param state random character string that uniquely identifies this request
+     * @apiNote <font color="red">This function blocks until request is completed or failed. This could take minutes to hours</font color="red">
+     * @return if successfully, the oauth token
+     */
+    public static Optional<String> newAuthRequest(String accName, String service, String authorizationUrl, String state) {
+        OauthRequest request = new OauthRequest(state, authorizationUrl, accName, service);
         requests.add(request);
 
-        // TODO add Timeout (10min)
         // wait for completion by user using web portal
         while (request.code.isEmpty() && !TwitchBot.requestedShutdown) {
             Thread.onSpinWait();
@@ -78,11 +86,44 @@ public class OAuthEndpoint {
             throw new UnexpectedShutdownException();
         }
 
-        //return code, remove completed request
         String code = request.code.get();
         requests.remove(request);
         return Optional.of(code);
     }
+
+    /**
+     * Create a new Oauth request via an OauthIdentityProvider.
+     * Constructs a request state automatically.
+     * @param accName name of the account to authorize
+     * @param service name of the service the accounts lives on
+     * @param iProvider identityProvider to use
+     * @param scopes scopes to use with the identityProvider
+     * @apiNote <font color="red">This function blocks until request is completed or failed. This could take minutes to hours</font color="red">
+     * @return if successfully, the oauth token
+     */
+    public static Optional<String> newAuthRequest(String accName, String service, OAuth2IdentityProvider iProvider, ArrayList<String> scopes) {
+        String state = RandomStringUtils.randomAlphanumeric(30);
+        String auth_url = iProvider.getAuthenticationUrl(Collections.singletonList(scopes), state);
+        return newAuthRequest(accName, service, auth_url, state);
+    }
+
+    /**
+     * Create a new Oauth request via an OauthIdentityProvider.
+     * Constructs a request state automatically.
+     * @param accName name of the account to authorize
+     * @param service name of the service the accounts lives on
+     * @param iProvider identityProvider to use
+     * @param scopes scopes to use with the identityProvider
+     * @apiNote <font color="red">This function blocks until request is completed or failed. This could take minutes to hours</font color="red">
+     * @return if successfully, the oauth token
+     */
+    public static Optional<String> newAuthRequest(String accName, String service, OAuth2IdentityProvider iProvider, String... scopes) {
+        String state = RandomStringUtils.randomAlphanumeric(30);
+        List<Object> objectList = Collections.singletonList(Arrays.stream(scopes).toList());
+        String auth_url = iProvider.getAuthenticationUrl(objectList, state);
+        return newAuthRequest(accName, service, auth_url, state);
+    }
+
 
     @RequestMapping("/auth/{service}")
     public String oAuthEndpoint(@PathVariable String service, @RequestParam(required = false) String code, @RequestParam(required = false) String scope, @RequestParam String state, @RequestParam(required = false) String error, @RequestParam(required = false) String error_description, Model model) {
