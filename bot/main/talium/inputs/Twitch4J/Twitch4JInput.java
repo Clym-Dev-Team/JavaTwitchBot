@@ -8,6 +8,7 @@ import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import com.github.twitch4j.chat.TwitchChat;
 import com.github.twitch4j.chat.events.TwitchEvent;
 import com.github.twitch4j.helix.TwitchHelix;
+import org.apache.commons.lang.RandomStringUtils;
 import talium.inputs.shared.oauth.OAuthEndpoint;
 import talium.inputs.shared.oauth.OauthAccount;
 import talium.system.eventSystem.EventDispatcher;
@@ -152,10 +153,22 @@ public class Twitch4JInput implements BotInput {
     }
 
     private Optional<OAuth2Credential> createNewOauth() {
+        String authorizationServer = "https://id.twitch.tv/oauth2/authorize";
         var scopes = new ArrayList<String>();
         scopes.add("chat:edit");
         scopes.add("chat:read");
-        Optional<String> code = OAuthEndpoint.newAuthRequest(chatAccountName, "twitch", iProvider, scopes);
+        scopes.add("moderator:read:chatters");
+
+        String state = RandomStringUtils.randomAlphanumeric(30);
+        String auth_url = String.format("%s?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s",
+                authorizationServer,
+                "code",
+                app_clientID,
+                OAuthEndpoint.getRedirectUrl("twitch"),
+                String.join(" ", scopes),
+                state
+        );
+        Optional<String> code = OAuthEndpoint.newAuthRequest(chatAccountName, "twitch", auth_url, state);
         return code.map(s -> iProvider.getCredentialByCode(s));
     }
 
