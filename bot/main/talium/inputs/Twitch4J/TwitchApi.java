@@ -44,4 +44,10 @@ public class TwitchApi {
                 .getChatters();
     }
 
+    public static boolean isOnline() {
+        if (Twitch4JInput.helix == null) return false;
+        OAuth2Credential cred = Twitch4JInput.oAuth2Credential;
+        return Twitch4JInput.helix.getStreams(cred.getAccessToken(), null, null, null, null, null, null, null).execute().getStreams().size() == 1;
+    }
+
 }

@@ -12,11 +12,13 @@ public class Chatter {
 
     long watchtimeSeconds;
     long coins;
+    int secondsSinceLastCoinsGain;
 
-    public Chatter(String twitchUserId, long watchtimeSeconds, long coins) {
+    public Chatter(String twitchUserId, long watchtimeSeconds, long coins, int secondsSinceLastCoinsGain) {
         this.twitchUserId = twitchUserId;
         this.watchtimeSeconds = watchtimeSeconds;
         this.coins = coins;
+        this.secondsSinceLastCoinsGain = secondsSinceLastCoinsGain;
     }
 
     public Chatter() {

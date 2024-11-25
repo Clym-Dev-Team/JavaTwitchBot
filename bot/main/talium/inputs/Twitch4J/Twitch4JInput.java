@@ -127,6 +127,9 @@ public class Twitch4JInput implements BotInput {
                 .getId();
         logger.debug("Start successful!");
         report(InputStatus.HEALTHY);
+
+        // trigger Init of watchtime Service
+        new TwitchUserListService();
     }
 
     @Override
@@ -171,6 +174,17 @@ public class Twitch4JInput implements BotInput {
         scopes.add("chat:edit");
         scopes.add("chat:read");
         scopes.add("moderator:read:chatters");
+
+        // park scopes that could be needed in the future
+        //scopes.add("moderator:manage:chat_settings"); // change emote-only & follow-only
+
+        //scopes.add("channel:manage:broadcast"); // if we want to change the stream info
+        //scopes.add("channel:manage:redemptions"); // probably needed if we automatically want to accept a channel point redemption for triggering a command (channel:read:redemptions)
+
+        // for overlay
+        //scopes.add("channel:read:polls"); // if we want to access polls
+        //scopes.add("channel:read:predictions"); // if we want to access predictions
+        //scopes.add("channel:read:hype_train"); // if we need to read information about the current hypetrain
 
         String state = RandomStringUtils.randomAlphanumeric(30);
         String auth_url = String.format("%s?response_type=%s&client_id=%s&redirect_uri=%s&scope=%s&state=%s",
