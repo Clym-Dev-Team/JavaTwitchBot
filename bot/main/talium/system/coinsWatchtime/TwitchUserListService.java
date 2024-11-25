@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import talium.inputs.Twitch4J.TwitchApi;
-import talium.system.coinsWatchtime.chatter.ChatterService;
+import talium.system.coinsWatchtime.chatter.ChatterRepo;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -25,14 +25,14 @@ public class TwitchUserListService {
 
     private static final ScheduledExecutorService CHATTER_UPDATE_SERVICE;
 
-    private static ChatterService chatterService;
+    private static ChatterRepo chatterRepo;
     private static final int POLLING_INTERVAL_SECONDS = 60;
     private static final int COIN_PAYOUT_INTERVAL_SECONDS = 600;
     private static final int COIN_PAYOUT_AMOUNT = 1;
 
     @Autowired
-    public void setChatterService(ChatterService chatterService) {
-        TwitchUserListService.chatterService = chatterService;
+    public void setChatterService(ChatterRepo chatterRepo) {
+        TwitchUserListService.chatterRepo = chatterRepo;
     }
 
     static {
@@ -55,8 +55,18 @@ public class TwitchUserListService {
             }
             logger.debug("Channel online: true");
             var viewerList = getUserList();
-            chatterService.addWatchtimeSeconds(viewerList, 60);
-            chatterService.addCoinsToUser(viewerList, POLLING_INTERVAL_SECONDS, COIN_PAYOUT_INTERVAL_SECONDS, COIN_PAYOUT_AMOUNT);
+            for (var user : viewerList) {
+                // check if an ID exist in the DB and insert a default value item in a single operation
+                // alternative would be checking and then making a separate insert
+                chatterRepo.addDefaultIfNotExist(user);
+
+                chatterRepo.incrementLastCoinsGain(user, POLLING_INTERVAL_SECONDS);
+                // increment the coin amount by the payout amount, and reset the lastPayoutTime if the amount of seconds since last payout exceeds the interval
+                chatterRepo.incrementCoinsIfTimeSincePayout(user, COIN_PAYOUT_INTERVAL_SECONDS, COIN_PAYOUT_AMOUNT);
+
+            }
+            // adds [seconds] amount onto the coins of each user. Alternative would be to get the amount for each user, and send a separate update
+            chatterRepo.incrementWatchtimeBySeconds(viewerList, POLLING_INTERVAL_SECONDS);
         } catch (Exception e) {
             logger.error("Failed to refresh user list", e);
         }
