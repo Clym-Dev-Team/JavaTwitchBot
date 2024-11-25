@@ -11,6 +11,7 @@ import com.github.twitch4j.helix.TwitchHelix;
 import org.apache.commons.lang.RandomStringUtils;
 import talium.inputs.shared.oauth.OAuthEndpoint;
 import talium.inputs.shared.oauth.OauthAccount;
+import talium.system.coinsWatchtime.TwitchUserListService;
 import talium.system.eventSystem.EventDispatcher;
 import talium.system.inputSystem.BotInput;
 import talium.system.inputSystem.HealthManager;
@@ -19,7 +20,6 @@ import talium.system.inputSystem.InputStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import com.github.twitch4j.helix.domain.User;
 import talium.system.inputSystem.configuration.InputConfiguration;
 
 import java.util.ArrayList;
@@ -28,9 +28,9 @@ import java.util.Optional;
 
 @Input
 public class Twitch4JInput implements BotInput {
-    private static String channelName;
-    private static String chatAccountName;
-    private static String sendTo;
+    protected static String channelName;
+    protected static String chatAccountName;
+    protected static String sendTo;
     private static String app_clientID;
     private static String app_clientSecret;
 
@@ -61,12 +61,14 @@ public class Twitch4JInput implements BotInput {
 
     private static final Logger logger = LoggerFactory.getLogger(Twitch4JInput.class);
 
-    private static volatile TwitchChat chat;
-    private static volatile TwitchHelix helix;
+    protected static volatile TwitchChat chat;
+    protected static volatile TwitchHelix helix;
+    protected static OAuth2Credential oAuth2Credential;
     private TwitchIdentityProvider iProvider;
-    private OAuth2Credential oAuth2Credential;
     private TwitchClient twitchClient;
     private InputStatus health;
+
+    protected static String broadCasterChannelId;
 
     @Override
     public void run() {
@@ -103,7 +105,13 @@ public class Twitch4JInput implements BotInput {
         }
         oAuth2Credential = creds.get();
 
-        TwitchClient twitchClient = TwitchClientBuilder.builder().withEnableHelix(true).withEnableChat(true).withDefaultAuthToken(oAuth2Credential).withChatAccount(oAuth2Credential).withDefaultEventHandler(SimpleEventHandler.class).build();
+        TwitchClient twitchClient = TwitchClientBuilder.builder()
+                .withEnableHelix(true)
+                .withEnableChat(true)
+                .withDefaultAuthToken(oAuth2Credential)
+                .withChatAccount(oAuth2Credential)
+                .withDefaultEventHandler(SimpleEventHandler.class)
+                .build();
         twitchClient.getClientHelper().enableStreamEventListener(channelName);
         twitchClient.getChat().joinChannel(channelName);
         twitchClient.getEventManager().onEvent(TwitchEvent.class, EventDispatcher::dispatch);
@@ -111,7 +119,12 @@ public class Twitch4JInput implements BotInput {
         this.twitchClient = twitchClient;
         chat = twitchClient.getChat();
         helix = twitchClient.getHelix();
-
+        broadCasterChannelId = helix
+                .getUsers(null, null, List.of(channelName))
+                .execute()
+                .getUsers()
+                .getFirst()
+                .getId();
         logger.debug("Start successful!");
         report(InputStatus.HEALTHY);
     }
@@ -175,30 +188,5 @@ public class Twitch4JInput implements BotInput {
     private void report(InputStatus health) {
         HealthManager.reportStatus(this, health);
         this.health = health;
-    }
-
-
-    /**
-     * Sends a message in the chat specified by the twitchOutputToChannel Env with the bot account specified by the twitchBotAccountName env
-     *
-     * @param message the message text to send
-     */
-    public static void sendMessage(String message) {
-        while (chat == null) Thread.onSpinWait();
-        chat.sendMessage(sendTo, message);
-    }
-
-    public static Optional<User> getUserById(String userId) {
-        if (helix == null) return Optional.empty();
-        var user = helix.getUsers(null, List.of(userId), null).execute().getUsers();
-        if (user.isEmpty()) return Optional.empty();
-        return Optional.ofNullable(user.getFirst());
-    }
-
-    public static Optional<User> getUserByName(String userId) {
-        if (helix == null) return Optional.empty();
-        var user = helix.getUsers(null, null, List.of(userId)).execute().getUsers();
-        if (user.isEmpty()) return Optional.empty();
-        return Optional.ofNullable(user.getFirst());
     }
 }
