@@ -15,10 +15,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import static talium.system.coinsWatchtime.CoinsService.addCoins;
 import static talium.system.coinsWatchtime.WatchtimeService.addMinuteOfWatchtime;
 
 /**
- * Requests the twitch user list (list of active chatters) and computes the difference between the two sets
+ * Requests the twitch user list (list of active chatters) and computes the difference between the two sets.
+ * These differences are then used by coins and watchtime services to add coins and watchtime for each user
  */
 public class TwitchUserListService {
     private static List<String> viewerList = new ArrayList<>();
@@ -43,13 +45,11 @@ public class TwitchUserListService {
             var oldUserList = viewerList;
             viewerList = getUserList();
             var leftChatters = getLeftChatters(oldUserList, viewerList);
-            var joinedChatters = getJoinedChatters(oldUserList, viewerList);
-            System.out.println(STR."oldUserList = \{oldUserList}");
-            System.out.println(STR."newViewerList = \{viewerList}");
-            System.out.println("leftChatters = " + leftChatters);
-            System.out.println("joinedChatters = " + joinedChatters);
-            addMinuteOfWatchtime(viewerList);
-            //TODO update coins
+//            var isOnline = TwitchApi.isOnline();
+            var isOnline = true;
+            logger.debug("Channel online: {}", isOnline);
+            addMinuteOfWatchtime(viewerList, isOnline);
+            addCoins(viewerList, leftChatters.stream().toList(), isOnline);
         } catch (Exception e) {
             logger.error("Failed to refresh user list", e);
         }
