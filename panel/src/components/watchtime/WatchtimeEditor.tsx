@@ -18,7 +18,7 @@ interface ChatterDTO {
 export default function WatchtimeEditor() {
   const {toast} = useToast();
   const [loadedUser, setLoadedUser] = useState(false);
-  const [userName, setUserName] = useState()
+  const [userName, setUserName] = useState<string>()
   const {handleSubmit, register, reset} = useForm<ChatterDTO>({disabled: !loadedUser});
 
   function loadData() {
