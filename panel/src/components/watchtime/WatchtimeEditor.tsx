@@ -15,7 +15,6 @@ interface ChatterDTO {
   watchtimeSeconds: number,
 }
 
-
 export default function WatchtimeEditor() {
   const {toast} = useToast();
   const [loadedUser, setLoadedUser] = useState(false);
@@ -23,7 +22,7 @@ export default function WatchtimeEditor() {
   const {handleSubmit, register, reset} = useForm<ChatterDTO>({disabled: !loadedUser});
 
   function loadData() {
-    fetchWithAuth(BOT_BACKEND_ADDR + "/watchtime/username/" + userName).then()
+    fetchWithAuth(BOT_BACKEND_ADDR + "/watchtime/username/" + userName)
       .then(response => response.json())
       .then(value => reset(value))
       .then(() => setLoadedUser(true))
@@ -44,16 +43,25 @@ export default function WatchtimeEditor() {
       })
   }
 
-  function submit(c: ChatterDTO) {
-    console.log("c: " + c);
+  function submit(chatter: ChatterDTO) {
+    fetchWithAuth(BOT_BACKEND_ADDR + "/watchtime/update", {method: "POST", body: JSON.stringify(chatter)})
+      .then(() => toast({className: "toast toast-success", title: "Saved Watchtime!"}))
+      .then(() => setLoadedUser(false))
+      .catch(reason => toast({
+        className: "toast toast-failure",
+        title: "ERROR loading User",
+        description: reason.toString()
+      }))
   }
 
   return <div className="editTile">
     <h1>Edit Watchtime and Coins Data:</h1>
-    <div className="searchBox">
+    <form className="searchBox" onSubmit={event => {
+      event.preventDefault()
+    }}>
       <Input placeholder="Search for twitch username..." onChange={event => setUserName(event.target.value)}/>
-      <Button onClick={loadData}><IconCloudDown/></Button>
-    </div>
+      <Button type="submit" onClick={loadData}><IconCloudDown/></Button>
+    </form>
     <div className="dataBox">
       <VLabel name="Watchtime [seconds]">
         <Input placeholder="..." {...register("watchtimeSeconds")}/>
@@ -62,15 +70,9 @@ export default function WatchtimeEditor() {
         <Input placeholder="..." {...register("coins")}/>
       </VLabel>
     </div>
-    <Button onClick={handleSubmit(submit)}>
+    <Button onClick={handleSubmit(submit)} disabled={!loadedUser} type="submit">
       <IconSave/>
     </Button>
-    {/* TODO name input*/}
-    {/* TODO load button*/}
-    {/* TODO coin filed*/}
-    {/* TODO watchtime field*/}
-    {/* TODO save button*/}
-    {/* TODO make save button only available after load*/}
   </div>
 
 }
