@@ -28,9 +28,9 @@ public class TwitchApi {
         return Optional.ofNullable(user.getFirst());
     }
 
-    public static Optional<User> getUserByName(String userId) {
+    public static Optional<User> getUserByName(String username) {
         if (Twitch4JInput.helix == null) return Optional.empty();
-        var user = Twitch4JInput.helix.getUsers(null, null, List.of(userId)).execute().getUsers();
+        var user = Twitch4JInput.helix.getUsers(null, null, List.of(username)).execute().getUsers();
         if (user.isEmpty()) return Optional.empty();
         return Optional.ofNullable(user.getFirst());
     }

@@ -9,4 +9,8 @@ import java.util.List;
 public interface ChatterRepo extends CrudRepository<Chatter, String> {
 
     List<Chatter> getAllByTwitchUserIdIn(List<String> twitchUserIds);
+
+    List<Chatter> getAllByOrderByWatchtimeSecondsDesc();
+
+    Chatter getByTwitchUserId(String twitchUserId);
 }
