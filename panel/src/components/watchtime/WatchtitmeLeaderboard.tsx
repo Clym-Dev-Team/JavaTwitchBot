@@ -10,11 +10,7 @@ interface LeaderboardDTO {
 }
 
 export default function WatchtitmeLeaderboard() {
-    const {data, loading} = useData<LeaderboardDTO[]>("/watchtime/top", "WatchtimeLeaderboard", [ {
-        twitchUserName: "test",
-        coins: 1929,
-        watchtimeSeconds: 292907192393
-    }])
+    const {data, loading} = useData<LeaderboardDTO[]>("/watchtime/top", "WatchtimeLeaderboard", [])
 
     return <ScrollArea className="watchtimeLeaderboard">
       <h1>Top 100 Leaderboard - Watchtime:</h1>

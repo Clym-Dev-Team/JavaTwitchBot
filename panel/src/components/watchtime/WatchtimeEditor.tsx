@@ -19,18 +19,29 @@ interface ChatterDTO {
 export default function WatchtimeEditor() {
   const {toast} = useToast();
   const [loadedUser, setLoadedUser] = useState(false);
-  const {handleSubmit, register, reset} = useForm<ChatterDTO>({ disabled: !loadedUser});
+  const [userName, setUserName] = useState()
+  const {handleSubmit, register, reset} = useForm<ChatterDTO>({disabled: !loadedUser});
 
   function loadData() {
-    fetchWithAuth(BOT_BACKEND_ADDR + "/watchtime/username").then()
+    fetchWithAuth(BOT_BACKEND_ADDR + "/watchtime/username/" + userName).then()
       .then(response => response.json())
       .then(value => reset(value))
       .then(() => setLoadedUser(true))
-      .catch(reason => toast({
-        className: "toast toast-failure",
-        title: "ERROR loading User",
-        description: reason.toString()
-      }))
+      .catch(reason => {
+        if (reason == "Error: 404 ") {
+          toast({
+            className: "toast toast-failure",
+            title: "User not found",
+            description: "User: " + userName,
+          })
+          return
+        }
+        toast({
+          className: "toast toast-failure",
+          title: "ERROR loading User",
+          description: reason.toString()
+        });
+      })
   }
 
   function submit(c: ChatterDTO) {
@@ -40,7 +51,7 @@ export default function WatchtimeEditor() {
   return <div className="editTile">
     <h1>Edit Watchtime and Coins Data:</h1>
     <div className="searchBox">
-      <Input placeholder="Search for twitch username..."/>
+      <Input placeholder="Search for twitch username..." onChange={event => setUserName(event.target.value)}/>
       <Button onClick={loadData}><IconCloudDown/></Button>
     </div>
     <div className="dataBox">
