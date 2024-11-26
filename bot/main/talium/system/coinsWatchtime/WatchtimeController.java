@@ -1,6 +1,8 @@
 package talium.system.coinsWatchtime;
 
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +11,14 @@ import talium.inputs.Twitch4J.TwitchApi;
 import talium.system.coinsWatchtime.chatter.Chatter;
 import talium.system.coinsWatchtime.chatter.ChatterDTO;
 import talium.system.coinsWatchtime.chatter.ChatterService;
+import talium.system.coinsWatchtime.chatter.LeaderboardDTO;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping(value = "/watchtime", produces = "application/json")
 public class WatchtimeController {
+    private static final Logger logger = LoggerFactory.getLogger(WatchtimeController.class);
     private final ChatterService chatterService;
     private final Gson gson = new Gson();
 
@@ -24,7 +30,15 @@ public class WatchtimeController {
     @GetMapping("/top")
     String getTop() {
         var chatters = chatterService.getTopWatchtime();
-        var dto = chatters.stream().map(Chatter::toChatterDto).toList();
+        var dto = new ArrayList<LeaderboardDTO>();
+        for (Chatter chatter : chatters) {
+            var twitchUser = TwitchApi.getUserById(chatter.twitchUserId);
+            if (twitchUser.isEmpty()) {
+                logger.warn("UserID {} from chatterData could not be found on twitch", chatter.twitchUserId);
+                continue;
+            }
+            dto.add(new LeaderboardDTO(twitchUser.get().getDisplayName(), chatter.watchtimeSeconds, chatter.coins));
+        }
         return gson.toJson(dto);
     }
 
