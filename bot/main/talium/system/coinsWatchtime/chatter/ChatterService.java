@@ -13,6 +13,23 @@ public class ChatterService {
         this.chatterRepo = chatterRepo;
     }
 
+    public List<Chatter> getChattersOrDefault(List<String> chatterIds) {
+        var chatters = chatterRepo.getAllByTwitchUserIdIn(chatterIds);
+        var dbChatterIds = chatters.stream().map(chatter -> chatter.twitchUserId).toList();
+
+        // get all chatter Ids that were not found in the DB and insert default object for them, so that the resulting is ist complete
+        var chatterIdsCopy = new java.util.ArrayList<>(chatterIds);
+        chatterIdsCopy.removeAll(dbChatterIds);
+        for (var chatterId : chatterIdsCopy) {
+            chatters.add(new Chatter(chatterId));
+        }
+        return chatters;
+    }
+
+    public void saveAll(List<Chatter> chatters) {
+        chatterRepo.saveAll(chatters);
+    }
+
     /**
      * Add Watchtime for each user in DB.
      * This method makes heavy use of complex (and native) sql queries to offload computation and data modification to the database because of the possible thousands of users that need to be processed here.

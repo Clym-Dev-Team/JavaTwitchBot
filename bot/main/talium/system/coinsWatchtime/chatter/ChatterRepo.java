@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface ChatterRepo extends CrudRepository<Chatter, String> {
 
+    List<Chatter> getAllByTwitchUserIdIn(List<String> twitchUserIds);
+
     @Transactional
     @Modifying
     @Query(value = "IF NOT EXISTS(SELECT chatter_data.twitch_user_id FROM chatter_data WHERE twitch_user_id = ?1) THEN " +
