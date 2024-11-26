@@ -8,17 +8,17 @@ import jakarta.persistence.Table;
 @Table(name = "chatter_data")
 public class Chatter {
     @Id
-    String twitchUserId;
+    public String twitchUserId;
 
-    long watchtimeSeconds;
-    long coins;
-    int secondsSinceLastCoinsGain;
+    public long watchtimeSeconds;
+    public long coins;
+    public int secondsSinceLastCoinsGain;
 
-    public Chatter(String twitchUserId, long watchtimeSeconds, long coins, int secondsSinceLastCoinsGain) {
+    public Chatter(String twitchUserId) {
         this.twitchUserId = twitchUserId;
-        this.watchtimeSeconds = watchtimeSeconds;
-        this.coins = coins;
-        this.secondsSinceLastCoinsGain = secondsSinceLastCoinsGain;
+        this.watchtimeSeconds = 0;
+        this.coins = 0;
+        this.secondsSinceLastCoinsGain = 0;
     }
 
     public Chatter() {

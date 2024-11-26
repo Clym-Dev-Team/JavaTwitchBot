@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import talium.inputs.Twitch4J.TwitchApi;
-import talium.system.coinsWatchtime.chatter.ChatterRepo;
+import talium.system.coinsWatchtime.chatter.ChatterService;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -25,27 +25,27 @@ public class TwitchUserListService {
 
     private static final ScheduledExecutorService CHATTER_UPDATE_SERVICE;
 
-    private static ChatterRepo chatterRepo;
+    private static ChatterService chatterService;
     private static final int POLLING_INTERVAL_SECONDS = 60;
     private static final int COIN_PAYOUT_INTERVAL_SECONDS = 600;
     private static final int COIN_PAYOUT_AMOUNT = 1;
 
     @Autowired
-    public void setChatterService(ChatterRepo chatterRepo) {
-        TwitchUserListService.chatterRepo = chatterRepo;
+    public void setChatterService(ChatterService chatterService) {
+        TwitchUserListService.chatterService = chatterService;
     }
 
     static {
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("CHATTER_UPDATE_EXECUTOR").build();
         CHATTER_UPDATE_SERVICE = Executors.newSingleThreadScheduledExecutor(namedThreadFactory);
-        CHATTER_UPDATE_SERVICE.scheduleAtFixedRate(TwitchUserListService::refreshUserList, 0, POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS);
+        CHATTER_UPDATE_SERVICE.scheduleAtFixedRate(TwitchUserListService::update, 1, POLLING_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 
     private static List<String> getUserList() {
         return TwitchApi.getUserList().stream().map(Chatter::getUserId).toList();
     }
 
-    private static void refreshUserList() {
+    private static void update() {
         // catch because otherwise the scheduler would end on any runtime error
         try {
             logger.info("Refreshing user list");
@@ -54,19 +54,17 @@ public class TwitchUserListService {
                 return;
             }
             logger.debug("Channel online: true");
-            var viewerList = getUserList();
-            for (var user : viewerList) {
-                // check if an ID exist in the DB and insert a default value item in a single operation
-                // alternative would be checking and then making a separate insert
-                chatterRepo.addDefaultIfNotExist(user);
+            var chatters = chatterService.getChattersOrDefault(getUserList());
+            for (var user : chatters) {
+                user.watchtimeSeconds += POLLING_INTERVAL_SECONDS;
+                user.secondsSinceLastCoinsGain += POLLING_INTERVAL_SECONDS;
 
-                chatterRepo.incrementLastCoinsGain(user, POLLING_INTERVAL_SECONDS);
-                // increment the coin amount by the payout amount, and reset the lastPayoutTime if the amount of seconds since last payout exceeds the interval
-                chatterRepo.incrementCoinsIfTimeSincePayout(user, COIN_PAYOUT_INTERVAL_SECONDS, COIN_PAYOUT_AMOUNT);
-
+                if (user.secondsSinceLastCoinsGain >= COIN_PAYOUT_INTERVAL_SECONDS) {
+                    user.secondsSinceLastCoinsGain = 0;
+                    user.coins += COIN_PAYOUT_AMOUNT;
+                }
             }
-            // adds [seconds] amount onto the coins of each user. Alternative would be to get the amount for each user, and send a separate update
-            chatterRepo.incrementWatchtimeBySeconds(viewerList, POLLING_INTERVAL_SECONDS);
+            chatterService.saveAll(chatters);
         } catch (Exception e) {
             logger.error("Failed to refresh user list", e);
         }
