@@ -1,5 +1,6 @@
 package talium.system.coinsWatchtime;
 
+import com.github.twitch4j.helix.domain.User;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ import talium.system.coinsWatchtime.chatter.ChatterService;
 import talium.system.coinsWatchtime.chatter.LeaderboardDTO;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 @RestController
 @RequestMapping(value = "/watchtime", produces = "application/json")
@@ -29,17 +32,34 @@ public class WatchtimeController {
 
     @GetMapping("/top")
     String getTop() {
+//        var t = new TimingSequence();
         var chatters = chatterService.getTopWatchtime();
+//        t.step("DB");
         var dto = new ArrayList<LeaderboardDTO>();
+        var userIdList = chatters.stream().map(chatter -> chatter.twitchUserId).toList();
+//        t.step("TRANSFORM LIST");
+        var twitchUserList = TwitchApi.getUserById(userIdList);
+//        t.step("TWITCH API");
+
+        Map<String, String> usernameMap = new TreeMap<>();
+
+        for (User user : twitchUserList) {
+            usernameMap.put(user.getId(), user.getId());
+        }
+//        t.step("TRANSFORM SET");
         for (Chatter chatter : chatters) {
-            var twitchUser = TwitchApi.getUserById(chatter.twitchUserId);
-            if (twitchUser.isEmpty()) {
+            var username = usernameMap.get(chatter.twitchUserId);
+            if (username == null) {
                 logger.warn("UserID {} from chatterData could not be found on twitch", chatter.twitchUserId);
                 continue;
             }
-            dto.add(new LeaderboardDTO(twitchUser.get().getDisplayName(), chatter.watchtimeSeconds, chatter.coins));
+            dto.add(new LeaderboardDTO(username, chatter.watchtimeSeconds, chatter.coins));
         }
-        return gson.toJson(dto);
+//        t.step("MAP");
+        String json = gson.toJson(dto);
+//        t.step("json");
+//        t.print();
+        return json;
     }
 
     @GetMapping("/username/{username}")
