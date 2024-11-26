@@ -29,4 +29,20 @@ public class ChatterService {
         chatterRepo.saveAll(chatters);
     }
 
+    public void save(Chatter chatters) {
+        chatterRepo.save(chatters);
+    }
+
+    public List<Chatter> getTopWatchtime() {
+        return chatterRepo.getAllByOrderByWatchtimeSecondsDesc();
+    }
+
+    public Chatter getDataForChatter(String userId) {
+        var dbResult = chatterRepo.getByTwitchUserId(userId);
+        if (dbResult == null) {
+            return new Chatter(userId);
+        }
+        return dbResult;
+    }
+
 }

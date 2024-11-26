@@ -21,6 +21,17 @@ public class Chatter {
         this.secondsSinceLastCoinsGain = 0;
     }
 
+    public Chatter(String twitchUserId, long watchtimeSeconds, long coins, int secondsSinceLastCoinsGain) {
+        this.twitchUserId = twitchUserId;
+        this.watchtimeSeconds = watchtimeSeconds;
+        this.coins = coins;
+        this.secondsSinceLastCoinsGain = secondsSinceLastCoinsGain;
+    }
+
     public Chatter() {
+    }
+
+    public ChatterDTO toChatterDto() {
+        return new ChatterDTO(this);
     }
 }
