@@ -11,7 +11,7 @@ import com.github.twitch4j.helix.TwitchHelix;
 import org.apache.commons.lang.RandomStringUtils;
 import talium.inputs.shared.oauth.OAuthEndpoint;
 import talium.inputs.shared.oauth.OauthAccount;
-import talium.system.coinsWatchtime.TwitchUserListService;
+import talium.system.coinsWatchtime.WatchtimeUpdateService;
 import talium.system.eventSystem.EventDispatcher;
 import talium.system.inputSystem.BotInput;
 import talium.system.inputSystem.HealthManager;
@@ -129,7 +129,7 @@ public class Twitch4JInput implements BotInput {
         report(InputStatus.HEALTHY);
 
         // trigger Init of watchtime Service
-        new TwitchUserListService();
+        new WatchtimeUpdateService();
     }
 
     @Override
